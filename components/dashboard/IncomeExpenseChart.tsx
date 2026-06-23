@@ -42,8 +42,8 @@ export function IncomeExpenseChart({ data }: { data: MonthlyData[] }) {
               borderRadius: '8px',
               fontSize: '12px',
             }}
-            formatter={(value: number) =>
-              new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(value)
+            formatter={(value: unknown) =>
+              new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(Number(value))
             }
           />
           <Legend
