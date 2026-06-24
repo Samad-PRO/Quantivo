@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quantivo - Financial Goals</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #051424;
+            color: #e5e1e7;
+        }
+        .glass-card {
+            background: rgba(18, 33, 49, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#ffdad6",
+                    "outline-variant": "#46464f",
+                    "secondary": "#ffb77a",
+                    "on-error": "#690005",
+                    "surface-container-high": "#2a292d",
+                    "secondary-fixed-dim": "#ffb77a",
+                    "outline": "#918f9a",
+                    "on-primary-container": "#4b4d83",
+                    "surface": "#131317",
+                    "tertiary-fixed": "#fee089",
+                    "tertiary-fixed-dim": "#e0c470",
+                    "on-secondary-container": "#5f3200",
+                    "primary": "#e1dfff",
+                    "on-tertiary": "#3c2f00",
+                    "surface-container-low": "#1b1b1f",
+                    "surface-bright": "#39393d",
+                    "surface-container": "#201f23",
+                    "background": "#131317",
+                    "inverse-surface": "#e5e1e7",
+                    "on-primary": "#292b5e",
+                    "primary-container": "#c0c1ff",
+                    "on-secondary-fixed": "#2e1500",
+                    "surface-container-highest": "#353438",
+                    "inverse-primary": "#585990",
+                    "tertiary-container": "#e0c470",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "surface-dim": "#131317",
+                    "surface-container-lowest": "#0e0e11",
+                    "error-container": "#93000a",
+                    "surface-tint": "#c0c1ff",
+                    "tertiary": "#fee089",
+                    "surface-variant": "#353438",
+                    "primary-fixed": "#e1e0ff",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-background": "#e5e1e7",
+                    "inverse-on-surface": "#313034",
+                    "on-tertiary-container": "#645003",
+                    "on-primary-fixed-variant": "#404176",
+                    "on-secondary": "#4c2700",
+                    "on-surface-variant": "#c7c5d0",
+                    "secondary-fixed": "#ffdcc2",
+                    "error": "#ffb4ab",
+                    "on-tertiary-fixed": "#231b00",
+                    "secondary-container": "#fb8c01",
+                    "on-primary-fixed": "#131449",
+                    "on-secondary-fixed-variant": "#6d3a00",
+                    "on-surface": "#e5e1e7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "40px",
+                    "base-unit": "8px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "data-display": ["JetBrains Mono"],
+                    "headline-lg": ["Space Grotesk"],
+                    "headline-xl": ["Space Grotesk"],
+                    "headline-lg-mobile": ["Space Grotesk"],
+                    "mono-label": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "300"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "300"}],
+                    "data-display": ["18px", {"lineHeight": "1.0", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "mono-label": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="antialiased min-h-screen flex overflow-x-hidden">
+<!-- Ambient Background Glows -->
+<div class="fixed inset-0 pointer-events-none z-0">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary-container/5 blur-[150px]"></div>
+</div>
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-base-unit bg-surface/60 dark:bg-surface/60 backdrop-blur-md fixed left-0 top-0 w-[240px] border-r border-white/10 z-20">
+<div class="px-gutter mb-8 mt-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden border border-primary/30">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A futuristic, abstract geometric logo icon featuring sharp, precise angles and deep blue and violet hues, conveying a sense of advanced technology and strategic data analytics in a premium, glassmorphic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBreXFbiC82hfBJZsjXBWE15VjrvtSOokuiE3JOKipsQ0O8w5jSrf-axKZv0DtlbA2GQlVk9unHXEepojkIFOYbIk1GH7DmEXZ4B8VueRXcDHjc8sFwb8wbl4yPFqGbkFGaW8uI-6szhSntxPf-YBYPKqI95kUVUAcx9RxNrnEdDwszG2ZsoNpgcd94ik5HLtTzI13MBEpPd1Cvh1iXJZr7qv01AxzQW50j-wBmSeJVQwN5zSEvl3tU0r6zAa3LJY6dtbQQSW-HIGY"/>
+</div>
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary text-[20px]">Quantivo</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px] opacity-70">Strategic Analytics</p>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-colors scale-98 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-colors scale-98 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">payments</span>
+<span class="font-body-md text-body-md">Finances</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary border-r-2 border-primary bg-primary/5 hover:bg-white/5 transition-colors scale-98 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">ads_click</span>
+<span class="font-body-md text-body-md font-medium">Goals</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-colors scale-98 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">psychology</span>
+<span class="font-body-md text-body-md">Habits</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-colors scale-98 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">receipt_long</span>
+<span class="font-body-md text-body-md">Invoices</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-colors scale-98 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">calendar_month</span>
+<span class="font-body-md text-body-md">Subscriptions</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-colors scale-98 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">monitoring</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-colors scale-98 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+<div class="p-4 mt-auto">
+<button class="w-full py-3 px-4 rounded-full bg-transparent border border-white/20 text-on-surface-variant hover:bg-white/5 transition-all font-body-sm text-body-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">workspace_premium</span>
+                Upgrade to Pro
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-[240px] relative z-10 w-full">
+<!-- TopAppBar -->
+<header class="flex items-center justify-between px-margin-desktop w-full h-20 bg-transparent sticky top-0 z-30 backdrop-blur-sm">
+<div class="flex items-center gap-4">
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary hidden md:block">Financial Insights</h2>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary md:hidden">Insights</h2>
+</div>
+<div class="flex items-center gap-6">
+<!-- Search could go here -->
+<div class="hidden lg:flex items-center bg-black/20 rounded-full px-4 py-2 border border-white/5 focus-within:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px] mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm font-body-sm text-on-surface-variant w-48 placeholder-on-surface-variant/50" placeholder="Search insights..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="hidden sm:flex items-center gap-2 bg-primary-container text-on-primary-container px-5 py-2.5 rounded-full font-body-sm text-body-sm font-medium hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    Create New
+                </button>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-margin-mobile md:p-margin-desktop pt-4 max-w-container-max mx-auto">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-primary mb-2">Financial Goals</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Track your savings milestones and strategic objectives.</p>
+</div>
+<button class="sm:hidden flex items-center justify-center gap-2 bg-primary-container text-on-primary-container px-6 py-3 rounded-full font-body-md text-body-md font-medium hover:opacity-90 active:scale-95 transition-all w-full">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                    Add New Goal
+                </button>
+</div>
+<!-- Goals Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Goal Card 1 -->
+<div class="glass-card rounded-2xl p-6 flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-6 z-10">
+<div class="w-12 h-12 rounded-xl bg-black/30 border border-white/5 flex items-center justify-center text-2xl shadow-inner">
+                            🏠
+                        </div>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full bg-secondary-container/10 border border-secondary-container/20 text-secondary font-mono-label text-mono-label">Due: Dec 2025</span>
+<span class="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-mono-label text-mono-label">Active</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-white mb-1 z-10">Dream House Fund</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 z-10">Down payment accumulation</p>
+<div class="flex items-center gap-6 mb-8 z-10">
+<!-- Circular Progress -->
+<div class="relative w-20 h-20 flex-shrink-0">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-white/10 stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="text-primary stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="40" stroke-dasharray="251.2" stroke-dashoffset="188.4" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-data-display text-data-display text-white">25%</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-baseline mb-1">
+<span class="font-data-display text-[24px] text-white">$45,000</span>
+</div>
+<div class="font-mono-label text-mono-label text-on-surface-variant/70">
+                                of $180,000 target
+                            </div>
+</div>
+</div>
+<div class="mt-auto z-10">
+<button class="w-full py-3 rounded-full bg-transparent border border-white/20 text-white hover:bg-white/5 transition-all font-body-sm text-body-sm flex items-center justify-center gap-2 group-hover:border-primary/50">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Add Money
+                        </button>
+</div>
+</div>
+<!-- Goal Card 2 -->
+<div class="glass-card rounded-2xl p-6 flex flex-col relative overflow-hidden group border-tertiary/20">
+<div class="absolute top-0 right-0 w-32 h-32 bg-tertiary/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-6 z-10">
+<div class="w-12 h-12 rounded-xl bg-black/30 border border-white/5 flex items-center justify-center text-2xl shadow-inner">
+                            🚗
+                        </div>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full bg-tertiary/10 border border-tertiary/20 text-tertiary font-mono-label text-mono-label">Completed</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-white mb-1 z-10">Tesla Model Y</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 z-10">Vehicle purchase fund</p>
+<div class="flex items-center gap-6 mb-8 z-10">
+<div class="relative w-20 h-20 flex-shrink-0">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-white/10 stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="text-tertiary stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="40" stroke-dasharray="251.2" stroke-dashoffset="0" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-data-display text-data-display text-tertiary">100%</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-baseline mb-1">
+<span class="font-data-display text-[24px] text-white">$55,000</span>
+</div>
+<div class="font-mono-label text-mono-label text-on-surface-variant/70">
+                                of $55,000 target
+                            </div>
+</div>
+</div>
+<div class="mt-auto z-10 opacity-50 pointer-events-none">
+<button class="w-full py-3 rounded-full bg-transparent border border-white/10 text-white font-body-sm text-body-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                            Goal Reached
+                        </button>
+</div>
+</div>
+<!-- Goal Card 3 -->
+<div class="glass-card rounded-2xl p-6 flex flex-col relative overflow-hidden group opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex justify-between items-start mb-6 z-10">
+<div class="w-12 h-12 rounded-xl bg-black/30 border border-white/5 flex items-center justify-center text-2xl shadow-inner grayscale">
+                            ✈️
+                        </div>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-on-surface-variant font-mono-label text-mono-label">Paused</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-white mb-1 z-10">Japan Trip 2025</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 z-10">Vacation travel budget</p>
+<div class="flex items-center gap-6 mb-8 z-10">
+<div class="relative w-20 h-20 flex-shrink-0">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-white/10 stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="text-primary stroke-current progress-ring__circle opacity-50" cx="50" cy="50" fill="transparent" r="40" stroke-dasharray="251.2" stroke-dashoffset="221" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-data-display text-data-display text-white/50">12%</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-baseline mb-1">
+<span class="font-data-display text-[24px] text-white/70">$600</span>
+</div>
+<div class="font-mono-label text-mono-label text-on-surface-variant/50">
+                                of $5,000 target
+                            </div>
+</div>
+</div>
+<div class="mt-auto z-10">
+<button class="w-full py-3 rounded-full bg-transparent border border-white/20 text-white hover:bg-white/5 transition-all font-body-sm text-body-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+                            Resume Goal
+                        </button>
+</div>
+</div>
+<!-- Goal Card 4 -->
+<div class="glass-card rounded-2xl p-6 flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-6 z-10">
+<div class="w-12 h-12 rounded-xl bg-black/30 border border-white/5 flex items-center justify-center text-2xl shadow-inner">
+                            💍
+                        </div>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-mono-label text-mono-label">Active</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-white mb-1 z-10">Engagement Ring</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 z-10">Special purchase fund</p>
+<div class="flex items-center gap-6 mb-8 z-10">
+<div class="relative w-20 h-20 flex-shrink-0">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-white/10 stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="text-primary stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="40" stroke-dasharray="251.2" stroke-dashoffset="100.48" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-data-display text-data-display text-white">60%</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-baseline mb-1">
+<span class="font-data-display text-[24px] text-white">$4,800</span>
+</div>
+<div class="font-mono-label text-mono-label text-on-surface-variant/70">
+                                of $8,000 target
+                            </div>
+</div>
+</div>
+<div class="mt-auto z-10">
+<button class="w-full py-3 rounded-full bg-transparent border border-white/20 text-white hover:bg-white/5 transition-all font-body-sm text-body-sm flex items-center justify-center gap-2 group-hover:border-primary/50">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Add Money
+                        </button>
+</div>
+</div>
+<!-- Empty State / Add New Card -->
+<div class="rounded-2xl p-6 flex flex-col items-center justify-center border-2 border-dashed border-white/10 hover:border-primary/30 bg-black/10 hover:bg-primary/5 transition-all cursor-pointer min-h-[320px] group">
+<div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-primary transition-colors">add</span>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-white mb-2">Track New Goal</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center max-w-[200px]">Define a new financial objective and start allocating funds.</p>
+</div>
+</div>
+</div>
+</main>
+</body></html>

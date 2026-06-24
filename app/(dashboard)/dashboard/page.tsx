@@ -1,12 +1,10 @@
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/supabase/server'
-import { KPICards } from '@/components/dashboard/KPICards'
-import { CashFlowChart } from '@/components/dashboard/CashFlowChart'
-import { ExpenseBreakdown } from '@/components/dashboard/ExpenseBreakdown'
-import { RecentTransactions } from '@/components/dashboard/RecentTransactions'
-import { ActiveGoals } from '@/components/dashboard/ActiveGoals'
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns'
+import { formatCurrency } from '@/lib/currency'
 
+export const dynamic = 'force-dynamic'
 export const metadata = { title: 'Dashboard' }
 
 export default async function DashboardPage() {
@@ -25,7 +23,7 @@ export default async function DashboardPage() {
     await Promise.all([
       supabase.from('transactions').select('amount, type, categories(name,color)').eq('user_id', user.id).gte('date', monthStart).lte('date', monthEnd),
       supabase.from('transactions').select('amount, type').eq('user_id', user.id).gte('date', lastMonthStart).lte('date', lastMonthEnd),
-      supabase.from('transactions').select('*, categories(name,color,icon)').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5),
+      supabase.from('transactions').select('*, categories(name,color,icon)').eq('user_id', user.id).order('date', { ascending: false }).limit(5),
       supabase.from('goals').select('*').eq('user_id', user.id).eq('status', 'active').limit(4),
       supabase.from('transactions').select('amount, type, date').eq('user_id', user.id).gte('date', sixMonthsAgo).order('date', { ascending: true }),
     ])
@@ -42,7 +40,7 @@ export default async function DashboardPage() {
     totalSavings: thisIncome - thisExpenses,
     incomeChange: lastIncome > 0 ? ((thisIncome - lastIncome) / lastIncome) * 100 : 0,
     expenseChange: lastExpenses > 0 ? ((thisExpenses - lastExpenses) / lastExpenses) * 100 : 0,
-    savingsChange: 0,
+    savingsChange: lastIncome - lastExpenses > 0 ? (((thisIncome - thisExpenses) - (lastIncome - lastExpenses)) / (lastIncome - lastExpenses)) * 100 : 0,
   }
 
   const monthlyMap: Record<string, { income: number; expenses: number }> = {}
@@ -66,26 +64,275 @@ export default async function DashboardPage() {
     if (!catMap[key]) catMap[key] = { name: key, amount: 0, color: cat?.color ?? '#6b7280' }
     catMap[key].amount += Number(t.amount)
   })
-  const categoryData = Object.values(catMap).sort((a, b) => b.amount - a.amount).slice(0, 4)
+  const categoryData = Object.values(catMap).sort((a, b) => b.amount - a.amount).slice(0, 3)
+  const categoryTotal = categoryData.reduce((s, c) => s + c.amount, 0) || 1
+
+  // Chart scaling
+  const maxVal = Math.max(...monthlyChartData.map(d => Math.max(d.income, d.expenses)), 1)
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-end justify-between">
-        <div>
-          <h2 className="text-3xl font-bold text-[#dae2fd]">Dashboard Overview</h2>
-          <p className="text-sm text-[#c7c4d7] mt-1">Real-time financial telemetry.</p>
+    <>
+      <style>{`
+        .glass-panel {
+          background-color: rgba(18, 33, 49, 0.6);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-panel-hover:hover {
+          transform: translateY(-3px);
+          transition: transform 200ms ease-out;
+        }
+        @keyframes progress {
+          0% { background-position: 1rem 0; }
+          100% { background-position: 0 0; }
+        }
+      `}</style>
+
+      <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
+        {/* Header */}
+        <div className="mb-10">
+          <h2 className="font-headline-md text-3xl font-bold text-[#dae2fd]">Dashboard Overview</h2>
+          <p className="font-body-md text-sm text-[#c7c4d7] mt-1">Monitor your financial health and growth</p>
         </div>
-        <span className="text-sm text-[#c7c4d7]">{format(now, 'MMMM yyyy')}</span>
+
+        {/* KPI Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Card 1 */}
+          <div className="glass-panel rounded-xl p-6 glass-panel-hover flex flex-col justify-between h-36">
+            <div className="flex justify-between items-start">
+              <span className="text-[#c7c5d0] font-body-sm text-sm">Total Balance</span>
+              <span className={`font-label-caps text-xs flex items-center gap-1 px-2 py-1 rounded-full ${stats.savingsChange >= 0 ? 'text-[#00cc4b] bg-[#00cc4b]/10' : 'text-[#ff4433] bg-[#ff4433]/10'}`}>
+                <span className="material-symbols-outlined text-[14px]">{stats.savingsChange >= 0 ? 'trending_up' : 'trending_down'}</span>
+                {stats.savingsChange >= 0 ? '+' : ''}{stats.savingsChange.toFixed(1)}%
+              </span>
+            </div>
+            <div className="flex justify-between items-end">
+              <span className="font-data-display text-[28px] font-bold text-[#dae2fd] tracking-tight">{formatCurrency(stats.totalBalance)}</span>
+              <svg className="stroke-[#c0c1ff] fill-none" height="30" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 60 30" width="60">
+                <path d="M0,25 L10,20 L20,28 L30,15 L40,18 L50,5 L60,10" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Card 2 */}
+          <div className="glass-panel rounded-xl p-6 glass-panel-hover flex flex-col justify-between h-36">
+            <div className="flex justify-between items-start">
+              <span className="text-[#c7c5d0] font-body-sm text-sm">Monthly Income</span>
+              <span className={`font-label-caps text-xs flex items-center gap-1 px-2 py-1 rounded-full ${stats.incomeChange >= 0 ? 'text-[#00cc4b] bg-[#00cc4b]/10' : 'text-[#ff4433] bg-[#ff4433]/10'}`}>
+                <span className="material-symbols-outlined text-[14px]">trending_up</span>
+                {stats.incomeChange >= 0 ? '+' : ''}{stats.incomeChange.toFixed(1)}%
+              </span>
+            </div>
+            <div className="flex justify-between items-end">
+              <span className="font-data-display text-[28px] font-bold text-[#dae2fd] tracking-tight">{formatCurrency(stats.totalIncome)}</span>
+              <svg className="stroke-[#00cc4b] fill-none" height="30" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 60 30" width="60">
+                <path d="M0,28 L15,15 L30,20 L45,5 L60,2" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Card 3 */}
+          <div className="glass-panel rounded-xl p-6 glass-panel-hover flex flex-col justify-between h-36">
+            <div className="flex justify-between items-start">
+              <span className="text-[#c7c5d0] font-body-sm text-sm">Monthly Expenses</span>
+              <span className={`font-label-caps text-xs flex items-center gap-1 px-2 py-1 rounded-full ${stats.expenseChange <= 0 ? 'text-[#00cc4b] bg-[#00cc4b]/10' : 'text-[#ff4433] bg-[#ff4433]/10'}`}>
+                <span className="material-symbols-outlined text-[14px]">{stats.expenseChange <= 0 ? 'trending_down' : 'trending_up'}</span>
+                {stats.expenseChange >= 0 ? '+' : ''}{stats.expenseChange.toFixed(1)}%
+              </span>
+            </div>
+            <div className="flex justify-between items-end">
+              <span className="font-data-display text-[28px] font-bold text-[#dae2fd] tracking-tight">{formatCurrency(stats.totalExpenses)}</span>
+              <svg className="stroke-[#ff4433] fill-none" height="30" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 60 30" width="60">
+                <path d="M0,5 L15,10 L30,25 L45,15 L60,28" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Card 4 */}
+          <div className="glass-panel rounded-xl p-6 glass-panel-hover flex flex-col justify-between h-36">
+            <div className="flex justify-between items-start">
+              <span className="text-[#c7c5d0] font-body-sm text-sm">Savings Rate</span>
+              <span className="text-[#c0c1ff] font-label-caps text-xs flex items-center gap-1 bg-[#c0c1ff]/10 px-2 py-1 rounded-full">
+                <span className="material-symbols-outlined text-[14px]">savings</span> Safe
+              </span>
+            </div>
+            <div className="flex justify-between items-end">
+              <span className="font-data-display text-[28px] font-bold text-[#dae2fd] tracking-tight">
+                {stats.totalIncome > 0 ? ((stats.totalIncome - stats.totalExpenses) / stats.totalIncome * 100).toFixed(1) : '0'}%
+              </span>
+              <svg className="stroke-[#c0c1ff] fill-none" height="30" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 60 30" width="60">
+                <path d="M0,20 L15,22 L30,15 L45,18 L60,5" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Middle Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Left Chart */}
+          <div className="lg:col-span-2 glass-panel rounded-xl p-6 glass-panel-hover flex flex-col h-[400px]">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="font-headline-md text-[20px] font-bold text-[#dae2fd]">Income vs Expenses</h3>
+              <div className="flex gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-[#c0c1ff]"></span>
+                  <span className="font-body-sm text-[#c7c5d0] text-sm">Income</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-[#fa8c00]"></span>
+                  <span className="font-body-sm text-[#c7c5d0] text-sm">Expenses</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Dynamic Bar Chart */}
+            <div className="flex-1 flex items-end justify-between px-4 pb-2 border-b border-white/5 relative">
+              {/* Y Axis Lines */}
+              <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-8">
+                <div className="w-full h-[1px] bg-white/5"></div>
+                <div className="w-full h-[1px] bg-white/5"></div>
+                <div className="w-full h-[1px] bg-white/5"></div>
+                <div className="w-full h-[1px] bg-white/5"></div>
+              </div>
+              {/* Bars */}
+              {monthlyChartData.map((d) => {
+                const incomePct = Math.max(5, (d.income / maxVal) * 220) // Max height 220px
+                const expensePct = Math.max(5, (d.expenses / maxVal) * 220)
+                return (
+                  <div key={d.month} className="flex flex-col items-center gap-2 z-10 w-full px-2">
+                    <div className="flex items-end gap-1 h-[220px]">
+                      <div
+                        className="w-6 md:w-8 bg-[#c0c1ff] rounded-t-sm hover:brightness-110 transition-all cursor-pointer"
+                        style={{ height: `${incomePct}px` }}
+                        title={`Income: ${formatCurrency(d.income)}`}
+                      ></div>
+                      <div
+                        className="w-6 md:w-8 bg-[#fa8c00] rounded-t-sm hover:brightness-110 transition-all cursor-pointer"
+                        style={{ height: `${expensePct}px` }}
+                        title={`Expenses: ${formatCurrency(d.expenses)}`}
+                      ></div>
+                    </div>
+                    <span className="font-label-caps text-xs text-[#c7c5d0]">{d.month}</span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Right Chart */}
+          <div className="lg:col-span-1 glass-panel rounded-xl p-6 glass-panel-hover flex flex-col h-[400px]">
+            <h3 className="font-headline-md text-[20px] font-bold text-[#dae2fd] mb-6">Expense Breakdown</h3>
+            <div className="flex-1 flex flex-col items-center justify-center relative">
+              {/* Donut */}
+              <div className="w-40 h-40 rounded-full border-[16px] border-white/5 relative" style={{ borderTopColor: '#c0c1ff', borderRightColor: '#fa8c00', transform: 'rotate(-45deg)' }}>
+                <div className="absolute inset-[-16px] rounded-full border-[16px] border-transparent border-b-[#ff4433]" style={{ transform: 'rotate(10deg)' }}></div>
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center flex-col">
+                <span className="font-data-display text-[24px] font-bold text-[#dae2fd]">100%</span>
+                <span className="font-label-caps text-[10px] text-[#c7c5d0]">TOTAL</span>
+              </div>
+            </div>
+            <div className="mt-6 flex flex-col gap-3">
+              {categoryData.length === 0 ? (
+                <div className="text-center text-xs text-[#c7c5d0] py-4">No expense categories this month</div>
+              ) : (
+                categoryData.map((cat, idx) => (
+                  <div className="flex justify-between items-center text-sm" key={cat.name}>
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full" style={{ backgroundColor: cat.color || (idx === 0 ? '#c0c1ff' : idx === 1 ? '#fa8c00' : '#ff4433') }}></span>
+                      <span className="font-body-sm text-[#c7c5d0]">{cat.name}</span>
+                    </div>
+                    <span className="font-data-display text-[#dae2fd]">{((cat.amount / categoryTotal) * 100).toFixed(0)}%</span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Table */}
+          <div className="lg:col-span-2 glass-panel rounded-xl p-6 glass-panel-hover flex flex-col h-[400px] overflow-hidden">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="font-headline-md text-[20px] font-bold text-[#dae2fd]">Recent Transactions</h3>
+              <Link href="/finances" className="text-[#c0c1ff] hover:text-white font-label-caps text-xs tracking-wider transition-colors">VIEW ALL</Link>
+            </div>
+            <div className="flex-1 overflow-y-auto pr-2">
+              <table className="w-full text-left border-collapse">
+                <tbody className="font-body-sm text-[#c7c5d0]">
+                  {!recentTx || recentTx.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="py-8 text-center text-sm text-[#c7c5d0]">No recent transactions</td>
+                    </tr>
+                  ) : (
+                    recentTx.map((tx) => {
+                      const isIncome = tx.type === 'income'
+                      const category = tx.categories as { name: string; color: string; icon: string } | null
+                      return (
+                        <tr key={tx.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                          <td className="py-4 px-2 w-16">
+                            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-[#dae2fd]">
+                              <span className="material-symbols-outlined text-[20px]">
+                                {category?.icon || (isIncome ? 'arrow_downward' : 'shopping_cart')}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-4 px-2">
+                            <div className="font-medium text-[#dae2fd]">{tx.description}</div>
+                            <div className="text-xs mt-1">{format(new Date(tx.date), 'MMM dd, yyyy')}</div>
+                          </td>
+                          <td className="py-4 px-2">
+                            <span className="px-2 py-1 rounded-full font-label-caps text-[10px]" style={{ backgroundColor: `${category?.color || '#918f9a'}20`, color: category?.color || '#918f9a', border: `1px solid ${category?.color || '#918f9a'}30` }}>
+                              {category?.name?.toUpperCase() || 'OTHER'}
+                            </span>
+                          </td>
+                          <td className={`py-4 px-2 text-right font-data-display font-medium ${isIncome ? 'text-[#00cc4b]' : 'text-[#ff4433]'}`}>
+                            {isIncome ? '+' : '-'}{formatCurrency(Number(tx.amount))}
+                          </td>
+                        </tr>
+                      )
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Right Goals */}
+          <div className="lg:col-span-1 glass-panel rounded-xl p-6 glass-panel-hover flex flex-col h-[400px]">
+            <h3 className="font-headline-md text-[20px] font-bold text-[#dae2fd] mb-6">Active Goals</h3>
+            <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2">
+              {!goals || goals.length === 0 ? (
+                <div className="text-center text-sm text-[#c7c5d0] py-12">No active goals</div>
+              ) : (
+                goals.map((g) => {
+                  const current = Number(g.current_amount || 0)
+                  const target = Number(g.target_amount || 1)
+                  const pct = Math.min(100, Math.round((current / target) * 100))
+                  return (
+                    <div key={g.id}>
+                      <div className="flex justify-between items-end mb-2">
+                        <span className="font-body-sm font-medium text-[#dae2fd]">{g.name}</span>
+                        <span className="font-data-display text-sm text-[#c0c1ff]">{pct}%</span>
+                      </div>
+                      <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden relative">
+                        <div className="absolute top-0 left-0 h-full bg-[#c0c1ff] rounded-full" style={{ width: `${pct}%`, transition: 'width 1s ease-in-out' }}>
+                          <div className="w-full h-full bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:1rem_1rem] animate-[progress_1s_linear_infinite]"></div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })
+              )}
+            </div>
+            <Link href="/goals" className="mt-4 w-full py-2 border border-white/10 rounded-full text-center text-[#c7c5d0] font-label-caps text-xs hover:bg-white/5 hover:text-white transition-all block">
+              ADD NEW GOAL
+            </Link>
+          </div>
+        </div>
       </div>
-      <KPICards stats={stats} />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <CashFlowChart data={monthlyChartData} />
-        <ExpenseBreakdown data={categoryData} />
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <RecentTransactions transactions={recentTx ?? []} />
-        <ActiveGoals goals={goals ?? []} />
-      </div>
-    </div>
+    </>
   )
 }

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quantivo Reports &amp; Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&amp;family=Inter:wght@300;400;500&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container": "#122031",
+                      "primary": "#e1dfff",
+                      "on-tertiary-fixed": "#231b00",
+                      "on-surface-variant": "#c7c5d0",
+                      "surface-dim": "#051424",
+                      "surface-container-high": "#1d2b3c",
+                      "on-primary": "#292b5e",
+                      "inverse-surface": "#d5e4fa",
+                      "secondary-fixed-dim": "#ffb77a",
+                      "surface-tint": "#c0c1ff",
+                      "outline": "#918f9a",
+                      "on-primary-fixed": "#131449",
+                      "error": "#ffb4ab",
+                      "surface-container-highest": "#283647",
+                      "on-tertiary": "#3c2f00",
+                      "inverse-on-surface": "#233143",
+                      "on-tertiary-fixed-variant": "#574500",
+                      "secondary-fixed": "#ffdcc2",
+                      "on-error-container": "#ffdad6",
+                      "on-surface": "#d5e4fa",
+                      "tertiary-fixed": "#fee089",
+                      "outline-variant": "#46464f",
+                      "on-secondary-fixed-variant": "#6d3a00",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "on-secondary-fixed": "#2e1500",
+                      "on-background": "#d5e4fa",
+                      "error-container": "#93000a",
+                      "surface-variant": "#283647",
+                      "on-secondary": "#4c2700",
+                      "tertiary-fixed-dim": "#e0c470",
+                      "primary-fixed": "#e1e0ff",
+                      "tertiary-container": "#e0c470",
+                      "surface-bright": "#2c3a4c",
+                      "inverse-primary": "#585990",
+                      "tertiary": "#fee089",
+                      "on-primary-container": "#4b4d83",
+                      "on-tertiary-container": "#645003",
+                      "secondary-container": "#fb8c01",
+                      "surface-container-low": "#0e1c2d",
+                      "surface": "#051424",
+                      "on-secondary-container": "#5f3200",
+                      "surface-container-lowest": "#010f1f",
+                      "on-primary-fixed-variant": "#404176",
+                      "primary-container": "#c0c1ff",
+                      "background": "#051424",
+                      "secondary": "#ffb77a",
+                      "on-error": "#690005"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "24px",
+                      "margin-mobile": "16px",
+                      "sm": "12px",
+                      "base": "8px",
+                      "gutter": "24px",
+                      "xs": "4px",
+                      "margin-desktop": "40px",
+                      "lg": "48px",
+                      "xl": "80px"
+              },
+              "fontFamily": {
+                      "headline-xl": [
+                              "Space Grotesk"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Space Grotesk"
+                      ],
+                      "data-lg": [
+                              "JetBrains Mono"
+                      ],
+                      "data-sm": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-lg-mobile": [
+                              "Space Grotesk"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-xl": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "300"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "data-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "data-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "300"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+      </script>
+<style>
+          body {
+              background-color: #051424;
+              color: #d5e4fa;
+          }
+          .glass-panel {
+              background-color: rgba(18, 33, 49, 0.6);
+              backdrop-filter: blur(16px);
+              -webkit-backdrop-filter: blur(16px);
+              border: 1px solid rgba(255, 255, 255, 0.08);
+              box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+          }
+          .chart-grid-line {
+              stroke: rgba(255, 255, 255, 0.05);
+              stroke-dasharray: 4;
+          }
+          /* Custom scrollbar for webkit */
+          ::-webkit-scrollbar {
+              width: 8px;
+              height: 8px;
+          }
+          ::-webkit-scrollbar-track {
+              background: #051424; 
+          }
+          ::-webkit-scrollbar-thumb {
+              background: #283647; 
+              border-radius: 4px;
+          }
+          ::-webkit-scrollbar-thumb:hover {
+              background: #46464f; 
+          }
+      </style>
+</head>
+<body class="font-body-md text-body-md bg-surface text-on-surface antialiased overflow-x-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex w-[240px] h-screen fixed left-0 top-0 bg-surface-container dark:bg-surface-container border-r border-white/10 backdrop-blur-md flex-col py-md px-sm z-50">
+<div class="mb-lg px-xs">
+<h1 class="font-headline-lg text-headline-lg text-primary dark:text-primary tracking-tight">Quantos AI</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Data Analyst</p>
+</div>
+<ul class="flex flex-col gap-sm flex-1">
+<li>
+<a class="flex items-center gap-md px-sm py-xs rounded-md text-on-surface-variant font-medium hover:bg-primary/10 transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span>Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-xs rounded-md text-on-surface-variant font-medium hover:bg-primary/10 transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">payments</span>
+<span>Finances</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-xs rounded-md text-on-surface-variant font-medium hover:bg-primary/10 transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">ads_click</span>
+<span>Goals</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-xs rounded-md text-on-surface-variant font-medium hover:bg-primary/10 transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">monitoring</span>
+<span>Habits</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-xs rounded-md text-on-surface-variant font-medium hover:bg-primary/10 transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">description</span>
+<span>Invoices</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-xs rounded-md text-on-surface-variant font-medium hover:bg-primary/10 transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">event_repeat</span>
+<span>Subscriptions</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-xs rounded-md text-primary font-bold border-r-2 border-primary bg-primary/10 transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span>Reports</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto pt-md border-t border-white/10">
+<a class="flex items-center gap-md px-sm py-xs rounded-md text-on-surface-variant font-medium hover:bg-primary/10 transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="hidden md:flex justify-between items-center w-full px-margin-desktop py-base ml-[240px] w-[calc(100%-240px)] bg-surface-container/60 dark:bg-surface-container/60 border-b border-white/10 backdrop-blur-lg docked top-0 sticky z-40 h-[72px]">
+<div class="flex items-center gap-md">
+<div class="relative focus-within:ring-2 focus-within:ring-primary rounded-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="bg-surface-dim border border-white/10 text-on-surface rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-primary/50 w-64 placeholder-on-surface-variant/50 transition-colors glass-panel" placeholder="Search analytics..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">help</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-white/10 ml-2">
+<img alt="Analyst profile" class="w-full h-full object-cover" data-alt="A futuristic, moody profile portrait of a data analyst, illuminated by soft violet and blue rim lights against a dark high-tech background. The image should be highly detailed, cinematic, and professional, blending realism with a subtle cyberpunk or sci-fi aesthetic. The lighting should emphasize a focused, intelligent expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0xF6_C_6Vw5DDpfqaT70VjCoC4gb3LYJPw2PSBDBIZbhyoI8OQq-ERFdgsF3H6x6dHZEcQSX3UCR0H5SQFAFXce0MGAo9UUIgpjC6zKGAn2OFsXxm0-8b0Jnbc06nsooqZ2sAVEbjnslhfGWf-TK_3v2nIZ_QXCkp4q5hQlgZpU4_s63dYB9TQbGgiTfaothdRjTNM3VnuGzwWUxxaFk-K138lg7s0zMxuZJPVyCKXNWGHA5G45OT3Lgkx8m29I62y2PmfaoUX7c"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="md:ml-[240px] p-margin-mobile md:p-margin-desktop min-h-screen">
+<div class="max-w-[1440px] mx-auto space-y-md">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-md mb-lg">
+<div>
+<h2 class="font-headline-xl text-headline-lg-mobile md:text-headline-xl text-on-surface tracking-tight">Reports &amp; Analytics</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Comprehensive financial breakdown and predictive modeling.</p>
+</div>
+<div class="flex items-center gap-sm">
+<select class="glass-panel text-on-surface border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary appearance-none cursor-pointer pr-10 relative">
+<option value="7m">Last 7 Months</option>
+<option value="1y">Last 1 Year</option>
+<option value="ytd">YTD</option>
+</select>
+<button class="bg-[#fa8c00] text-[#231b00] px-6 py-2 rounded-full font-medium text-sm hover:brightness-110 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        CSV
+                    </button>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-medium text-sm hover:brightness-110 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                        PDF
+                    </button>
+</div>
+</div>
+<!-- Stats Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Stat Card 1 -->
+<div class="glass-panel rounded-xl p-md flex flex-col justify-between h-[160px] relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#22c55e]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start">
+<span class="font-body-sm text-body-sm text-on-surface-variant uppercase tracking-wider">Total Income (7 months)</span>
+<div class="w-8 h-8 rounded-full bg-[#22c55e]/10 flex items-center justify-center border border-[#22c55e]/20">
+<span class="material-symbols-outlined text-[#22c55e] text-[16px]">trending_up</span>
+</div>
+</div>
+<div>
+<div class="font-data-lg text-[36px] font-medium leading-tight text-on-surface">$142,850.00</div>
+<div class="text-[#22c55e] font-data-sm text-data-sm mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                            +8.4% vs prev. period
+                        </div>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="glass-panel rounded-xl p-md flex flex-col justify-between h-[160px] relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ef4444]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start">
+<span class="font-body-sm text-body-sm text-on-surface-variant uppercase tracking-wider">Total Expenses (7 months)</span>
+<div class="w-8 h-8 rounded-full bg-[#ef4444]/10 flex items-center justify-center border border-[#ef4444]/20">
+<span class="material-symbols-outlined text-[#ef4444] text-[16px]">trending_down</span>
+</div>
+</div>
+<div>
+<div class="font-data-lg text-[36px] font-medium leading-tight text-on-surface">$84,320.50</div>
+<div class="text-[#ef4444] font-data-sm text-data-sm mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+                            -2.1% vs prev. period
+                        </div>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="glass-panel rounded-xl p-md flex flex-col justify-between h-[160px] relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start">
+<span class="font-body-sm text-body-sm text-on-surface-variant uppercase tracking-wider">Net Savings Rate</span>
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-[16px]">account_balance_wallet</span>
+</div>
+</div>
+<div>
+<div class="font-data-lg text-[36px] font-medium leading-tight text-on-surface">41.2%</div>
+<div class="text-primary font-data-sm text-data-sm mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+                            Optimized tier
+                        </div>
+</div>
+</div>
+</div>
+<!-- Bento Grid Area -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-gutter mt-lg">
+<!-- Main Chart (Spans 2 columns on desktop) -->
+<div class="xl:col-span-2 glass-panel rounded-xl p-md flex flex-col h-[450px]">
+<div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+<h3 class="font-headline-lg text-[24px] font-bold text-on-surface">Income &amp; Savings Velocity</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary/80"></div>
+<span class="font-data-sm text-data-sm text-on-surface-variant">Income</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-[#fa8c00]"></div>
+<span class="font-data-sm text-data-sm text-on-surface-variant">Savings</span>
+</div>
+</div>
+</div>
+<div class="flex-1 relative w-full h-full pt-4">
+<!-- Mock SVG Chart -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 800 300">
+<defs>
+<lineargradient id="incomeGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#c0c1ff" stop-opacity="0.4"></stop>
+<stop offset="100%" stop-color="#c0c1ff" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<!-- Grid Lines -->
+<line class="chart-grid-line" x1="50" x2="780" y1="50" y2="50"></line>
+<line class="chart-grid-line" x1="50" x2="780" y1="125" y2="125"></line>
+<line class="chart-grid-line" x1="50" x2="780" y1="200" y2="200"></line>
+<line class="chart-grid-line" x1="50" x2="780" y1="275" y2="275"></line>
+<!-- Y Axis Labels (JetBrains Mono) -->
+<text fill="#918f9a" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="40" y="55">25k</text>
+<text fill="#918f9a" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="40" y="130">20k</text>
+<text fill="#918f9a" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="40" y="205">15k</text>
+<text fill="#918f9a" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="40" y="280">10k</text>
+<!-- X Axis Labels (JetBrains Mono) -->
+<text fill="#918f9a" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="50" y="295">Jan</text>
+<text fill="#918f9a" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="171" y="295">Feb</text>
+<text fill="#918f9a" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="292" y="295">Mar</text>
+<text fill="#918f9a" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="414" y="295">Apr</text>
+<text fill="#918f9a" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="535" y="295">May</text>
+<text fill="#918f9a" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="657" y="295">Jun</text>
+<text fill="#918f9a" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="780" y="295">Jul</text>
+<!-- Income Area (Violet) -->
+<path d="M50,220 C100,210 120,180 171,150 C220,120 250,140 292,130 C340,120 370,80 414,90 C460,100 490,110 535,80 C580,50 610,60 657,40 C700,20 740,30 780,20 L780,275 L50,275 Z" fill="url(#incomeGradient)"></path>
+<path d="M50,220 C100,210 120,180 171,150 C220,120 250,140 292,130 C340,120 370,80 414,90 C460,100 490,110 535,80 C580,50 610,60 657,40 C700,20 740,30 780,20" fill="none" stroke="#c0c1ff" stroke-width="2"></path>
+<!-- Savings Line (Amber) -->
+<path d="M50,260 C100,255 120,240 171,230 C220,220 250,210 292,200 C340,190 370,170 414,150 C460,130 490,120 535,100 C580,80 610,90 657,70 C700,50 740,60 780,40" fill="none" stroke="#fa8c00" stroke-dasharray="6,4" stroke-width="2"></path>
+<!-- Data Points -->
+<circle cx="780" cy="20" fill="#051424" r="4" stroke="#c0c1ff" stroke-width="2"></circle>
+<circle cx="780" cy="40" fill="#051424" r="4" stroke="#fa8c00" stroke-width="2"></circle>
+</svg>
+</div>
+</div>
+<!-- Right Column Stack -->
+<div class="flex flex-col gap-gutter">
+<!-- AI Insight Card (Locked) -->
+<div class="glass-panel rounded-xl p-md relative overflow-hidden h-[213px] border-primary/30 shadow-[0_0_15px_rgba(192,193,255,0.1)]">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent z-0"></div>
+<div class="relative z-10 filter blur-sm select-none">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+<h4 class="font-headline-lg text-[18px] text-primary font-bold">Quantos Insight</h4>
+</div>
+<p class="font-body-md text-on-surface-variant leading-relaxed">
+                                Your savings rate has improved by <strong class="text-on-surface font-medium">12%</strong> following subscription optimization. We project an additional $4,200 in surplus capital by year end if current velocity holds.
+                            </p>
+</div>
+<!-- Lock Overlay -->
+<div class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-surface/80 backdrop-blur-[2px]">
+<span class="material-symbols-outlined text-primary/50 text-[32px] mb-2">lock</span>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-medium text-sm hover:brightness-110 transition-all shadow-lg flex items-center gap-2">
+                                Unlock Pro Insights
+                                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Spend Intensity Heatmap Mini -->
+<div class="glass-panel rounded-xl p-md flex flex-col h-[213px]">
+<h4 class="font-body-md font-medium text-on-surface mb-4 border-b border-white/10 pb-2">Spend Intensity Heatmap</h4>
+<div class="flex-1 grid grid-cols-7 grid-rows-4 gap-1">
+<!-- JS will populate these, putting in some static examples for visual -->
+<!-- Row 1 -->
+<div class="bg-[#c0c1ff]/20 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/10 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/40 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/20 rounded-sm"></div>
+<div class="bg-[#fa8c00]/40 rounded-sm"></div>
+<div class="bg-[#fa8c00]/60 rounded-sm"></div>
+<div class="bg-[#fa8c00]/30 rounded-sm"></div>
+<!-- Row 2 -->
+<div class="bg-[#c0c1ff]/10 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/30 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/20 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/50 rounded-sm"></div>
+<div class="bg-[#fa8c00]/20 rounded-sm"></div>
+<div class="bg-[#fa8c00]/80 rounded-sm"></div>
+<div class="bg-[#fa8c00]/40 rounded-sm"></div>
+<!-- Row 3 -->
+<div class="bg-[#c0c1ff]/40 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/20 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/60 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/30 rounded-sm"></div>
+<div class="bg-[#fa8c00]/50 rounded-sm"></div>
+<div class="bg-[#fa8c00]/90 rounded-sm"></div>
+<div class="bg-[#fa8c00]/60 rounded-sm"></div>
+<!-- Row 4 -->
+<div class="bg-[#c0c1ff]/20 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/40 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/10 rounded-sm"></div>
+<div class="bg-[#c0c1ff]/20 rounded-sm"></div>
+<div class="bg-[#fa8c00]/30 rounded-sm"></div>
+<div class="bg-[#fa8c00]/70 rounded-sm"></div>
+<div class="bg-[#fa8c00]/50 rounded-sm"></div>
+</div>
+<div class="flex justify-between mt-2 font-data-sm text-data-sm text-on-surface-variant/50">
+<span>Low (Mon)</span>
+<span>High (Sun)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Transaction Table Section -->
+<div class="glass-panel rounded-xl mt-gutter overflow-hidden">
+<div class="p-md border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
+<h3 class="font-headline-lg text-[20px] font-bold text-on-surface">Category Breakdown</h3>
+<button class="text-primary text-sm hover:underline font-medium">View All</button>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-white/10">
+<th class="py-4 px-6 font-headline-lg text-[14px] text-on-surface-variant font-medium tracking-wide">Category</th>
+<th class="py-4 px-6 font-headline-lg text-[14px] text-on-surface-variant font-medium tracking-wide">Amount</th>
+<th class="py-4 px-6 font-headline-lg text-[14px] text-on-surface-variant font-medium tracking-wide">% Share</th>
+<th class="py-4 px-6 font-headline-lg text-[14px] text-on-surface-variant font-medium tracking-wide w-1/3">Allocation</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/[0.05]">
+<!-- Row 1 -->
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="py-4 px-6">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-data-sm text-[13px] text-on-surface">Housing</span>
+</div>
+</td>
+<td class="py-4 px-6 font-data-lg text-[15px] text-on-surface">$28,500.00</td>
+<td class="py-4 px-6 font-data-lg text-[15px] text-on-surface-variant">33.8%</td>
+<td class="py-4 px-6">
+<div class="w-full h-1.5 bg-surface-dim rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-gradient-to-r from-primary to-primary-container" style="width: 33.8%"></div>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="py-4 px-6">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
+<span class="w-2 h-2 rounded-full bg-[#fb8c01]"></span>
+<span class="font-data-sm text-[13px] text-on-surface">Operations</span>
+</div>
+</td>
+<td class="py-4 px-6 font-data-lg text-[15px] text-on-surface">$18,240.50</td>
+<td class="py-4 px-6 font-data-lg text-[15px] text-on-surface-variant">21.6%</td>
+<td class="py-4 px-6">
+<div class="w-full h-1.5 bg-surface-dim rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-gradient-to-r from-[#fb8c01] to-[#ffb77a]" style="width: 21.6%"></div>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="py-4 px-6">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
+<span class="w-2 h-2 rounded-full bg-[#22c55e]"></span>
+<span class="font-data-sm text-[13px] text-on-surface">Payroll</span>
+</div>
+</td>
+<td class="py-4 px-6 font-data-lg text-[15px] text-on-surface">$15,800.00</td>
+<td class="py-4 px-6 font-data-lg text-[15px] text-on-surface-variant">18.7%</td>
+<td class="py-4 px-6">
+<div class="w-full h-1.5 bg-surface-dim rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-[#22c55e]/80" style="width: 18.7%"></div>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="py-4 px-6">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
+<span class="w-2 h-2 rounded-full bg-[#ef4444]"></span>
+<span class="font-data-sm text-[13px] text-on-surface">Marketing</span>
+</div>
+</td>
+<td class="py-4 px-6 font-data-lg text-[15px] text-on-surface">$12,450.00</td>
+<td class="py-4 px-6 font-data-lg text-[15px] text-on-surface-variant">14.7%</td>
+<td class="py-4 px-6">
+<div class="w-full h-1.5 bg-surface-dim rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-[#ef4444]/80" style="width: 14.7%"></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quantivo Settings</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#233143",
+                        "on-background": "#d5e4fa",
+                        "on-secondary-container": "#5f3200",
+                        "surface-container-low": "#0e1c2d",
+                        "on-tertiary-fixed-variant": "#39485a",
+                        "on-error": "#690005",
+                        "tertiary": "#d5e4fa",
+                        "secondary-container": "#fb8c01",
+                        "tertiary-fixed": "#d4e4fa",
+                        "primary-fixed": "#e1e0ff",
+                        "inverse-primary": "#585990",
+                        "on-tertiary-fixed": "#0d1d2c",
+                        "surface-dim": "#051424",
+                        "on-secondary": "#4c2700",
+                        "surface-container-high": "#1d2b3c",
+                        "inverse-surface": "#d5e4fa",
+                        "primary": "#e1dfff",
+                        "secondary-fixed": "#ffdcc2",
+                        "surface-bright": "#2c3a4c",
+                        "on-secondary-fixed": "#2e1500",
+                        "surface-container": "#122031",
+                        "surface-tint": "#c0c1ff",
+                        "error-container": "#93000a",
+                        "surface-container-highest": "#283647",
+                        "surface-container-lowest": "#010f1f",
+                        "outline-variant": "#46464f",
+                        "primary-container": "#c0c1ff",
+                        "on-primary-fixed-variant": "#404176",
+                        "tertiary-fixed-dim": "#b9c8dd",
+                        "outline": "#918f9a",
+                        "on-surface-variant": "#c7c5d0",
+                        "surface-variant": "#283647",
+                        "on-surface": "#d5e4fa",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#ffb77a",
+                        "background": "#051424",
+                        "tertiary-container": "#b9c8dd",
+                        "on-primary-container": "#4b4d83",
+                        "on-primary-fixed": "#131449",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-primary": "#292b5e",
+                        "on-secondary-fixed-variant": "#6d3a00",
+                        "surface": "#051424",
+                        "on-tertiary-container": "#455466",
+                        "secondary": "#ffb77a",
+                        "on-tertiary": "#233142",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "unit": "8px",
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Space Grotesk"],
+                        "headline-sm": ["Space Grotesk"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"],
+                        "data-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "data-lg": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "300" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "300" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "headline-md": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "data-md": ["14px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "300" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.08em", "fontWeight": "600" }],
+                        "data-lg": ["18px", { "lineHeight": "1.4", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(18, 33, 49, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+        .glass-panel:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        .ghost-input {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #d5e4fa;
+        }
+        .ghost-input:focus {
+            outline: none;
+            border-color: #c0c1ff;
+            box-shadow: 0 0 0 1px #c0c1ff;
+        }
+        
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(18, 33, 49, 0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex overflow-x-hidden">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-surface-container/60 backdrop-blur-xl h-screen w-[240px] fixed left-0 top-0 border-r border-white/10 shadow-none flex flex-col h-full py-unit z-50">
+<!-- Brand Header -->
+<div class="px-gutter py-6 border-b border-white/10 flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">hexagon</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight" style="font-size: 24px; line-height: 1.2;">Quantivo</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase opacity-70">Quantitative Finance</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 overflow-y-auto py-6 flex flex-col gap-1 px-3">
+<a class="text-on-surface-variant font-medium hover:bg-white/10 hover:text-on-surface transition-all scale-95 duration-200 flex items-center gap-3 px-4 py-3 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="text-on-surface-variant font-medium hover:bg-white/10 hover:text-on-surface transition-all scale-95 duration-200 flex items-center gap-3 px-4 py-3 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">payments</span>
+<span class="font-body-md text-body-md">Finances</span>
+</a>
+<a class="text-on-surface-variant font-medium hover:bg-white/10 hover:text-on-surface transition-all scale-95 duration-200 flex items-center gap-3 px-4 py-3 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">ads_click</span>
+<span class="font-body-md text-body-md">Goals</span>
+</a>
+<a class="text-on-surface-variant font-medium hover:bg-white/10 hover:text-on-surface transition-all scale-95 duration-200 flex items-center gap-3 px-4 py-3 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">autorenew</span>
+<span class="font-body-md text-body-md">Habits</span>
+</a>
+<a class="text-on-surface-variant font-medium hover:bg-white/10 hover:text-on-surface transition-all scale-95 duration-200 flex items-center gap-3 px-4 py-3 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">description</span>
+<span class="font-body-md text-body-md">Invoices</span>
+</a>
+<a class="text-on-surface-variant font-medium hover:bg-white/10 hover:text-on-surface transition-all scale-95 duration-200 flex items-center gap-3 px-4 py-3 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">calendar_today</span>
+<span class="font-body-md text-body-md">Subscriptions</span>
+</a>
+<a class="text-on-surface-variant font-medium hover:bg-white/10 hover:text-on-surface transition-all scale-95 duration-200 flex items-center gap-3 px-4 py-3 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">monitoring</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="text-primary font-bold bg-white/5 border-r-2 border-secondary hover:bg-white/10 hover:text-on-surface transition-all scale-95 duration-200 flex items-center gap-3 px-4 py-3 rounded-lg" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+<!-- User Quick Profile (Bottom) -->
+<div class="mt-auto px-4 pt-4 border-t border-white/10 mb-4">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+<img class="w-10 h-10 rounded-full object-cover border border-white/20" data-alt="A macro photography style close-up of a professional corporate headshot of a mature individual, softly lit with cool blue and violet undertones, set against a dark institutional background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe0nNAcFIYRj_RmI7_5pHzbKz3p7QesyB08S65dTiM9JIjt4TYXBsNGBb05eBRNM9z_EkDoYXUeUpVy2COHl1u2SQXyy04VAzabUXXl7V8ug33eNDlQ9L80eSrc1sZFztAEd_HmQ5mingIyABPYoORu4j5FAeJ3Tb1viduSWLoX17HCLlRgqJzCogUA4YIPEe9LSTkLc5KBw_vqrMDoCanqkgqjOtesGj6hgG-7zNHSTRQzeukrlJPpVGtq7TAU-4CRECLt_d39lE"/>
+<div class="flex-1 min-w-0">
+<p class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Elenor Vance</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-70 truncate text-xs">elenor@quantivo.io</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-[240px] flex-1 min-h-screen relative overflow-hidden">
+<!-- Abstract Background Glows -->
+<div class="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary-container/5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4 pointer-events-none"></div>
+<!-- Top Header Container -->
+<header class="px-margin-desktop py-12 border-b border-white/5 sticky top-0 z-40 bg-background/80 backdrop-blur-md">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Settings</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Manage your account preferences, billing details, and workspace appearance.</p>
+</header>
+<!-- Settings Layout -->
+<div class="px-margin-desktop py-12 flex gap-16 relative z-10">
+<!-- Left Sub-Nav (200px) -->
+<aside class="w-[200px] shrink-0 sticky top-[180px] self-start space-y-1">
+<a class="block px-4 py-3 rounded-lg text-primary font-semibold bg-white/5 border-l-2 border-primary transition-colors flex items-center justify-between" href="#profile">
+<span>Profile</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+<a class="block px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-white/5 hover:text-on-surface transition-colors" href="#account">
+                    Account Security
+                </a>
+<a class="block px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-white/5 hover:text-on-surface transition-colors" href="#billing">
+                    Billing &amp; Plan
+                </a>
+<a class="block px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-white/5 hover:text-on-surface transition-colors flex items-center justify-between" href="#notifications">
+<span>Notifications</span>
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+</a>
+<a class="block px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-white/5 hover:text-on-surface transition-colors" href="#appearance">
+                    Appearance
+                </a>
+<a class="block px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-white/5 hover:text-on-surface transition-colors" href="#privacy">
+                    Privacy
+                </a>
+<div class="pt-6 mt-2 border-t border-white/10">
+<a class="block px-4 py-3 rounded-lg text-error font-medium hover:bg-error/10 transition-colors" href="#danger">
+                        Danger Zone
+                    </a>
+</div>
+</aside>
+<!-- Right Main Content -->
+<div class="flex-1 max-w-4xl space-y-24 pb-32">
+<!-- Section: Profile -->
+<section class="scroll-mt-32" id="profile">
+<div class="mb-8 border-b border-white/10 pb-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Public Profile</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">This information will be displayed publicly across your workspaces.</p>
+</div>
+<div class="glass-panel p-8">
+<!-- Avatar Upload -->
+<div class="flex items-center gap-8 mb-10 border-b border-white/5 pb-8">
+<div class="relative group cursor-pointer">
+<div class="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/30 group-hover:border-primary transition-colors">
+<img class="w-full h-full object-cover" data-alt="A beautifully lit studio headshot of a female executive in her mid-thirties, wearing a sleek navy blazer. The lighting is soft and professional, set against a deep, dark gray background with a subtle ambient blue rim light. High resolution, premium corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASTMtMQTOMsGLoqcbiHMNVU2Jg6FtmmakgnEPagkO18XUvvnc1jbYqq9H0rEf1s26pv8VZNT9vdcJSYSighhPkAkKtJGmvqTCyMusSfus8jBGxr7H51WnhjPC2js8rQGr5oCH7DvB0V3-pGGLWGls8DQ_zJJ3K50fly7TlOBk_wnKfEyLA-KB1mQnqcWOvy8QzQFtSy__iul9y7qZGxjOqtXKIAOpEsG-suDVxiwpIbELEzEC5BLGI4NI9wT3BJ6pkLRbUv9t77XY"/>
+</div>
+<div class="absolute inset-0 bg-background/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+<span class="material-symbols-outlined text-on-surface">photo_camera</span>
+</div>
+</div>
+<div>
+<div class="flex gap-4 mb-2">
+<button class="px-6 py-2 rounded-full bg-white/10 text-on-surface hover:bg-white/20 transition-colors font-body-sm text-body-sm font-semibold">Change Avatar</button>
+<button class="px-6 py-2 rounded-full bg-transparent text-on-surface-variant hover:text-on-surface transition-colors font-body-sm text-body-sm">Remove</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-70 text-xs">JPG, GIF or PNG. 1MB max.</p>
+</div>
+</div>
+<!-- Form Grid -->
+<div class="grid grid-cols-2 gap-8">
+<div class="space-y-2 col-span-2 sm:col-span-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block">Full Name</label>
+<input class="ghost-input w-full px-4 py-3 rounded-full font-body-md text-body-md transition-all" type="text" value="Elenor Vance"/>
+</div>
+<div class="space-y-2 col-span-2 sm:col-span-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider flex items-center gap-2">
+                                    Email Address
+                                    <span class="material-symbols-outlined text-primary text-[14px]" title="Verified">verified</span>
+</label>
+<input class="ghost-input w-full px-4 py-3 rounded-full font-body-md text-body-md transition-all" readonly="" type="email" value="elenor@quantivo.io"/>
+</div>
+<div class="space-y-2 col-span-2 sm:col-span-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block">Default Currency</label>
+<div class="relative">
+<select class="ghost-input w-full px-4 py-3 rounded-full font-body-md text-body-md appearance-none transition-all pr-10">
+<option class="bg-surface text-on-surface" value="usd">USD ($) - US Dollar</option>
+<option class="bg-surface text-on-surface" value="eur">EUR (€) - Euro</option>
+<option class="bg-surface text-on-surface" value="gbp">GBP (£) - British Pound</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<div class="space-y-2 col-span-2 sm:col-span-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block">Timezone</label>
+<div class="relative">
+<select class="ghost-input w-full px-4 py-3 rounded-full font-body-md text-body-md appearance-none transition-all pr-10">
+<option class="bg-surface text-on-surface" value="est">(GMT-05:00) Eastern Time</option>
+<option class="bg-surface text-on-surface" value="pst">(GMT-08:00) Pacific Time</option>
+<option class="bg-surface text-on-surface" value="utc">(UTC) Coordinated Universal Time</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="mt-10 pt-6 border-t border-white/5 flex justify-end">
+<button class="px-8 py-3 rounded-full bg-primary-container text-on-primary-container hover:bg-primary transition-colors font-headline-sm text-headline-sm !text-[16px]">
+                                Save Changes
+                            </button>
+</div>
+</div>
+</section>
+<!-- Section: Billing & Plan -->
+<section class="scroll-mt-32" id="billing">
+<div class="mb-8 border-b border-white/10 pb-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Billing &amp; Plan</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Manage your subscription, payment methods, and billing history.</p>
+</div>
+<!-- Current Plan Card -->
+<div class="glass-panel p-8 mb-8 relative overflow-hidden">
+<!-- Decorative gradient blob -->
+<div class="absolute -right-20 -top-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex justify-between items-start mb-6 relative z-10">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Professional Tier</h4>
+<span class="px-2 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary font-label-caps text-[10px] tracking-widest uppercase">Pro</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Billed $149.00 monthly. Next charge on Nov 15, 2024.</p>
+</div>
+<div class="text-right">
+<div class="font-headline-lg text-headline-lg text-on-surface !text-[32px]">$149<span class="font-body-sm text-body-sm text-on-surface-variant">/mo</span></div>
+</div>
+</div>
+<!-- Upgrade CTA -->
+<div class="bg-surface-container-low/50 rounded-xl p-6 border border-primary/20 flex items-center justify-between mt-8 relative group">
+<!-- Subtle glow border effect on hover -->
+<div class="absolute inset-0 rounded-xl border border-primary/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-[0_0_15px_rgba(192,193,255,0.2)]"></div>
+<div>
+<h5 class="font-headline-sm text-headline-sm text-on-surface !text-[16px] mb-1">Unlock Enterprise Features</h5>
+<ul class="flex gap-4 font-body-sm text-body-sm text-on-surface-variant opacity-80 mt-2">
+<li class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-primary">check</span> Unlimited API calls</li>
+<li class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-primary">check</span> Custom ML models</li>
+<li class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-primary">check</span> 24/7 Priority Support</li>
+</ul>
+</div>
+<button class="px-6 py-2 rounded-full bg-white/10 text-on-surface hover:bg-white/20 transition-colors font-body-sm text-body-sm font-semibold whitespace-nowrap z-10">
+                                Upgrade to Enterprise
+                            </button>
+</div>
+</div>
+<!-- Billing History Table -->
+<div class="glass-panel overflow-hidden">
+<div class="px-6 py-4 border-b border-white/5 bg-white/[0.02]">
+<h4 class="font-headline-sm text-headline-sm text-on-surface !text-[16px]">Billing History</h4>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-white/5">
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant uppercase">Date</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant uppercase">Description</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Amount</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant uppercase text-center">Status</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant uppercase text-center">Invoice</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface">
+<tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+<td class="px-6 py-4 font-data-md text-data-md text-on-surface-variant">2024-10-15</td>
+<td class="px-6 py-4">Pro Plan - Monthly Subscription</td>
+<td class="px-6 py-4 font-data-md text-data-md text-right">$149.00</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-block px-3 py-1 rounded-full bg-[#10b981]/10 border border-[#10b981]/30 text-[#10b981] font-label-caps text-[10px]">Paid</span>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">download</span>
+</button>
+</td>
+</tr>
+<tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+<td class="px-6 py-4 font-data-md text-data-md text-on-surface-variant">2024-09-15</td>
+<td class="px-6 py-4">Pro Plan - Monthly Subscription</td>
+<td class="px-6 py-4 font-data-md text-data-md text-right">$149.00</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-block px-3 py-1 rounded-full bg-[#10b981]/10 border border-[#10b981]/30 text-[#10b981] font-label-caps text-[10px]">Paid</span>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">download</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="px-6 py-4 font-data-md text-data-md text-on-surface-variant">2024-08-15</td>
+<td class="px-6 py-4">Pro Plan - Monthly Subscription</td>
+<td class="px-6 py-4 font-data-md text-data-md text-right">$149.00</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-block px-3 py-1 rounded-full bg-[#10b981]/10 border border-[#10b981]/30 text-[#10b981] font-label-caps text-[10px]">Paid</span>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">download</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Section: Appearance -->
+<section class="scroll-mt-32" id="appearance">
+<div class="mb-8 border-b border-white/10 pb-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Appearance</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Customize the interface theme and accent colors.</p>
+</div>
+<div class="glass-panel p-8">
+<!-- Theme Toggle Cards -->
+<div class="mb-10">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block mb-4">Interface Theme</label>
+<div class="flex gap-6">
+<!-- Dark Mode (Active) -->
+<div class="cursor-pointer group flex flex-col items-center gap-3">
+<div class="w-40 h-28 rounded-xl border-2 border-primary bg-background p-2 relative overflow-hidden shadow-[0_0_20px_rgba(192,193,255,0.15)]">
+<!-- Mini preview skeleton -->
+<div class="w-full h-full flex flex-col gap-2 opacity-80">
+<div class="w-full h-3 bg-surface-container rounded-sm flex items-center px-1 gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-primary-container"></div>
+<div class="w-6 h-1 rounded bg-white/20 ml-auto"></div>
+</div>
+<div class="flex flex-1 gap-2">
+<div class="w-6 h-full bg-surface-container rounded-sm"></div>
+<div class="flex-1 bg-surface-container/50 border border-white/5 rounded-sm p-1 flex flex-col gap-1">
+<div class="w-3/4 h-2 bg-white/10 rounded-sm"></div>
+<div class="w-1/2 h-2 bg-white/10 rounded-sm"></div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-background text-[12px] font-bold">check</span>
+</div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Dark Mode</span>
+</div>
+<!-- Light Mode (Inactive) -->
+<div class="cursor-pointer group flex flex-col items-center gap-3 opacity-60 hover:opacity-100 transition-opacity">
+<div class="w-40 h-28 rounded-xl border-2 border-transparent bg-[#f1f5f9] p-2 relative overflow-hidden group-hover:border-white/20 transition-colors">
+<!-- Mini preview skeleton -->
+<div class="w-full h-full flex flex-col gap-2 opacity-80">
+<div class="w-full h-3 bg-white rounded-sm border border-black/5 flex items-center px-1 gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+<div class="w-6 h-1 rounded bg-black/10 ml-auto"></div>
+</div>
+<div class="flex flex-1 gap-2">
+<div class="w-6 h-full bg-white border border-black/5 rounded-sm"></div>
+<div class="flex-1 bg-white border border-black/5 rounded-sm p-1 flex flex-col gap-1">
+<div class="w-3/4 h-2 bg-black/5 rounded-sm"></div>
+<div class="w-1/2 h-2 bg-black/5 rounded-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Light Mode</span>
+</div>
+</div>
+</div>
+<!-- Accent Color Picker -->
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block mb-4">Accent Color</label>
+<div class="flex gap-4">
+<!-- Violet (Active) -->
+<button class="w-10 h-10 rounded-full bg-[#c0c1ff] ring-2 ring-offset-2 ring-offset-background ring-primary transition-all flex items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined text-background text-[18px]">check</span>
+</button>
+<!-- Blue -->
+<button class="w-10 h-10 rounded-full bg-[#60a5fa] ring-2 ring-offset-2 ring-offset-background ring-transparent hover:ring-white/30 transition-all cursor-pointer"></button>
+<!-- Green -->
+<button class="w-10 h-10 rounded-full bg-[#34d399] ring-2 ring-offset-2 ring-offset-background ring-transparent hover:ring-white/30 transition-all cursor-pointer"></button>
+<!-- Amber -->
+<button class="w-10 h-10 rounded-full bg-[#fb8c01] ring-2 ring-offset-2 ring-offset-background ring-transparent hover:ring-white/30 transition-all cursor-pointer"></button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Danger Zone -->
+<section class="scroll-mt-32" id="danger">
+<div class="mb-8 border-b border-error/20 pb-4">
+<h3 class="font-headline-sm text-headline-sm text-error">Danger Zone</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Irreversible and destructive actions concerning your account data.</p>
+</div>
+<div class="glass-panel p-8 border-error/20 bg-error/5">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 pb-8 border-b border-error/10">
+<div class="max-w-xl">
+<h4 class="font-headline-sm text-headline-sm text-on-surface !text-[16px] mb-2">Export My Data</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-80">Download a complete copy of all your financial data, reports, and settings in CSV and JSON formats.</p>
+</div>
+<button class="px-6 py-2 rounded-full border border-white/20 text-on-surface hover:bg-white/5 transition-colors font-body-sm text-body-sm font-semibold shrink-0">
+                                Request Export
+                            </button>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div class="max-w-xl">
+<h4 class="font-headline-sm text-headline-sm text-on-surface !text-[16px] mb-2">Delete Account</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-80">Permanently remove your account and all associated data. <strong class="text-error font-medium">This action cannot be undone.</strong></p>
+</div>
+<button class="px-6 py-2 rounded-full bg-error text-on-error hover:bg-error/90 transition-colors font-body-sm text-body-sm font-semibold shrink-0">
+                                Delete Account
+                            </button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Simple interaction script for visual feedback -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add click styling to left sub-nav items
+            const subNavLinks = document.querySelectorAll('aside a[href^="#"]');
+            
+            subNavLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Reset all links
+                    subNavLinks.forEach(l => {
+                        if (!l.href.includes('#danger')) {
+                            l.className = 'block px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-white/5 hover:text-on-surface transition-colors';
+                            // Remove chevron if present
+                            const chevron = l.querySelector('.material-symbols-outlined');
+                            if(chevron) chevron.remove();
+                        }
+                    });
+                    
+                    // Set active style (skip for danger zone)
+                    if (!this.href.includes('#danger')) {
+                        // Reconstruct active link HTML content
+                        const originalText = this.textContent.trim();
+                        this.className = 'block px-4 py-3 rounded-lg text-primary font-semibold bg-white/5 border-l-2 border-primary transition-colors flex items-center justify-between';
+                        this.innerHTML = `<span>${originalText}</span><span class="material-symbols-outlined text-sm">chevron_right</span>`;
+                    }
+                });
+            });
+        });
+    </script>
+</body></html>
