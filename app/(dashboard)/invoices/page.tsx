@@ -51,8 +51,66 @@ export default function InvoicesPage() {
     setLineItems(lineItems.filter(item => item.id !== id))
   }
 
-  const handleDownloadPDF = () => {
-    alert('Generating PDF invoice... Your file is preparing for download.')
+  const handleDownloadPDF = async () => {
+    try {
+      const { jsPDF } = await import('jspdf')
+      const autoTable = (await import('jspdf-autotable')).default
+      
+      const doc = new jsPDF()
+      
+      // Header
+      doc.setFontSize(24)
+      doc.text('INVOICE', 14, 22)
+      doc.setFontSize(10)
+      doc.text('INV-001', 14, 30)
+
+      // Company Info
+      doc.setFontSize(12)
+      doc.text(companyName || 'Your Company', 14, 45)
+      doc.setFontSize(10)
+      doc.text(companyAddress || 'Your Details', 14, 52)
+
+      // Client Info
+      doc.setFontSize(12)
+      doc.text('Bill To:', 120, 45)
+      doc.text(clientName || 'Client Name', 120, 52)
+      doc.setFontSize(10)
+      if (clientEmail) doc.text(clientEmail, 120, 58)
+      doc.text(clientAddress || 'Client Details', 120, clientEmail ? 64 : 58)
+
+      // Dates
+      doc.text(`Issue Date: ${issueDate || '-'}`, 14, 75)
+      doc.text(`Due Date: ${dueDate || '-'}`, 14, 82)
+
+      // Table
+      autoTable(doc, {
+        startY: 90,
+        head: [['Description', 'Qty', 'Rate', 'Amount']],
+        body: lineItems.map(item => [
+          item.description || '-',
+          item.qty.toString(),
+          `${symbol}${item.rate.toFixed(2)}`,
+          `${symbol}${(item.qty * item.rate).toFixed(2)}`
+        ]),
+      })
+
+      // Totals
+      const finalY = (doc as any).lastAutoTable.finalY + 10
+      doc.text(`Subtotal: ${symbol}${subtotal.toFixed(2)}`, 140, finalY)
+      doc.text(`Tax (${taxRate}%): ${symbol}${taxAmount.toFixed(2)}`, 140, finalY + 7)
+      doc.setFontSize(12)
+      doc.text(`Total: ${symbol}${total.toFixed(2)}`, 140, finalY + 15)
+
+      // Notes
+      doc.setFontSize(10)
+      doc.text('Notes:', 14, finalY + 5)
+      doc.text(notes || '-', 14, finalY + 12)
+
+      doc.save('Invoice.pdf')
+    } catch (e) {
+      console.error(e)
+      alert('Error generating PDF')
+    }
   }
 
   const handleDownloadCSV = () => {

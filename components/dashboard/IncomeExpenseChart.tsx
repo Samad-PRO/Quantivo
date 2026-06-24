@@ -37,11 +37,14 @@ export function IncomeExpenseChart({ data }: { data: MonthlyData[] }) {
           />
           <Tooltip
             contentStyle={{
-              background: 'hsl(var(--card))',
-              border: '1px solid hsl(var(--border))',
-              borderRadius: '8px',
+              background: 'rgba(18, 33, 49, 0.85)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '12px',
               fontSize: '12px',
+              color: '#d5e4fa',
+              backdropFilter: 'blur(16px)'
             }}
+            itemStyle={{ color: '#d5e4fa' }}
             formatter={(value: unknown) =>
               new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(value))
             }

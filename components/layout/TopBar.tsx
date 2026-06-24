@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/supabase/client'
 import type { Profile } from '@/types'
 import type { User } from '@supabase/supabase-js'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 interface TopBarProps {
   user: User
@@ -41,6 +42,8 @@ export function TopBar({ user, profile }: TopBarProps) {
 
         {/* Right side */}
         <div className="flex items-center gap-4">
+          <ThemeToggle />
+          
           {/* Notifications */}
           <button className="text-[#c7c4d7] hover:text-[#c0c1ff] transition-colors relative">
             <span className="material-symbols-outlined">notifications</span>

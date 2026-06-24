@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { ThemeToggle } from '@/components/ThemeToggle'
+import DotField from '@/components/DotField'
 import Link from 'next/link'
 
 export default function LandingPage() {
@@ -136,6 +138,7 @@ export default function LandingPage() {
             <a className="nav-link" href="#faq">FAQ</a>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <ThemeToggle />
             <Link href="/login" className="nav-link">Log In</Link>
             <Link href="/signup" className="btn-violet">Get Started</Link>
           </div>
@@ -144,7 +147,22 @@ export default function LandingPage() {
 
       <main style={{ paddingTop: '96px', paddingBottom: '80px', background: '#051424' }}>
         {/* Hero Section */}
-        <section style={{ padding: '80px 48px', maxWidth: '1280px', margin: '0 auto', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <section style={{ position: 'relative', paddingTop: '160px', paddingBottom: '100px', overflow: 'hidden' }}>
+          {/* DotField interactive background */}
+          <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+            <DotField
+              dotRadius={1.5}
+              dotSpacing={18}
+              bulgeStrength={60}
+              glowRadius={180}
+              gradientFrom="rgba(192, 193, 255, 0.3)"
+              gradientTo="rgba(186, 198, 233, 0.15)"
+              glowColor="#051424"
+              bulgeOnly
+            />
+          </div>
+          {/* Hero content on top */}
+          <div style={{ position: 'relative', zIndex: 1, padding: '0 48px', maxWidth: '1280px', margin: '0 auto', textAlign: 'center' }}>
           {/* Ambient glow */}
           <div style={{ position: 'absolute', top: '-100px', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '600px', background: 'radial-gradient(circle, rgba(192,193,255,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
@@ -215,6 +233,7 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+          </div>
         </section>
 
         {/* Tools Section */}
@@ -241,7 +260,7 @@ export default function LandingPage() {
                 <h3 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '20px', fontWeight: 600, color: '#d5e4fa', marginBottom: '8px' }}>{tool.name}</h3>
                 <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: '#c7c5d0', lineHeight: 1.6, marginBottom: '20px' }}>{tool.desc}</p>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                  <Link href={tool.href} className="btn-amber" style={{ flex: 1, textAlign: 'center', padding: '9px 16px', fontSize: '14px' }}>Try Free</Link>
+                  <Link href={tool.href} className="btn-amber" style={{ flex: 1, textAlign: 'center', padding: '9px 16px', fontSize: '14px' }}>Try Free →</Link>
                   <Link href="/signup" style={{ flex: 1, textAlign: 'center', padding: '9px 16px', fontSize: '14px', background: 'transparent', color: '#c0c1ff', border: '1px solid rgba(192,193,255,0.4)', borderRadius: '9999px', fontFamily: 'Inter, sans-serif', textDecoration: 'none', transition: 'all 200ms ease-out', display: 'block' }}>Unlock All</Link>
                 </div>
               </div>

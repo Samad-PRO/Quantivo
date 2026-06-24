@@ -27,6 +27,9 @@ export default function FinancesPage() {
   const [sortField, setSortField] = useState<'date' | 'amount'>('date')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [page, setPage] = useState(1)
+  const [addModal, setAddModal] = useState<{ isOpen: boolean, type: 'income' | 'expense' }>({ isOpen: false, type: 'income' })
+  const [addForm, setAddForm] = useState({ desc: '', amount: '' })
+  const [isAdding, setIsAdding] = useState(false)
   const itemsPerPage = 10
 
   const fetchTransactions = async () => {
@@ -60,25 +63,30 @@ export default function FinancesPage() {
     fetchTransactions()
   }, [])
 
-  const handleAddTransaction = async (type: 'income' | 'expense') => {
-    const desc = prompt(`Enter ${type} description:`)
-    if (!desc) return
-    const amtStr = prompt('Enter amount:')
-    if (!amtStr) return
-    const amt = parseFloat(amtStr)
-    if (isNaN(amt)) return
+  const openAddModal = (type: 'income' | 'expense') => {
+    setAddModal({ isOpen: true, type })
+    setAddForm({ desc: '', amount: '' })
+  }
 
+  const submitAddTransaction = async () => {
+    const { type } = addModal
+    const amt = parseFloat(addForm.amount)
+    if (!addForm.desc || isNaN(amt)) return
+
+    setIsAdding(true)
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
+    if (!user) {
+      setIsAdding(false)
+      return
+    }
 
-    // Get default category if possible
     const { data: catData } = await supabase.from('categories').select('id').limit(1).single()
     const category_id = catData?.id || null
 
     const { error } = await supabase.from('transactions').insert({
       user_id: user.id,
-      description: desc,
+      description: addForm.desc,
       amount: amt,
       type,
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -89,7 +97,9 @@ export default function FinancesPage() {
       alert(`Error creating transaction: ${error.message}`)
     } else {
       fetchTransactions()
+      setAddModal({ isOpen: false, type: 'income' })
     }
+    setIsAdding(false)
   }
 
   const handleDelete = async (id: string) => {
@@ -145,6 +155,13 @@ export default function FinancesPage() {
           border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 16px;
         }
+        .glass-modal {
+          background: rgba(13, 28, 45, 0.95);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+        }
         .glass-input {
           background: rgba(10, 20, 30, 0.8);
           border: 1px solid rgba(255, 255, 255, 0.1);
@@ -165,14 +182,14 @@ export default function FinancesPage() {
           </div>
           <div className="flex items-center gap-3">
             <button
-              onClick={() => handleAddTransaction('income')}
+              onClick={() => openAddModal('income')}
               className="bg-[#c0c1ff] text-[#051424] px-6 py-2.5 rounded-full font-medium flex items-center gap-2 hover:brightness-110 hover:shadow-[0_0_20px_rgba(192,193,255,0.3)] transition-all"
             >
               <span className="material-symbols-outlined text-sm">add</span>
               Add Income
             </button>
             <button
-              onClick={() => handleAddTransaction('expense')}
+              onClick={() => openAddModal('expense')}
               className="bg-[#fa8c00] text-[#051424] px-6 py-2.5 rounded-full font-medium flex items-center gap-2 hover:brightness-110 hover:shadow-[0_0_20px_rgba(250,140,0,0.3)] transition-all"
             >
               <span className="material-symbols-outlined text-sm">remove</span>
@@ -334,6 +351,60 @@ export default function FinancesPage() {
           )}
         </div>
       </div>
+
+      {addModal.isOpen && (
+        <div className="fixed inset-0 bg-[#051424]/80 z-50 flex items-center justify-center p-4">
+          <div className="glass-modal w-full max-w-md p-6 flex flex-col gap-6 animate-in fade-in zoom-in-95 duration-200">
+            <div>
+              <h3 className="font-display text-xl font-bold text-white">Add {addModal.type.charAt(0).toUpperCase() + addModal.type.slice(1)}</h3>
+              <p className="text-sm text-[#c7c5d0] mt-1">Enter transaction details below.</p>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Description</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Client Payment"
+                  className="glass-input rounded-lg px-4 py-3 text-sm text-white"
+                  value={addForm.desc}
+                  onChange={(e) => setAddForm(prev => ({ ...prev, desc: e.target.value }))}
+                  autoFocus
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Amount</label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#c7c5d0]">$</span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    className="glass-input rounded-lg pl-8 pr-4 py-3 text-sm text-white w-full"
+                    value={addForm.amount}
+                    onChange={(e) => setAddForm(prev => ({ ...prev, amount: e.target.value }))}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                onClick={() => setAddModal({ isOpen: false, type: 'income' })}
+                className="px-5 py-2.5 rounded-full text-sm font-medium text-[#c7c5d0] hover:text-white hover:bg-white/5 transition-colors"
+                disabled={isAdding}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={submitAddTransaction}
+                disabled={!addForm.desc || !addForm.amount || isAdding}
+                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${addModal.type === 'income' ? 'bg-[#c0c1ff] text-[#051424] hover:shadow-[0_0_15px_rgba(192,193,255,0.3)]' : 'bg-[#fa8c00] text-[#051424] hover:shadow-[0_0_15px_rgba(250,140,0,0.3)]'} disabled:opacity-50 disabled:pointer-events-none`}
+              >
+                {isAdding ? 'Saving...' : 'Save Transaction'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }
