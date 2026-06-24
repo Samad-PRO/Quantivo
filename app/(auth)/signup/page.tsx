@@ -1,127 +1,178 @@
 'use client'
+export const dynamic = 'force-dynamic'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import { createClient } from '@/supabase/client'
+
+const GoogleIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24">
+    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+  </svg>
+)
 
 export default function SignupPage() {
+  const supabase = createClient()
+  const [step, setStep] = useState<'signup' | 'otp'>('signup')
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [otp, setOtp] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%', background: '#0b1326', border: '1px solid #464554',
+    borderRadius: '8px', padding: '10px 12px', color: '#dae2fd',
+    fontSize: '14px', outline: 'none', boxSizing: 'border-box'
+  }
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    const { error } = await supabase.auth.signUp({
+      email, password,
+      options: { data: { full_name: fullName } }
+    })
+    if (error) { setError(error.message); setLoading(false); return }
+    setStep('otp')
+    setLoading(false)
+  }
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    const { error } = await supabase.auth.verifyOtp({ email, token: otp, type: 'signup' })
+    if (error) { setError(error.message); setLoading(false); return }
+    window.location.href = '/dashboard'
+  }
+
+  const handleGoogle = async () => {
+    setGoogleLoading(true)
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth/callback` }
+    })
+  }
+
+  const cardStyle: React.CSSProperties = {
+    background: '#131b2e', border: '1px solid #464554', borderRadius: '16px',
+    padding: '32px', boxShadow: '0 24px 48px rgba(0,0,0,0.4)'
+  }
+
+  if (step === 'otp') {
+    return (
+      <div style={{ minHeight: '100vh', background: '#0b1326', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', fontFamily: 'Inter, sans-serif' }}>
+        <div style={{ width: '100%', maxWidth: '420px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <div style={{ width: '48px', height: '48px', background: '#c0c1ff', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <span style={{ color: '#1000a9', fontWeight: 800, fontSize: '20px' }}>Q</span>
+            </div>
+            <h1 style={{ color: '#dae2fd', fontSize: '24px', fontWeight: 700, margin: '0 0 8px' }}>Check your email</h1>
+            <p style={{ color: '#c7c4d7', fontSize: '14px', margin: 0 }}>
+              We sent a 6-digit code to{' '}
+              <strong style={{ color: '#c0c1ff' }}>{email}</strong>
+            </p>
+          </div>
+          <div style={cardStyle}>
+            <form onSubmit={handleVerifyOtp} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {error && (
+                <div style={{ background: '#ffb4ab18', border: '1px solid #ffb4ab44', borderRadius: '8px', padding: '10px 14px', color: '#ffb4ab', fontSize: '13px' }}>
+                  {error}
+                </div>
+              )}
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#dae2fd', marginBottom: '10px', textAlign: 'center' }}>
+                  Enter your 6-digit verification code
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  placeholder="000000"
+                  value={otp}
+                  onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
+                  autoFocus
+                  style={{ width: '100%', background: '#0b1326', border: '2px solid #c0c1ff', borderRadius: '10px', padding: '16px 12px', color: '#dae2fd', fontSize: '28px', fontWeight: 700, textAlign: 'center', letterSpacing: '12px', outline: 'none', boxSizing: 'border-box' }}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading || otp.length !== 6}
+                style={{ width: '100%', background: '#c0c1ff', color: '#1000a9', border: 'none', borderRadius: '10px', padding: '12px', fontSize: '14px', fontWeight: 700, cursor: otp.length !== 6 ? 'not-allowed' : 'pointer', opacity: (loading || otp.length !== 6) ? 0.6 : 1 }}
+              >
+                {loading ? 'Verifying...' : 'Verify & Enter Dashboard'}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setStep('signup'); setOtp(''); setError(null) }}
+                style={{ background: 'none', border: 'none', color: '#c0c1ff', fontSize: '13px', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+              >
+                Back to signup
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <>
-
-{/*  Atmospheric Background Animation  */}
-
-{/*  Header / Branding (TopNavBar Reference)  */}
-<header className="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop h-20 max-w-[1440px] mx-auto">
-<div className="font-headline-lg text-headline-lg text-primary tracking-tight">Quantivo</div>
-<div className="font-body-md text-body-md text-on-surface-variant">
-            Already have an account? <a className="text-primary font-bold hover:underline" href="#">Log In</a>
-</div>
-</header>
-<main className="relative z-10 w-full max-w-md px-margin-mobile">
-{/*  Registration Card  */}
-<div className="glass-card rounded-xl p-lg md:p-xl w-full">
-{/*  Step 1: Account Creation  */}
-<div className="step-transition active-step" id="step1">
-<div className="mb-lg">
-<h1 className="font-headline-lg text-headline-lg text-primary mb-xs">Create Account</h1>
-<p className="font-body-md text-body-md text-on-surface-variant">Join the premium financial command center.</p>
-</div>
-<form className="space-y-md" id="form-step1">
-<div className="space-y-base">
-<label className="font-label-caps text-on-surface-variant block">FULL NAME</label>
-<input className="w-full bg-[#0b1326] border border-white/10 rounded-lg px-md py-sm text-on-surface transition-all" placeholder="John Doe" required="" type="text"/>
-</div>
-<div className="space-y-base">
-<label className="font-label-caps text-on-surface-variant block">EMAIL ADDRESS</label>
-<input className="w-full bg-[#0b1326] border border-white/10 rounded-lg px-md py-sm text-on-surface transition-all" placeholder="john@company.com" required="" type="email"/>
-</div>
-<div className="space-y-base">
-<label className="font-label-caps text-on-surface-variant block">PASSWORD</label>
-<input className="w-full bg-[#0b1326] border border-white/10 rounded-lg px-md py-sm text-on-surface transition-all" placeholder="••••••••" required="" type="password"/>
-</div>
-<button className="glow-button w-full bg-gradient-to-r from-[#c0c1ff] to-[#e1dfff] text-on-primary font-bold py-md rounded-lg mt-md" type="submit">
-                        Get Started
-                    </button>
-</form>
-<div className="mt-md flex items-center gap-xs">
-<div className="h-[1px] flex-1 bg-white/10"></div>
-<span className="text-xs text-on-surface-variant uppercase tracking-widest">or register with</span>
-<div className="h-[1px] flex-1 bg-white/10"></div>
-</div>
-<div className="grid grid-cols-2 gap-md mt-md">
-<button className="flex items-center justify-center gap-xs bg-white/5 border border-white/10 py-sm rounded-lg hover:bg-white/10 transition-colors">
-<div className="w-5 h-5" data-alt="A clean vector icon of a Google logo, rendered in high-definition minimalist style suitable for a premium dark-themed finance application dashboard. The logo maintains its original brand colors but is framed within a subtle translucent glass circular container. It signifies a secure and modern single sign-on option." style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDQN3Tthr1VAyODf-63QMigw8x5FWIRCDUv9bCbxXEfgP0pK3LYfq9Sn8PvHJLaI4Xtyj4C09t33cmlytaIZJPdsinp595VRMqAV_sAgUF6FG0iI4n4GGA1rgWp_IH58v0T-zkRmgkG-7l0iKLLruZsNWKb9gMMXpiLpOqzyyB3ZfHBxDR3ZktRpjd89HrckrvwxRxfTmpTTxYRRwt2pCNV4EdqciMUr2cnQtRzLic82SKcubYJ1ioMDxaMMcf-Dfy6IVPNPX6Hzg4')" }}></div>
-<span className="text-sm font-medium">Google</span>
-</button>
-<button className="flex items-center justify-center gap-xs bg-white/5 border border-white/10 py-sm rounded-lg hover:bg-white/10 transition-colors">
-<span className="material-symbols-outlined text-xl">terminal</span>
-<span className="text-sm font-medium">SSO</span>
-</button>
-</div>
-</div>
-{/*  Step 2: OTP Verification  */}
-<div className="step-transition hidden-step" id="step2">
-<div className="mb-lg text-center">
-<div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-md">
-<span className="material-symbols-outlined text-primary text-3xl">mark_email_read</span>
-</div>
-<h1 className="font-headline-lg text-headline-lg text-primary mb-xs">Verify Email</h1>
-<p className="font-body-md text-body-md text-on-surface-variant">We've sent a 6-digit code to your inbox.</p>
-</div>
-<form className="space-y-lg" id="form-step2">
-<div className="flex justify-between gap-xs">
-<input autofocus="" className="otp-input w-12 h-16 text-center font-data-lg text-data-lg bg-[#0b1326] border border-white/10 rounded-lg text-primary transition-all" maxlength="1" type="text"/>
-<input className="otp-input w-12 h-16 text-center font-data-lg text-data-lg bg-[#0b1326] border border-white/10 rounded-lg text-primary transition-all" maxlength="1" type="text"/>
-<input className="otp-input w-12 h-16 text-center font-data-lg text-data-lg bg-[#0b1326] border border-white/10 rounded-lg text-primary transition-all" maxlength="1" type="text"/>
-<input className="otp-input w-12 h-16 text-center font-data-lg text-data-lg bg-[#0b1326] border border-white/10 rounded-lg text-primary transition-all" maxlength="1" type="text"/>
-<input className="otp-input w-12 h-16 text-center font-data-lg text-data-lg bg-[#0b1326] border border-white/10 rounded-lg text-primary transition-all" maxlength="1" type="text"/>
-<input className="otp-input w-12 h-16 text-center font-data-lg text-data-lg bg-[#0b1326] border border-white/10 rounded-lg text-primary transition-all" maxlength="1" type="text"/>
-</div>
-<div className="text-center">
-<p className="font-body-md text-body-md text-on-surface-variant">
-                            Didn't receive the code? <button className="text-primary font-bold hover:underline" type="button">Resend</button>
-</p>
-</div>
-<button className="glow-button w-full bg-gradient-to-r from-[#c0c1ff] to-[#e1dfff] text-on-primary font-bold py-md rounded-lg" type="submit">
-                        Verify &amp; Complete
-                    </button>
-<button className="w-full text-on-surface-variant hover:text-primary text-sm flex items-center justify-center gap-xs transition-colors" id="back-to-step1" type="button">
-<span className="material-symbols-outlined text-sm">arrow_back</span>
-                        Back to email entry
-                    </button>
-</form>
-</div>
-{/*  Success State (Optional Splash)  */}
-<div className="step-transition hidden-step text-center" id="step3">
-<div className="inline-flex items-center justify-center w-20 h-20 bg-primary/20 rounded-full mb-lg">
-<span className="material-symbols-outlined text-primary text-5xl" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-</div>
-<h1 className="font-headline-lg text-headline-lg text-primary mb-xs">Welcome to Quantivo</h1>
-<p className="font-body-md text-body-md text-on-surface-variant mb-lg">Your workspace is being prepared for prime financial analysis.</p>
-<div className="w-full bg-[#0b1326] h-1.5 rounded-full overflow-hidden">
-<div className="h-full bg-primary w-0 animate-progress"></div>
-</div>
-<p className="text-xs text-on-surface-variant mt-sm">Redirecting to command center...</p>
-</div>
-</div>
-{/*  Security Badge  */}
-<div className="mt-lg flex items-center justify-center gap-md text-on-surface-variant/40">
-<div className="flex items-center gap-xs">
-<span className="material-symbols-outlined text-sm">lock</span>
-<span className="text-[10px] tracking-widest uppercase font-bold">256-bit encryption</span>
-</div>
-<div className="flex items-center gap-xs">
-<span className="material-symbols-outlined text-sm">verified_user</span>
-<span className="text-[10px] tracking-widest uppercase font-bold">SOC2 Compliant</span>
-</div>
-</div>
-</main>
-<style>
-        @keyframes progress {
-            to { width: 100%; }
-        }
-        .animate-progress {
-            animation: progress 2s ease-out forwards;
-        }
-    </style>
-
-
-    </>
+    <div style={{ minHeight: '100vh', background: '#0b1326', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ width: '100%', maxWidth: '420px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <div style={{ width: '48px', height: '48px', background: '#c0c1ff', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', cursor: 'pointer' }}>
+              <span style={{ color: '#1000a9', fontWeight: 800, fontSize: '20px' }}>Q</span>
+            </div>
+          </Link>
+          <h1 style={{ color: '#dae2fd', fontSize: '24px', fontWeight: 700, margin: '0 0 8px' }}>Create your account</h1>
+          <p style={{ color: '#c7c4d7', fontSize: '14px', margin: 0 }}>Start tracking your finances today</p>
+        </div>
+        <div style={cardStyle}>
+          <button onClick={handleGoogle} disabled={googleLoading} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#1e293b', border: '1px solid #464554', borderRadius: '10px', padding: '11px 16px', color: '#dae2fd', fontSize: '14px', fontWeight: 500, cursor: 'pointer', marginBottom: '20px', opacity: googleLoading ? 0.6 : 1 }}>
+            <GoogleIcon />
+            {googleLoading ? 'Redirecting...' : 'Continue with Google'}
+          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ flex: 1, height: '1px', background: '#464554' }} />
+            <span style={{ color: '#908fa0', fontSize: '12px' }}>or continue with email</span>
+            <div style={{ flex: 1, height: '1px', background: '#464554' }} />
+          </div>
+          <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {error && (
+              <div style={{ background: '#ffb4ab18', border: '1px solid #ffb4ab44', borderRadius: '8px', padding: '10px 14px', color: '#ffb4ab', fontSize: '13px' }}>
+                {error}
+              </div>
+            )}
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#dae2fd', marginBottom: '6px' }}>Full Name</label>
+              <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} required placeholder="Your name" style={inputStyle} />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#dae2fd', marginBottom: '6px' }}>Email</label>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" style={inputStyle} />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#dae2fd', marginBottom: '6px' }}>Password</label>
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} required minLength={6} placeholder="Min 6 characters" style={inputStyle} />
+            </div>
+            <button type="submit" disabled={loading} style={{ width: '100%', background: '#c0c1ff', color: '#1000a9', border: 'none', borderRadius: '10px', padding: '12px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', opacity: loading ? 0.6 : 1 }}>
+              {loading ? 'Creating account...' : 'Create account'}
+            </button>
+          </form>
+          <p style={{ textAlign: 'center', fontSize: '13px', color: '#c7c4d7', marginTop: '20px', marginBottom: 0 }}>
+            Already have an account?{' '}
+            <Link href="/login" style={{ color: '#c0c1ff', textDecoration: 'none', fontWeight: 500 }}>Sign in</Link>
+          </p>
+        </div>
+      </div>
+    </div>
   )
 }
