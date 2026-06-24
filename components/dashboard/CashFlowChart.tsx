@@ -42,7 +42,7 @@ export function CashFlowChart({ data }: { data: MonthlyData[] }) {
                 color: '#dae2fd',
               }}
               formatter={(value: unknown) =>
-                new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(Number(value))
+                new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(value))
               }
             />
             <Legend

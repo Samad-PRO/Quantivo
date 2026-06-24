@@ -40,10 +40,10 @@ export function GoalsSummary({ goals }: { goals: Goal[] }) {
                 </div>
                 <div className="mt-1 flex justify-between text-xs text-muted-foreground">
                   <span>
-                    {new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(goal.current_amount)}
+                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(goal.current_amount)}
                   </span>
                   <span>
-                    {new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(goal.target_amount)}
+                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(goal.target_amount)}
                   </span>
                 </div>
               </div>

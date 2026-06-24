@@ -45,7 +45,7 @@ export default function LandingPage() {
         {/* Mock Dashboard Preview */}
         <div style={{ marginTop: '64px', background: '#131b2e', border: '1px solid #464554', borderRadius: '16px', padding: '24px', maxWidth: '800px', margin: '64px auto 0' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '24px' }}>
-            {[['Total Balance', 'PKR 124,580', '#c0c1ff'], ['Monthly Income', 'PKR 18,450', '#4edea3'], ['Expenses', 'PKR 6,230', '#ffb4ab'], ['Savings Rate', '66.2%', '#4edea3']].map(([label, value, color]) => (
+            {[['Total Balance', '$124,580', '#c0c1ff'], ['Monthly Income', '$18,450', '#4edea3'], ['Expenses', '$6,230', '#ffb4ab'], ['Savings Rate', '66.2%', '#4edea3']].map(([label, value, color]) => (
               <div key={label} style={{ background: '#0b1326', border: '1px solid #464554', borderRadius: '10px', padding: '16px' }}>
                 <p style={{ fontSize: '11px', color: '#c7c4d7', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</p>
                 <p style={{ fontSize: '18px', fontWeight: 700, color }}>{value}</p>
@@ -94,7 +94,7 @@ export default function LandingPage() {
       {/* Stats */}
       <section style={{ background: '#131b2e', borderTop: '1px solid #464554', borderBottom: '1px solid #464554' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '48px 24px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', textAlign: 'center' }}>
-          {[['120k+', 'Active users'], ['PKR 48M+', 'Tracked monthly'], ['4.9 ★', 'User rating'], ['99.9%', 'Uptime']].map(([num, label]) => (
+          {[['120k+', 'Active users'], ['$48M+', 'Tracked monthly'], ['4.9 ★', 'User rating'], ['99.9%', 'Uptime']].map(([num, label]) => (
             <div key={label as string}>
               <p style={{ fontSize: '28px', fontWeight: 700, color: '#c0c1ff' }}>{num}</p>
               <p style={{ fontSize: '14px', color: '#c7c4d7', marginTop: '4px' }}>{label}</p>
@@ -111,7 +111,7 @@ export default function LandingPage() {
           {/* Free */}
           <div style={{ background: '#131b2e', border: '1px solid #464554', borderRadius: '16px', padding: '32px' }}>
             <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '4px' }}>Free</h3>
-            <p style={{ fontSize: '36px', fontWeight: 700, color: '#c0c1ff', margin: '16px 0' }}>PKR 0<span style={{ fontSize: '16px', color: '#c7c4d7' }}>/mo</span></p>
+            <p style={{ fontSize: '36px', fontWeight: 700, color: '#c0c1ff', margin: '16px 0' }}>$0<span style={{ fontSize: '16px', color: '#c7c4d7' }}>/mo</span></p>
             <ul style={{ listStyle: 'none', padding: 0, marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {['100 transactions/month', '3 active goals', '3 invoices', 'Basic dashboard'].map(f => (
                 <li key={f} style={{ fontSize: '14px', color: '#c7c4d7', display: 'flex', gap: '8px' }}>
@@ -125,7 +125,7 @@ export default function LandingPage() {
           <div style={{ background: '#1a1a3e', border: '2px solid #c0c1ff', borderRadius: '16px', padding: '32px', position: 'relative' }}>
             <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: '#c0c1ff', color: '#1000a9', fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '999px' }}>MOST POPULAR</div>
             <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '4px' }}>Pro</h3>
-            <p style={{ fontSize: '36px', fontWeight: 700, color: '#c0c1ff', margin: '16px 0' }}>PKR 999<span style={{ fontSize: '16px', color: '#c7c4d7' }}>/mo</span></p>
+            <p style={{ fontSize: '36px', fontWeight: 700, color: '#c0c1ff', margin: '16px 0' }}>$999<span style={{ fontSize: '16px', color: '#c7c4d7' }}>/mo</span></p>
             <ul style={{ listStyle: 'none', padding: 0, marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {['Unlimited transactions', 'Unlimited goals & invoices', 'PDF reports & CSV export', 'Advanced analytics', 'Premium insights'].map(f => (
                 <li key={f} style={{ fontSize: '14px', color: '#c7c4d7', display: 'flex', gap: '8px' }}>

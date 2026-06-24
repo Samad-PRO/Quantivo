@@ -51,7 +51,7 @@ export function RecentTransactions({ transactions }: { transactions: Transaction
                     tx.type === 'income' ? 'text-[#4edea3]' : 'text-[#dae2fd]'
                   }`}>
                     {tx.type === 'income' ? '+' : '-'}
-                    {new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(Number(tx.amount))}
+                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(tx.amount))}
                   </td>
                 </tr>
               ))

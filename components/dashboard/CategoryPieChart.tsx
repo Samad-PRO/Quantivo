@@ -48,7 +48,7 @@ export function CategoryPieChart({ data }: { data: CategoryData[] }) {
               fontSize: '12px',
             }}
             formatter={(value: unknown) => [
-              new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(Number(value)),
+              new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(value)),
               'Amount'
             ]}
           />

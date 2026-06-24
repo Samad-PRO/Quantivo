@@ -9,10 +9,10 @@ interface StatsCardsProps {
 }
 
 export function StatsCards({ stats }: StatsCardsProps) {
-  const currency = 'PKR' // TODO: from profile
+  const currency = 'USD' // TODO: from profile
 
   const fmt = (n: number) =>
-    new Intl.NumberFormat('en-PK', { style: 'currency', currency, maximumFractionDigits: 0 }).format(n)
+    new Intl.NumberFormat('en-US', { style: 'currency', currency, maximumFractionDigits: 0 }).format(n)
 
   const cards = [
     {

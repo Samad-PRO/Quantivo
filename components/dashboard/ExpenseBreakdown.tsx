@@ -55,7 +55,7 @@ export function ExpenseBreakdown({ data }: { data: CategoryData[] }) {
               }}
               formatter={(value: unknown) =>
                 total > 0
-                  ? new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(Number(value))
+                  ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(value))
                   : `${value}%`
               }
             />

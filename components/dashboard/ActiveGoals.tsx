@@ -3,7 +3,7 @@ import type { Goal } from '@/types'
 
 export function ActiveGoals({ goals }: { goals: Goal[] }) {
   const fmt = (n: number) =>
-    new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(n)
+    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n)
 
   return (
     <div className="bg-[#131b2e] border border-[#464554] rounded-lg p-4 flex flex-col">

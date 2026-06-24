@@ -16,7 +16,7 @@ function Sparkline({ color, path }: { color: string; path: string }) {
 
 export function KPICards({ stats }: KPICardsProps) {
   const fmt = (n: number) =>
-    new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(n)
+    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n)
 
   const cards = [
     {
