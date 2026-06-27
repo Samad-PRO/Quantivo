@@ -5,11 +5,10 @@ export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/supabase/client'
 import { formatCurrency } from '@/lib/currency'
-import { format } from 'date-fns'
 
 interface Goal {
   id: string
-  name: string
+  title: string
   current_amount: number
   target_amount: number
   status: 'active' | 'completed' | 'paused'
@@ -29,6 +28,17 @@ const getGoalEmoji = (name: string) => {
 export default function GoalsPage() {
   const [goals, setGoals] = useState<Goal[]>([])
   const [loading, setLoading] = useState(true)
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [addForm, setAddForm] = useState({ title: '', target: '', deadline: '' })
+  const [isAdding, setIsAdding] = useState(false)
+  const [addMoneyModal, setAddMoneyModal] = useState<Goal | null>(null)
+  const [addMoneyAmount, setAddMoneyAmount] = useState('')
+  const [toastMsg, setToastMsg] = useState<string | null>(null)
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg)
+    setTimeout(() => setToastMsg(null), 3000)
+  }
 
   const fetchGoals = async () => {
     setLoading(true)
@@ -45,7 +55,7 @@ export default function GoalsPage() {
     if (!error && data) {
       setGoals(data.map(g => ({
         id: g.id,
-        name: g.name,
+        title: g.title,
         current_amount: Number(g.current_amount || 0),
         target_amount: Number(g.target_amount || 0),
         status: g.status as Goal['status'],
@@ -60,54 +70,53 @@ export default function GoalsPage() {
   }, [])
 
   const handleAddGoal = async () => {
-    const name = prompt('Enter goal name:')
-    if (!name) return
-    const targetStr = prompt('Enter target amount ($):')
-    if (!targetStr) return
-    const target = parseFloat(targetStr)
-    if (isNaN(target) || target <= 0) return
+    const target = parseFloat(addForm.target)
+    if (!addForm.title || isNaN(target) || target <= 0) return
 
-    const deadline = prompt('Enter deadline (e.g. YYYY-MM-DD or Dec 2025):') || null
-
+    setIsAdding(true)
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
+    if (!user) { setIsAdding(false); return }
 
     const { error } = await supabase.from('goals').insert({
       user_id: user.id,
-      name,
+      title: addForm.title,
       target_amount: target,
       current_amount: 0,
       status: 'active',
-      deadline
+      deadline: addForm.deadline || null
     })
 
     if (error) {
-      alert(`Error creating goal: ${error.message}`)
+      showToast(`Error creating goal: ${error.message}`)
     } else {
       fetchGoals()
+      setShowAddModal(false)
+      setAddForm({ title: '', target: '', deadline: '' })
     }
+    setIsAdding(false)
   }
 
-  const handleAddMoney = async (goal: Goal) => {
-    const amtStr = prompt(`How much money would you like to allocate to ${goal.name}?`)
-    if (!amtStr) return
-    const amt = parseFloat(amtStr)
+  const handleAddMoney = async () => {
+    if (!addMoneyModal) return
+    const amt = parseFloat(addMoneyAmount)
     if (isNaN(amt) || amt <= 0) return
 
-    const newCurrent = goal.current_amount + amt
-    const newStatus = newCurrent >= goal.target_amount ? 'completed' : goal.status
+    const newCurrent = addMoneyModal.current_amount + amt
+    const newStatus = newCurrent >= addMoneyModal.target_amount ? 'completed' : addMoneyModal.status
 
     const supabase = createClient()
     const { error } = await supabase
       .from('goals')
       .update({ current_amount: newCurrent, status: newStatus })
-      .eq('id', goal.id)
+      .eq('id', addMoneyModal.id)
 
     if (error) {
-      alert(`Error updating goal: ${error.message}`)
+      showToast(`Error updating goal: ${error.message}`)
     } else {
       fetchGoals()
+      setAddMoneyModal(null)
+      setAddMoneyAmount('')
     }
   }
 
@@ -120,7 +129,7 @@ export default function GoalsPage() {
       .eq('id', goal.id)
 
     if (error) {
-      alert(`Error toggling goal status: ${error.message}`)
+      showToast(`Error toggling goal status: ${error.message}`)
     } else {
       fetchGoals()
     }
@@ -135,6 +144,29 @@ export default function GoalsPage() {
           -webkit-backdrop-filter: blur(16px);
           border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 16px;
+        }
+        .glass-modal {
+          background: rgba(13, 28, 45, 0.95);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+        }
+        .glass-input {
+          background: rgba(10, 20, 30, 0.8);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #d5e4fa;
+          border-radius: 8px;
+          padding: 10px 14px;
+          font-size: 14px;
+          width: 100%;
+          outline: none;
+          box-sizing: border-box;
+          transition: border-color 200ms;
+        }
+        .glass-input:focus {
+          border-color: rgba(225, 223, 255, 0.5);
+          box-shadow: 0 0 0 2px rgba(225, 223, 255, 0.2);
         }
         .progress-ring__circle {
           transition: stroke-dashoffset 0.35s;
@@ -151,7 +183,7 @@ export default function GoalsPage() {
             <p className="font-body-md text-sm text-[#c7c5d0]">Track your savings milestones and strategic objectives.</p>
           </div>
           <button
-            onClick={handleAddGoal}
+            onClick={() => setShowAddModal(true)}
             className="flex items-center justify-center gap-2 bg-[#c0c1ff] text-[#051424] px-6 py-3 rounded-full font-body-md text-sm font-semibold hover:opacity-90 active:scale-95 transition-all"
           >
             <span className="material-symbols-outlined text-[20px]">add</span>
@@ -168,7 +200,7 @@ export default function GoalsPage() {
               {goals.map((goal) => {
                 const pct = goal.target_amount > 0 ? Math.min(100, Math.round((goal.current_amount / goal.target_amount) * 100)) : 0
                 const strokeOffset = 251.2 - (251.2 * pct) / 100
-                const emoji = getGoalEmoji(goal.name)
+                const emoji = getGoalEmoji(goal.title)
                 const isCompleted = goal.status === 'completed'
                 const isPaused = goal.status === 'paused'
 
@@ -191,7 +223,7 @@ export default function GoalsPage() {
                       </div>
                     </div>
 
-                    <h3 className="font-headline-lg text-xl font-bold text-white mb-1 z-10">{goal.name}</h3>
+                    <h3 className="font-headline-lg text-xl font-bold text-white mb-1 z-10">{goal.title}</h3>
                     <p className="font-body-sm text-xs text-[#c7c5d0] mb-6 z-10">
                       {isCompleted ? 'Goal fully completed!' : isPaused ? 'Goal currently paused' : 'Accumulating savings'}
                     </p>
@@ -229,7 +261,7 @@ export default function GoalsPage() {
                       {!isCompleted ? (
                         <>
                           <button
-                            onClick={() => handleAddMoney(goal)}
+                            onClick={() => { setAddMoneyModal(goal); setAddMoneyAmount('') }}
                             className="flex-1 py-2.5 rounded-full bg-transparent border border-white/20 text-white hover:bg-white/5 transition-all font-body-sm text-sm flex items-center justify-center gap-2 group-hover:border-[#c0c1ff]/50"
                           >
                             <span className="material-symbols-outlined text-[18px]">add</span>
@@ -258,7 +290,7 @@ export default function GoalsPage() {
 
               {/* Track New Goal Placeholder Card */}
               <div
-                onClick={handleAddGoal}
+                onClick={() => setShowAddModal(true)}
                 className="rounded-2xl p-6 flex flex-col items-center justify-center border-2 border-dashed border-white/10 hover:border-[#c0c1ff]/30 bg-black/10 hover:bg-[#c0c1ff]/5 transition-all cursor-pointer min-h-[280px] group"
               >
                 <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -271,6 +303,102 @@ export default function GoalsPage() {
           )}
         </div>
       </div>
+
+      {/* Add Goal Dialog */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-[#051424]/80 z-50 flex items-center justify-center p-4" onClick={() => setShowAddModal(false)}>
+          <div className="glass-modal w-full max-w-md p-6 flex flex-col gap-6 animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+            <div>
+              <h3 className="text-xl font-bold text-white">Add New Goal</h3>
+              <p className="text-sm text-[#c7c5d0] mt-1">Define your savings target and timeline.</p>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Goal Name</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Dream House Fund"
+                  className="glass-input"
+                  value={addForm.title}
+                  onChange={(e) => setAddForm(prev => ({ ...prev, title: e.target.value }))}
+                  autoFocus
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Target Amount ($)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="50000"
+                  className="glass-input"
+                  value={addForm.target}
+                  onChange={(e) => setAddForm(prev => ({ ...prev, target: e.target.value }))}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Deadline (optional)</label>
+                <input
+                  type="date"
+                  className="glass-input"
+                  value={addForm.deadline}
+                  onChange={(e) => setAddForm(prev => ({ ...prev, deadline: e.target.value }))}
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="px-5 py-2.5 rounded-full text-sm font-medium text-[#c7c5d0] hover:text-white hover:bg-white/5 transition-colors"
+                disabled={isAdding}
+              >Cancel</button>
+              <button
+                onClick={handleAddGoal}
+                disabled={!addForm.title || !addForm.target || isAdding}
+                className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#c0c1ff] text-[#051424] hover:shadow-[0_0_15px_rgba(192,193,255,0.3)] disabled:opacity-50 disabled:pointer-events-none transition-all"
+              >
+                {isAdding ? 'Creating...' : 'Create Goal'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Money Dialog */}
+      {addMoneyModal && (
+        <div className="fixed inset-0 bg-[#051424]/80 z-50 flex items-center justify-center p-4" onClick={() => setAddMoneyModal(null)}>
+          <div className="glass-modal w-full max-w-sm p-6 flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+            <div>
+              <h3 className="text-lg font-bold text-white">Add Money</h3>
+              <p className="text-sm text-[#c7c5d0] mt-1">Allocate funds to <strong className="text-[#c0c1ff]">{addMoneyModal.title}</strong></p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Amount ($)</label>
+              <input
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                className="glass-input"
+                value={addMoneyAmount}
+                onChange={(e) => setAddMoneyAmount(e.target.value)}
+                autoFocus
+              />
+            </div>
+            <div className="flex items-center justify-end gap-3">
+              <button onClick={() => setAddMoneyModal(null)} className="px-5 py-2.5 rounded-full text-sm font-medium text-[#c7c5d0] hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
+              <button onClick={handleAddMoney} disabled={!addMoneyAmount} className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#c0c1ff] text-[#051424] hover:shadow-[0_0_15px_rgba(192,193,255,0.3)] disabled:opacity-50 disabled:pointer-events-none transition-all">
+                Add Funds
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast */}
+      {toastMsg && (
+        <div className="fixed bottom-6 right-6 z-50 glass-modal px-5 py-3 text-sm text-white animate-in slide-in-from-bottom-5 duration-300">
+          {toastMsg}
+        </div>
+      )}
     </>
   )
 }

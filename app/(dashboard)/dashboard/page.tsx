@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/supabase/server'
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns'
 import { formatCurrency } from '@/lib/currency'
+import { DashboardCharts } from '@/components/DashboardCharts'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'Dashboard' }
@@ -169,87 +170,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Middle Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          {/* Left Chart */}
-          <div className="lg:col-span-2 glass-panel rounded-xl p-6 glass-panel-hover flex flex-col h-[400px]">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="font-headline-md text-[20px] font-bold text-[#dae2fd]">Income vs Expenses</h3>
-              <div className="flex gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-[#c0c1ff]"></span>
-                  <span className="font-body-sm text-[#c7c5d0] text-sm">Income</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-[#fa8c00]"></span>
-                  <span className="font-body-sm text-[#c7c5d0] text-sm">Expenses</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Dynamic Bar Chart */}
-            <div className="flex-1 flex items-end justify-between px-4 pb-2 border-b border-white/5 relative">
-              {/* Y Axis Lines */}
-              <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-8">
-                <div className="w-full h-[1px] bg-white/5"></div>
-                <div className="w-full h-[1px] bg-white/5"></div>
-                <div className="w-full h-[1px] bg-white/5"></div>
-                <div className="w-full h-[1px] bg-white/5"></div>
-              </div>
-              {/* Bars */}
-              {monthlyChartData.map((d) => {
-                const incomePct = Math.max(5, (d.income / maxVal) * 220) // Max height 220px
-                const expensePct = Math.max(5, (d.expenses / maxVal) * 220)
-                return (
-                  <div key={d.month} className="flex flex-col items-center gap-2 z-10 w-full px-2">
-                    <div className="flex items-end gap-1 h-[220px]">
-                      <div
-                        className="w-6 md:w-8 bg-[#c0c1ff] rounded-t-sm hover:brightness-110 transition-all cursor-pointer"
-                        style={{ height: `${incomePct}px` }}
-                        title={`Income: ${formatCurrency(d.income)}`}
-                      ></div>
-                      <div
-                        className="w-6 md:w-8 bg-[#fa8c00] rounded-t-sm hover:brightness-110 transition-all cursor-pointer"
-                        style={{ height: `${expensePct}px` }}
-                        title={`Expenses: ${formatCurrency(d.expenses)}`}
-                      ></div>
-                    </div>
-                    <span className="font-label-caps text-xs text-[#c7c5d0]">{d.month}</span>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* Right Chart */}
-          <div className="lg:col-span-1 glass-panel rounded-xl p-6 glass-panel-hover flex flex-col h-[400px]">
-            <h3 className="font-headline-md text-[20px] font-bold text-[#dae2fd] mb-6">Expense Breakdown</h3>
-            <div className="flex-1 flex flex-col items-center justify-center relative">
-              {/* Donut */}
-              <div className="w-40 h-40 rounded-full border-[16px] border-white/5 relative" style={{ borderTopColor: '#c0c1ff', borderRightColor: '#fa8c00', transform: 'rotate(-45deg)' }}>
-                <div className="absolute inset-[-16px] rounded-full border-[16px] border-transparent border-b-[#ff4433]" style={{ transform: 'rotate(10deg)' }}></div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center flex-col">
-                <span className="font-data-display text-[24px] font-bold text-[#dae2fd]">100%</span>
-                <span className="font-label-caps text-[10px] text-[#c7c5d0]">TOTAL</span>
-              </div>
-            </div>
-            <div className="mt-6 flex flex-col gap-3">
-              {categoryData.length === 0 ? (
-                <div className="text-center text-xs text-[#c7c5d0] py-4">No expense categories this month</div>
-              ) : (
-                categoryData.map((cat, idx) => (
-                  <div className="flex justify-between items-center text-sm" key={cat.name}>
-                    <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full" style={{ backgroundColor: cat.color || (idx === 0 ? '#c0c1ff' : idx === 1 ? '#fa8c00' : '#ff4433') }}></span>
-                      <span className="font-body-sm text-[#c7c5d0]">{cat.name}</span>
-                    </div>
-                    <span className="font-data-display text-[#dae2fd]">{((cat.amount / categoryTotal) * 100).toFixed(0)}%</span>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
+        <DashboardCharts monthlyChartData={monthlyChartData} categoryData={categoryData} />
 
         {/* Bottom Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -280,7 +201,7 @@ export default async function DashboardPage() {
                             </div>
                           </td>
                           <td className="py-4 px-2">
-                            <div className="font-medium text-[#dae2fd]">{tx.description}</div>
+                            <div className="font-medium text-[#dae2fd]">{tx.title ?? tx.description}</div>
                             <div className="text-xs mt-1">{format(new Date(tx.date), 'MMM dd, yyyy')}</div>
                           </td>
                           <td className="py-4 px-2">

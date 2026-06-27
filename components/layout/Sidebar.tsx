@@ -11,6 +11,7 @@ const navItems = [
   { href: '/invoices', label: 'Invoices', icon: 'description' },
   { href: '/subscriptions', label: 'Subscriptions', icon: 'subscriptions' },
   { href: '/reports', label: 'Reports', icon: 'analytics' },
+  { href: '/tools', label: 'Tools', icon: 'construction' },
 ]
 
 export function Sidebar() {

@@ -2,18 +2,51 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { createClient } from '@/supabase/client'
+
+function Avatar({ name, avatarUrl }: { name: string; avatarUrl?: string | null }) {
+  const initials = name
+    ? name.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2)
+    : '?'
+
+  if (avatarUrl) {
+    return (
+      <img
+        src={avatarUrl}
+        alt={name}
+        className="w-full h-full object-cover"
+        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+      />
+    )
+  }
+
+  return (
+    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#c0c1ff] to-[#7b7fff] text-[#051424] font-bold text-2xl">
+      {initials}
+    </div>
+  )
+}
 
 export default function SettingsPage() {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [currency, setCurrency] = useState('usd')
   const [timezone, setTimezone] = useState('est')
   const [activeSection, setActiveSection] = useState('profile')
   const [accentColor, setAccentColor] = useState('violet')
   const [theme, setTheme] = useState('dark')
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null)
+  const [uploading, setUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
+    setToast({ msg, type })
+    setTimeout(() => setToast(null), 3000)
+  }
 
   const fetchProfile = async () => {
     setLoading(true)
@@ -31,6 +64,7 @@ export default function SettingsPage() {
 
     if (!error && profile) {
       setFullName(profile.full_name ?? '')
+      setAvatarUrl(profile.avatar_url ?? null)
     }
     setLoading(false)
   }
@@ -40,9 +74,10 @@ export default function SettingsPage() {
   }, [])
 
   const handleSaveProfile = async () => {
+    setSaving(true)
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
+    if (!user) { setSaving(false); return }
 
     const { error } = await supabase
       .from('profiles')
@@ -50,10 +85,57 @@ export default function SettingsPage() {
       .eq('id', user.id)
 
     if (error) {
-      alert(`Error saving profile: ${error.message}`)
+      showToast(`Error saving profile: ${error.message}`, 'error')
     } else {
-      alert('Profile updated successfully!')
+      showToast('Profile updated successfully!')
     }
+    setSaving(false)
+  }
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 1_048_576) {
+      showToast('File too large (max 1MB)', 'error')
+      return
+    }
+
+    setUploading(true)
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) { setUploading(false); return }
+
+    const ext = file.name.split('.').pop()
+    const path = `avatars/${user.id}.${ext}`
+
+    const { error: uploadError } = await supabase.storage
+      .from('user-content')
+      .upload(path, file, { upsert: true })
+
+    if (uploadError) {
+      showToast(`Upload error: ${uploadError.message}`, 'error')
+      setUploading(false)
+      return
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('user-content')
+      .getPublicUrl(path)
+
+    await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', user.id)
+    setAvatarUrl(publicUrl)
+    showToast('Avatar updated!')
+    setUploading(false)
+  }
+
+  const handleRemoveAvatar = async () => {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
+    await supabase.from('profiles').update({ avatar_url: null }).eq('id', user.id)
+    setAvatarUrl(null)
+    showToast('Avatar removed.')
   }
 
   const handleSectionClick = (id: string) => {
@@ -61,6 +143,19 @@ export default function SettingsPage() {
     const element = document.getElementById(id)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme)
+    document.documentElement.setAttribute('data-theme', newTheme)
+    localStorage.setItem('quantivo-theme', newTheme)
+    if (newTheme === 'light') {
+      document.documentElement.style.background = '#f8f9fc'
+      document.body.style.background = '#f8f9fc'
+    } else {
+      document.documentElement.style.background = '#0b1326'
+      document.body.style.background = '#0b1326'
     }
   }
 
@@ -87,7 +182,7 @@ export default function SettingsPage() {
       `}</style>
 
       <div className="max-w-[1440px] mx-auto pb-12 flex gap-12 relative">
-        {/* Left Sub-Nav (200px) */}
+        {/* Left Sub-Nav */}
         <aside className="w-[200px] shrink-0 sticky top-24 self-start space-y-1 z-30">
           {[
             { id: 'profile', label: 'Profile' },
@@ -126,18 +221,40 @@ export default function SettingsPage() {
             <div className="glass-panel p-8 rounded-xl">
               {/* Avatar Upload */}
               <div className="flex items-center gap-8 mb-10 border-b border-white/5 pb-8">
-                <div className="relative group cursor-pointer">
+                <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                   <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#c0c1ff]/30 group-hover:border-[#c0c1ff] transition-colors">
-                    <img className="w-full h-full object-cover" alt="User Avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASTMtMQTOMsGLoqcbiHMNVU2Jg6FtmmakgnEPagkO18XUvvnc1jbYqq9H0rEf1s26pv8VZNT9vdcJSYSighhPkAkKtJGmvqTCyMusSfus8jBGxr7H51WnhjPC2js8rQGr5oCH7DvB0V3-pGGLWGls8DQ_zJJ3K50fly7TlOBk_wnKfEyLA-KB1mQnqcWOvy8QzQFtSy__iul9y7qZGxjOqtXKIAOpEsG-suDVxiwpIbELEzEC5BLGI4NI9wT3BJ6pkLRbUv9t77XY" />
+                    <Avatar name={fullName} avatarUrl={avatarUrl} />
                   </div>
                   <div className="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
-                    <span className="material-symbols-outlined text-white">photo_camera</span>
+                    <span className="material-symbols-outlined text-white">
+                      {uploading ? 'hourglass_empty' : 'photo_camera'}
+                    </span>
                   </div>
                 </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarUpload}
+                />
                 <div>
                   <div className="flex gap-4 mb-2">
-                    <button onClick={() => alert('Feature coming soon!')} className="px-6 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors font-body-sm text-xs font-semibold">Change Avatar</button>
-                    <button onClick={() => alert('Removed avatar.')} className="px-6 py-2 rounded-full bg-transparent text-[#c7c5d0] hover:text-white transition-colors font-body-sm text-xs">Remove</button>
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploading}
+                      className="px-6 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors font-body-sm text-xs font-semibold disabled:opacity-50"
+                    >
+                      {uploading ? 'Uploading…' : 'Change Avatar'}
+                    </button>
+                    {avatarUrl && (
+                      <button
+                        onClick={handleRemoveAvatar}
+                        className="px-6 py-2 rounded-full bg-transparent text-[#c7c5d0] hover:text-white transition-colors font-body-sm text-xs"
+                      >
+                        Remove
+                      </button>
+                    )}
                   </div>
                   <p className="font-body-sm text-[#c7c5d0] opacity-70 text-[10px]">JPG, GIF or PNG. 1MB max.</p>
                 </div>
@@ -200,9 +317,10 @@ export default function SettingsPage() {
               <div className="mt-10 pt-6 border-t border-white/5 flex justify-end">
                 <button
                   onClick={handleSaveProfile}
-                  className="px-8 py-3 rounded-full bg-[#c0c1ff] text-[#051424] hover:bg-white transition-colors font-semibold text-sm"
+                  disabled={saving}
+                  className="px-8 py-3 rounded-full bg-[#c0c1ff] text-[#051424] hover:bg-white transition-colors font-semibold text-sm disabled:opacity-50"
                 >
-                  Save Changes
+                  {saving ? 'Saving…' : 'Save Changes'}
                 </button>
               </div>
             </div>
@@ -228,7 +346,7 @@ export default function SettingsPage() {
                   <div className="font-headline text-3xl font-bold text-white">$12<span className="font-body-sm text-sm text-[#c7c5d0]">/mo</span></div>
                 </div>
               </div>
-              <div className="bg-[#051424]/50 rounded-xl p-6 border border-[#c0c1ff]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-8 relative group">
+              <div className="bg-[#051424]/50 rounded-xl p-6 border border-[#c0c1ff]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-8 relative">
                 <div>
                   <h5 className="font-headline font-bold text-white text-sm mb-1">Unlock Enterprise Features</h5>
                   <ul className="flex flex-wrap gap-4 font-mono text-[11px] text-[#c7c5d0] mt-2">
@@ -237,7 +355,7 @@ export default function SettingsPage() {
                     <li className="flex items-center gap-1"><span className="material-symbols-outlined text-[14px] text-[#c0c1ff]">check</span> Priority Support</li>
                   </ul>
                 </div>
-                <button onClick={() => alert('Upgrading to Enterprise...')} className="px-6 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors font-body-sm text-xs font-semibold whitespace-nowrap z-10">
+                <button onClick={() => showToast('Enterprise upgrade — contact sales@quantivo.app')} className="px-6 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors font-body-sm text-xs font-semibold whitespace-nowrap z-10">
                   Upgrade to Enterprise
                 </button>
               </div>
@@ -272,7 +390,7 @@ export default function SettingsPage() {
                         <span className="inline-block px-3 py-1 rounded-full bg-[#10b981]/10 border border-[#10b981]/30 text-[#10b981] font-mono text-[9px] uppercase">Paid</span>
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <button onClick={() => alert('Downloading invoice pdf...')} className="text-[#c7c5d0] hover:text-white transition-colors">
+                        <button onClick={() => showToast('Invoice download feature coming soon.')} className="text-[#c7c5d0] hover:text-white transition-colors">
                           <span className="material-symbols-outlined text-[20px]">download</span>
                         </button>
                       </td>
@@ -296,7 +414,7 @@ export default function SettingsPage() {
                 <div className="flex gap-6">
                   {/* Dark Mode */}
                   <div
-                    onClick={() => setTheme('dark')}
+                    onClick={() => handleThemeChange('dark')}
                     className={`cursor-pointer flex flex-col items-center gap-3 transition-opacity ${theme === 'dark' ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
                   >
                     <div className={`w-40 h-28 rounded-xl border-2 bg-[#051424] p-2 relative overflow-hidden transition-all ${theme === 'dark' ? 'border-[#c0c1ff] shadow-[0_0_20px_rgba(192,193,255,0.15)]' : 'border-transparent'}`}>
@@ -320,7 +438,7 @@ export default function SettingsPage() {
 
                   {/* Light Mode */}
                   <div
-                    onClick={() => setTheme('light')}
+                    onClick={() => handleThemeChange('light')}
                     className={`cursor-pointer flex flex-col items-center gap-3 transition-opacity ${theme === 'light' ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
                   >
                     <div className={`w-40 h-28 rounded-xl border-2 bg-white p-2 relative overflow-hidden transition-all ${theme === 'light' ? 'border-[#c0c1ff] shadow-[0_0_20px_rgba(192,193,255,0.15)]' : 'border-transparent'}`}>
@@ -385,7 +503,7 @@ export default function SettingsPage() {
                   <h4 className="font-headline font-bold text-white text-sm mb-2">Export My Data</h4>
                   <p className="font-body-sm text-xs text-[#c7c5d0] opacity-80">Download a complete copy of all your financial data, reports, and settings in CSV and JSON formats.</p>
                 </div>
-                <button onClick={() => alert('Data export requested. An email will be sent to you shortly.')} className="px-6 py-2 rounded-full border border-white/20 text-white hover:bg-white/5 transition-colors font-body-sm text-xs font-semibold shrink-0">
+                <button onClick={() => showToast('Data export requested. An email will be sent to you shortly.')} className="px-6 py-2 rounded-full border border-white/20 text-white hover:bg-white/5 transition-colors font-body-sm text-xs font-semibold shrink-0">
                   Request Export
                 </button>
               </div>
@@ -394,7 +512,7 @@ export default function SettingsPage() {
                   <h4 className="font-headline font-bold text-white text-sm mb-2">Delete Account</h4>
                   <p className="font-body-sm text-xs text-[#c7c5d0] opacity-80">Permanently remove your account and all associated data. <strong className="text-red-500 font-medium">This action cannot be undone.</strong></p>
                 </div>
-                <button onClick={() => alert('Delete account triggered. Please contact support.')} className="px-6 py-2 rounded-full bg-red-600 text-white hover:bg-red-500 transition-colors font-body-sm text-xs font-semibold shrink-0">
+                <button onClick={() => showToast('To delete your account, contact support@quantivo.app', 'error')} className="px-6 py-2 rounded-full bg-red-600 text-white hover:bg-red-500 transition-colors font-body-sm text-xs font-semibold shrink-0">
                   Delete Account
                 </button>
               </div>
@@ -402,6 +520,17 @@ export default function SettingsPage() {
           </section>
         </div>
       </div>
+
+      {/* Toast */}
+      {toast && (
+        <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-medium shadow-xl backdrop-blur-md border ${
+          toast.type === 'error'
+            ? 'bg-red-500/90 border-red-400/30 text-white'
+            : 'bg-[#0d1c2d]/95 border-white/10 text-[#e1dfff]'
+        }`}>
+          {toast.msg}
+        </div>
+      )}
     </>
   )
 }

@@ -19,6 +19,8 @@ export default function PublicInvoiceToolPage() {
   ])
   const [taxRate, setTaxRate] = useState(5)
   const [notes, setNotes] = useState('Thank you for your business.')
+  const [toastMsg, setToastMsg] = useState<string | null>(null)
+  const showToast = (msg: string) => { setToastMsg(msg); setTimeout(() => setToastMsg(null), 3000) }
 
   const getSymbol = (c: string) => {
     if (c.includes('EUR')) return '€'
@@ -52,11 +54,11 @@ export default function PublicInvoiceToolPage() {
   }
 
   const handleDownloadPDF = () => {
-    alert('Free tool limit: Please sign up to download PDF invoices.')
+    showToast('Sign up to download PDF invoices — it\'s free!')
   }
 
   const handleDownloadCSV = () => {
-    alert('Free tool limit: Please sign up to download CSV invoice data.')
+    showToast('Sign up to export CSV invoice data — it\'s free!')
   }
 
   return (
@@ -459,6 +461,11 @@ export default function PublicInvoiceToolPage() {
           <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
         </div>
       </footer>
+      {toastMsg && (
+        <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 200, background: 'rgba(13,28,45,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px 20px', color: '#e1dfff', fontSize: '14px', backdropFilter: 'blur(12px)' }}>
+          {toastMsg}
+        </div>
+      )}
     </>
   )
 }

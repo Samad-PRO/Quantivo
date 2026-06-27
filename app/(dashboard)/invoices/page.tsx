@@ -3,7 +3,6 @@
 export const dynamic = 'force-dynamic'
 
 import { useState } from 'react'
-import Link from 'next/link'
 
 export default function InvoicesPage() {
   const [companyName, setCompanyName] = useState('')
@@ -51,30 +50,49 @@ export default function InvoicesPage() {
     setLineItems(lineItems.filter(item => item.id !== id))
   }
 
+  const [toastMsg, setToastMsg] = useState<string | null>(null)
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg)
+    setTimeout(() => setToastMsg(null), 3000)
+  }
+
   const handleDownloadPDF = async () => {
     try {
       const { jsPDF } = await import('jspdf')
       const autoTable = (await import('jspdf-autotable')).default
-      
+
       const doc = new jsPDF()
-      
+
+      // Watermark
+      doc.setTextColor(220, 220, 220)
+      doc.setFontSize(60)
+      doc.text('QUANTIVO', 30, 160, { angle: -30, renderingMode: 'fillThenStroke' })
+      doc.setTextColor(0, 0, 0)
+
       // Header
       doc.setFontSize(24)
+      doc.setTextColor(40, 40, 40)
       doc.text('INVOICE', 14, 22)
       doc.setFontSize(10)
+      doc.setTextColor(120, 120, 120)
       doc.text('INV-001', 14, 30)
 
       // Company Info
       doc.setFontSize(12)
+      doc.setTextColor(40, 40, 40)
       doc.text(companyName || 'Your Company', 14, 45)
       doc.setFontSize(10)
+      doc.setTextColor(100, 100, 100)
       doc.text(companyAddress || 'Your Details', 14, 52)
 
       // Client Info
       doc.setFontSize(12)
+      doc.setTextColor(40, 40, 40)
       doc.text('Bill To:', 120, 45)
       doc.text(clientName || 'Client Name', 120, 52)
       doc.setFontSize(10)
+      doc.setTextColor(100, 100, 100)
       if (clientEmail) doc.text(clientEmail, 120, 58)
       doc.text(clientAddress || 'Client Details', 120, clientEmail ? 64 : 58)
 
@@ -92,29 +110,52 @@ export default function InvoicesPage() {
           `${symbol}${item.rate.toFixed(2)}`,
           `${symbol}${(item.qty * item.rate).toFixed(2)}`
         ]),
+        headStyles: { fillColor: [192, 193, 255], textColor: [5, 20, 36] },
+        alternateRowStyles: { fillColor: [245, 245, 255] }
       })
 
       // Totals
       const finalY = (doc as any).lastAutoTable.finalY + 10
+      doc.setFontSize(10)
+      doc.setTextColor(100, 100, 100)
       doc.text(`Subtotal: ${symbol}${subtotal.toFixed(2)}`, 140, finalY)
       doc.text(`Tax (${taxRate}%): ${symbol}${taxAmount.toFixed(2)}`, 140, finalY + 7)
       doc.setFontSize(12)
+      doc.setTextColor(40, 40, 40)
       doc.text(`Total: ${symbol}${total.toFixed(2)}`, 140, finalY + 15)
 
       // Notes
       doc.setFontSize(10)
+      doc.setTextColor(100, 100, 100)
       doc.text('Notes:', 14, finalY + 5)
       doc.text(notes || '-', 14, finalY + 12)
 
-      doc.save('Invoice.pdf')
+      doc.save(`Invoice-${clientName || 'Draft'}.pdf`)
+      showToast('PDF downloaded successfully!')
     } catch (e) {
       console.error(e)
-      alert('Error generating PDF')
+      showToast('Error generating PDF. Please try again.')
     }
   }
 
   const handleDownloadCSV = () => {
-    alert('Exporting invoice metadata as CSV...')
+    const rows = [
+      ['Description', 'Qty', 'Rate', 'Amount'],
+      ...lineItems.map(i => [i.description, i.qty, i.rate, (i.qty * i.rate).toFixed(2)]),
+      [],
+      ['Subtotal', '', '', subtotal.toFixed(2)],
+      [`Tax (${taxRate}%)`, '', '', taxAmount.toFixed(2)],
+      ['Total', '', '', total.toFixed(2)]
+    ]
+    const csv = rows.map(r => r.join(',')).join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `Invoice-${clientName || 'Draft'}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+    showToast('CSV downloaded successfully!')
   }
 
   return (
@@ -461,6 +502,13 @@ export default function InvoicesPage() {
           </button>
         </div>
       </div>
+
+      {/* Toast */}
+      {toastMsg && (
+        <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 200, background: 'rgba(13,28,45,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px 20px', color: '#e1dfff', fontSize: '14px', backdropFilter: 'blur(12px)' }}>
+          {toastMsg}
+        </div>
+      )}
     </>
   )
 }

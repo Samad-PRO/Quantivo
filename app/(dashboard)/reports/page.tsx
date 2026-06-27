@@ -18,6 +18,12 @@ export default function ReportsPage() {
   const [totalExpenses, setTotalExpenses] = useState(0)
   const [categories, setCategories] = useState<CategoryBreakdown[]>([])
   const [range, setRange] = useState('7m')
+  const [toast, setToast] = useState<string | null>(null)
+
+  const showToast = (msg: string) => {
+    setToast(msg)
+    setTimeout(() => setToast(null), 3000)
+  }
 
   const fetchReportData = async () => {
     setLoading(true)
@@ -101,14 +107,21 @@ export default function ReportsPage() {
               <option value="ytd">YTD</option>
             </select>
             <button
-              onClick={() => alert('Exporting report as CSV...')}
+              onClick={() => {
+                const csv = `Category,Amount\n${categories.map(c => `${c.name},${c.amount}`).join('\n')}`
+                const blob = new Blob([csv], { type: 'text/csv' })
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a'); a.href = url; a.download = 'report.csv'; a.click()
+                URL.revokeObjectURL(url)
+                showToast('CSV downloaded!')
+              }}
               className="bg-[#fa8c00] text-[#231b00] px-6 py-2 rounded-full font-medium text-sm hover:brightness-110 transition-all flex items-center gap-2"
             >
               <span className="material-symbols-outlined text-[18px]">download</span>
               CSV
             </button>
             <button
-              onClick={() => alert('Exporting report as PDF...')}
+              onClick={() => showToast('PDF export — use the Reports PDF feature in the Tools page.')}
               className="bg-[#c0c1ff] text-[#292b5e] px-6 py-2 rounded-full font-medium text-sm hover:brightness-110 transition-all flex items-center gap-2"
             >
               <span className="material-symbols-outlined text-[18px]">picture_as_pdf</span>
@@ -260,7 +273,7 @@ export default function ReportsPage() {
               <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#051424]/80 backdrop-blur-[2px]">
                 <span className="material-symbols-outlined text-[#c0c1ff]/50 text-[32px] mb-2">lock</span>
                 <button
-                  onClick={() => alert('Upgrading to Pro to unlock AI insights...')}
+                  onClick={() => showToast('Upgrade to Pro to unlock AI-powered financial insights.')}
                   className="bg-[#c0c1ff] text-[#292b5e] px-6 py-2 rounded-full font-medium text-xs hover:brightness-110 transition-all shadow-lg flex items-center gap-2"
                 >
                   Unlock Pro Insights
@@ -371,6 +384,13 @@ export default function ReportsPage() {
           </div>
         </div>
       </div>
+
+      {/* Toast */}
+      {toast && (
+        <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 200, background: 'rgba(13,28,45,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px 20px', color: '#e1dfff', fontSize: '14px', backdropFilter: 'blur(12px)' }}>
+          {toast}
+        </div>
+      )}
     </>
   )
 }

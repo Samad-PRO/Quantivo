@@ -10,7 +10,7 @@ import { format } from 'date-fns'
 interface Transaction {
   id: string
   date: string
-  description: string
+  title: string
   amount: number
   type: 'income' | 'expense'
   categories?: {
@@ -30,7 +30,14 @@ export default function FinancesPage() {
   const [addModal, setAddModal] = useState<{ isOpen: boolean, type: 'income' | 'expense' }>({ isOpen: false, type: 'income' })
   const [addForm, setAddForm] = useState({ desc: '', amount: '' })
   const [isAdding, setIsAdding] = useState(false)
+  const [toastMsg, setToastMsg] = useState<string | null>(null)
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
   const itemsPerPage = 10
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg)
+    setTimeout(() => setToastMsg(null), 3000)
+  }
 
   const fetchTransactions = async () => {
     setLoading(true)
@@ -40,16 +47,15 @@ export default function FinancesPage() {
 
     const { data, error } = await supabase
       .from('transactions')
-      .select('id, date, description, amount, type, categories(name,color)')
+      .select('id, date, title, amount, type, categories(name,color)')
       .eq('user_id', user.id)
       .order('date', { ascending: false })
 
     if (!error && data) {
-      // Map schema relations to standard structures
       const formatted = (data as any[]).map(tx => ({
         id: tx.id,
         date: tx.date,
-        description: tx.description,
+        title: tx.title,
         amount: Number(tx.amount),
         type: tx.type,
         categories: Array.isArray(tx.categories) ? tx.categories[0] : tx.categories
@@ -86,7 +92,7 @@ export default function FinancesPage() {
 
     const { error } = await supabase.from('transactions').insert({
       user_id: user.id,
-      description: addForm.desc,
+      title: addForm.desc,
       amount: amt,
       type,
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -94,7 +100,7 @@ export default function FinancesPage() {
     })
 
     if (error) {
-      alert(`Error creating transaction: ${error.message}`)
+      showToast(`Error creating transaction: ${error.message}`)
     } else {
       fetchTransactions()
       setAddModal({ isOpen: false, type: 'income' })
@@ -103,14 +109,14 @@ export default function FinancesPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this transaction?')) return
     const supabase = createClient()
     const { error } = await supabase.from('transactions').delete().eq('id', id)
     if (error) {
-      alert(`Error deleting transaction: ${error.message}`)
+      showToast(`Error deleting transaction: ${error.message}`)
     } else {
       fetchTransactions()
     }
+    setDeleteConfirm(null)
   }
 
   // Filter & Search Logic
@@ -118,7 +124,7 @@ export default function FinancesPage() {
     .filter(tx => {
       if (filter === 'income' && tx.type !== 'income') return false
       if (filter === 'expense' && tx.type !== 'expense') return false
-      if (searchTerm && !tx.description.toLowerCase().includes(searchTerm.toLowerCase())) return false
+      if (searchTerm && !tx.title.toLowerCase().includes(searchTerm.toLowerCase())) return false
       return true
     })
     .sort((a, b) => {
@@ -218,7 +224,7 @@ export default function FinancesPage() {
               <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#c7c5d0] text-sm">search</span>
               <input
                 type="text"
-                placeholder="Search description..."
+                placeholder="Search transactions..."
                 value={searchTerm}
                 onChange={(e) => { setSearchTerm(e.target.value); setPage(1) }}
                 className="glass-input text-white rounded-lg pl-9 pr-4 py-2 text-sm w-64"
@@ -278,7 +284,7 @@ export default function FinancesPage() {
                     return (
                       <tr key={tx.id} className="hover:bg-white/[0.02] transition-colors group">
                         <td className="py-4 px-6 font-mono text-sm text-[#c7c5d0]">{tx.date}</td>
-                        <td className="py-4 px-6 font-body-md text-white font-medium">{tx.description}</td>
+                        <td className="py-4 px-6 font-body-md text-white font-medium">{tx.title}</td>
                         <td className="py-4 px-6">
                           <span
                             className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border"
@@ -301,7 +307,7 @@ export default function FinancesPage() {
                         </td>
                         <td className="py-4 px-6 text-right">
                           <button
-                            onClick={() => handleDelete(tx.id)}
+                            onClick={() => setDeleteConfirm(tx.id)}
                             className="text-[#c7c5d0] hover:text-[#ff4433] p-1 transition-colors"
                             title="Delete"
                           >
@@ -352,9 +358,10 @@ export default function FinancesPage() {
         </div>
       </div>
 
+      {/* Add Transaction Dialog */}
       {addModal.isOpen && (
-        <div className="fixed inset-0 bg-[#051424]/80 z-50 flex items-center justify-center p-4">
-          <div className="glass-modal w-full max-w-md p-6 flex flex-col gap-6 animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 bg-[#051424]/80 z-50 flex items-center justify-center p-4" onClick={() => setAddModal({ isOpen: false, type: 'income' })}>
+          <div className="glass-modal w-full max-w-md p-6 flex flex-col gap-6 animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <div>
               <h3 className="font-display text-xl font-bold text-white">Add {addModal.type.charAt(0).toUpperCase() + addModal.type.slice(1)}</h3>
               <p className="text-sm text-[#c7c5d0] mt-1">Enter transaction details below.</p>
@@ -403,6 +410,34 @@ export default function FinancesPage() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 bg-[#051424]/80 z-50 flex items-center justify-center p-4" onClick={() => setDeleteConfirm(null)}>
+          <div className="glass-modal w-full max-w-sm p-6 flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#ff4433]/10 flex items-center justify-center">
+                <span className="material-symbols-outlined text-[#ff4433]">warning</span>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white">Delete Transaction</h3>
+                <p className="text-sm text-[#c7c5d0]">This action cannot be undone.</p>
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-3">
+              <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2.5 rounded-full text-sm font-medium text-[#c7c5d0] hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
+              <button onClick={() => handleDelete(deleteConfirm)} className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#ff4433] text-white hover:brightness-110 transition-all">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast */}
+      {toastMsg && (
+        <div className="fixed bottom-6 right-6 z-50 glass-modal px-5 py-3 text-sm text-white animate-in slide-in-from-bottom-5 duration-300">
+          {toastMsg}
         </div>
       )}
     </>
