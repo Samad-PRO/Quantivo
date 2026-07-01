@@ -184,19 +184,19 @@ export default function FinancesPage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <div>
             <h2 className="font-display-lg text-[40px] font-bold text-white mb-2 tracking-tight">Finances</h2>
-            <p className="text-[#c7c5d0]">Manage and track your operational cash flow.</p>
+            <p className="text-[var(--text-secondary)]">Manage and track your operational cash flow.</p>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={() => openAddModal('income')}
-              className="bg-[#c0c1ff] text-[#051424] px-6 py-2.5 rounded-full font-medium flex items-center gap-2 hover:brightness-110 hover:shadow-[0_0_20px_rgba(192,193,255,0.3)] transition-all"
+              className="bg-[#c0c1ff] text-[var(--bg-canvas)] px-6 py-2.5 rounded-full font-medium flex items-center gap-2 hover:brightness-110 hover:shadow-[0_0_20px_rgba(192,193,255,0.3)] transition-all"
             >
               <span className="material-symbols-outlined text-sm">add</span>
               Add Income
             </button>
             <button
               onClick={() => openAddModal('expense')}
-              className="bg-[#fa8c00] text-[#051424] px-6 py-2.5 rounded-full font-medium flex items-center gap-2 hover:brightness-110 hover:shadow-[0_0_20px_rgba(250,140,0,0.3)] transition-all"
+              className="bg-[#fa8c00] text-[var(--bg-canvas)] px-6 py-2.5 rounded-full font-medium flex items-center gap-2 hover:brightness-110 hover:shadow-[0_0_20px_rgba(250,140,0,0.3)] transition-all"
             >
               <span className="material-symbols-outlined text-sm">remove</span>
               Add Expense
@@ -211,7 +211,7 @@ export default function FinancesPage() {
               <button
                 key={type}
                 onClick={() => { setFilter(type); setPage(1) }}
-                className={`px-4 py-1.5 rounded-md font-medium text-sm transition-colors ${filter === type ? 'bg-white/10 text-white' : 'text-[#c7c5d0] hover:text-white'}`}
+                className={`px-4 py-1.5 rounded-md font-medium text-sm transition-colors ${filter === type ? 'bg-white/10 text-white' : 'text-[var(--text-secondary)] hover:text-white'}`}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </button>
@@ -221,7 +221,7 @@ export default function FinancesPage() {
           <div className="flex flex-wrap items-center gap-3">
             {/* Search Input */}
             <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#c7c5d0] text-sm">search</span>
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] text-sm">search</span>
               <input
                 type="text"
                 placeholder="Search transactions..."
@@ -238,7 +238,7 @@ export default function FinancesPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/5 text-[#c7c5d0] font-mono text-xs uppercase tracking-wider">
+                <tr className="border-b border-white/5 text-[var(--text-secondary)] font-mono text-xs uppercase tracking-wider">
                   <th
                     onClick={() => toggleSort('date')}
                     className="py-4 px-6 font-medium cursor-pointer hover:text-white transition-colors group"
@@ -270,11 +270,11 @@ export default function FinancesPage() {
               <tbody className="divide-y divide-white/5">
                 {loading ? (
                   <tr>
-                    <td colSpan={6} className="py-12 text-center text-sm text-[#c7c5d0]">Loading transactions...</td>
+                    <td colSpan={6} className="py-12 text-center text-sm text-[var(--text-secondary)]">Loading transactions...</td>
                   </tr>
                 ) : paginatedTransactions.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="py-12 text-center text-sm text-[#c7c5d0]">No transactions found</td>
+                    <td colSpan={6} className="py-12 text-center text-sm text-[var(--text-secondary)]">No transactions found</td>
                   </tr>
                 ) : (
                   paginatedTransactions.map((tx) => {
@@ -283,7 +283,7 @@ export default function FinancesPage() {
                     const catName = tx.categories?.name || 'Other'
                     return (
                       <tr key={tx.id} className="hover:bg-white/[0.02] transition-colors group">
-                        <td className="py-4 px-6 font-mono text-sm text-[#c7c5d0]">{tx.date}</td>
+                        <td className="py-4 px-6 font-mono text-sm text-[var(--text-secondary)]">{tx.date}</td>
                         <td className="py-4 px-6 font-body-md text-white font-medium">{tx.title}</td>
                         <td className="py-4 px-6">
                           <span
@@ -308,7 +308,7 @@ export default function FinancesPage() {
                         <td className="py-4 px-6 text-right">
                           <button
                             onClick={() => setDeleteConfirm(tx.id)}
-                            className="text-[#c7c5d0] hover:text-[#ff4433] p-1 transition-colors"
+                            className="text-[var(--text-secondary)] hover:text-[#ff4433] p-1 transition-colors"
                             title="Delete"
                           >
                             <span className="material-symbols-outlined text-[20px]">delete</span>
@@ -325,14 +325,14 @@ export default function FinancesPage() {
           {/* Pagination */}
           {pageCount > 1 && (
             <div className="px-6 py-4 border-t border-white/5 flex items-center justify-between">
-              <span className="font-mono text-sm text-[#c7c5d0]">
+              <span className="font-mono text-sm text-[var(--text-secondary)]">
                 Showing {(page - 1) * itemsPerPage + 1}-{Math.min(page * itemsPerPage, filteredTransactions.length)} of {filteredTransactions.length}
               </span>
               <div className="flex items-center gap-2">
                 <button
                   disabled={page === 1}
                   onClick={() => setPage(p => Math.max(1, p - 1))}
-                  className="w-8 h-8 rounded border border-white/10 flex items-center justify-center text-[#c7c5d0] hover:bg-white/5 hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"
+                  className="w-8 h-8 rounded border border-white/10 flex items-center justify-center text-[var(--text-secondary)] hover:bg-white/5 hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"
                 >
                   <span className="material-symbols-outlined text-[18px]">chevron_left</span>
                 </button>
@@ -340,7 +340,7 @@ export default function FinancesPage() {
                   <button
                     key={i}
                     onClick={() => setPage(i + 1)}
-                    className={`w-8 h-8 rounded font-mono text-sm border flex items-center justify-center transition-colors ${page === i + 1 ? 'bg-[#c0c1ff]/20 text-[#c0c1ff] border-[#c0c1ff]/30' : 'border-white/10 text-[#c7c5d0] hover:bg-white/5 hover:text-white'}`}
+                    className={`w-8 h-8 rounded font-mono text-sm border flex items-center justify-center transition-colors ${page === i + 1 ? 'bg-[#c0c1ff]/20 text-[#c0c1ff] border-[#c0c1ff]/30' : 'border-white/10 text-[var(--text-secondary)] hover:bg-white/5 hover:text-white'}`}
                   >
                     {i + 1}
                   </button>
@@ -348,7 +348,7 @@ export default function FinancesPage() {
                 <button
                   disabled={page === pageCount}
                   onClick={() => setPage(p => Math.min(pageCount, p + 1))}
-                  className="w-8 h-8 rounded border border-white/10 flex items-center justify-center text-[#c7c5d0] hover:bg-white/5 hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"
+                  className="w-8 h-8 rounded border border-white/10 flex items-center justify-center text-[var(--text-secondary)] hover:bg-white/5 hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"
                 >
                   <span className="material-symbols-outlined text-[18px]">chevron_right</span>
                 </button>
@@ -360,15 +360,15 @@ export default function FinancesPage() {
 
       {/* Add Transaction Dialog */}
       {addModal.isOpen && (
-        <div className="fixed inset-0 bg-[#051424]/80 z-50 flex items-center justify-center p-4" onClick={() => setAddModal({ isOpen: false, type: 'income' })}>
+        <div className="fixed inset-0 bg-[var(--bg-canvas)]/80 z-50 flex items-center justify-center p-4" onClick={() => setAddModal({ isOpen: false, type: 'income' })}>
           <div className="glass-modal w-full max-w-md p-6 flex flex-col gap-6 animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <div>
               <h3 className="font-display text-xl font-bold text-white">Add {addModal.type.charAt(0).toUpperCase() + addModal.type.slice(1)}</h3>
-              <p className="text-sm text-[#c7c5d0] mt-1">Enter transaction details below.</p>
+              <p className="text-sm text-[var(--text-secondary)] mt-1">Enter transaction details below.</p>
             </div>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Description</label>
+                <label className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Description</label>
                 <input
                   type="text"
                   placeholder="e.g. Client Payment"
@@ -379,9 +379,9 @@ export default function FinancesPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Amount</label>
+                <label className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Amount</label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#c7c5d0]">$</span>
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]">$</span>
                   <input
                     type="number"
                     step="0.01"
@@ -396,7 +396,7 @@ export default function FinancesPage() {
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 onClick={() => setAddModal({ isOpen: false, type: 'income' })}
-                className="px-5 py-2.5 rounded-full text-sm font-medium text-[#c7c5d0] hover:text-white hover:bg-white/5 transition-colors"
+                className="px-5 py-2.5 rounded-full text-sm font-medium text-[var(--text-secondary)] hover:text-white hover:bg-white/5 transition-colors"
                 disabled={isAdding}
               >
                 Cancel
@@ -404,7 +404,7 @@ export default function FinancesPage() {
               <button
                 onClick={submitAddTransaction}
                 disabled={!addForm.desc || !addForm.amount || isAdding}
-                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${addModal.type === 'income' ? 'bg-[#c0c1ff] text-[#051424] hover:shadow-[0_0_15px_rgba(192,193,255,0.3)]' : 'bg-[#fa8c00] text-[#051424] hover:shadow-[0_0_15px_rgba(250,140,0,0.3)]'} disabled:opacity-50 disabled:pointer-events-none`}
+                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${addModal.type === 'income' ? 'bg-[#c0c1ff] text-[var(--bg-canvas)] hover:shadow-[0_0_15px_rgba(192,193,255,0.3)]' : 'bg-[#fa8c00] text-[var(--bg-canvas)] hover:shadow-[0_0_15px_rgba(250,140,0,0.3)]'} disabled:opacity-50 disabled:pointer-events-none`}
               >
                 {isAdding ? 'Saving...' : 'Save Transaction'}
               </button>
@@ -415,7 +415,7 @@ export default function FinancesPage() {
 
       {/* Delete Confirmation Dialog */}
       {deleteConfirm && (
-        <div className="fixed inset-0 bg-[#051424]/80 z-50 flex items-center justify-center p-4" onClick={() => setDeleteConfirm(null)}>
+        <div className="fixed inset-0 bg-[var(--bg-canvas)]/80 z-50 flex items-center justify-center p-4" onClick={() => setDeleteConfirm(null)}>
           <div className="glass-modal w-full max-w-sm p-6 flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#ff4433]/10 flex items-center justify-center">
@@ -423,11 +423,11 @@ export default function FinancesPage() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-white">Delete Transaction</h3>
-                <p className="text-sm text-[#c7c5d0]">This action cannot be undone.</p>
+                <p className="text-sm text-[var(--text-secondary)]">This action cannot be undone.</p>
               </div>
             </div>
             <div className="flex items-center justify-end gap-3">
-              <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2.5 rounded-full text-sm font-medium text-[#c7c5d0] hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
+              <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2.5 rounded-full text-sm font-medium text-[var(--text-secondary)] hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
               <button onClick={() => handleDelete(deleteConfirm)} className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#ff4433] text-white hover:brightness-110 transition-all">Delete</button>
             </div>
           </div>

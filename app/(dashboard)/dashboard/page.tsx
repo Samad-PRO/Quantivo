@@ -93,8 +93,8 @@ export default async function DashboardPage() {
       <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
         {/* Header */}
         <div className="mb-10">
-          <h2 className="font-headline-md text-3xl font-bold text-[#dae2fd]">Dashboard Overview</h2>
-          <p className="font-body-md text-sm text-[#c7c4d7] mt-1">Monitor your financial health and growth</p>
+          <h2 className="font-headline-md text-3xl font-bold text-[var(--text-primary)]">Dashboard Overview</h2>
+          <p className="font-body-md text-sm text-[var(--text-secondary)] mt-1">Monitor your financial health and growth</p>
         </div>
 
         {/* KPI Row */}
@@ -102,14 +102,14 @@ export default async function DashboardPage() {
           {/* Card 1 */}
           <div className="glass-panel rounded-xl p-6 glass-panel-hover flex flex-col justify-between h-36">
             <div className="flex justify-between items-start">
-              <span className="text-[#c7c5d0] font-body-sm text-sm">Total Balance</span>
+              <span className="text-[var(--text-secondary)] font-body-sm text-sm">Total Balance</span>
               <span className={`font-label-caps text-xs flex items-center gap-1 px-2 py-1 rounded-full ${stats.savingsChange >= 0 ? 'text-[#00cc4b] bg-[#00cc4b]/10' : 'text-[#ff4433] bg-[#ff4433]/10'}`}>
                 <span className="material-symbols-outlined text-[14px]">{stats.savingsChange >= 0 ? 'trending_up' : 'trending_down'}</span>
                 {stats.savingsChange >= 0 ? '+' : ''}{stats.savingsChange.toFixed(1)}%
               </span>
             </div>
             <div className="flex justify-between items-end">
-              <span className="font-data-display text-[28px] font-bold text-[#dae2fd] tracking-tight">{formatCurrency(stats.totalBalance)}</span>
+              <span className="font-data-display text-[28px] font-bold text-[var(--text-primary)] tracking-tight">{formatCurrency(stats.totalBalance)}</span>
               <svg className="stroke-[#c0c1ff] fill-none" height="30" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 60 30" width="60">
                 <path d="M0,25 L10,20 L20,28 L30,15 L40,18 L50,5 L60,10" />
               </svg>
@@ -119,14 +119,14 @@ export default async function DashboardPage() {
           {/* Card 2 */}
           <div className="glass-panel rounded-xl p-6 glass-panel-hover flex flex-col justify-between h-36">
             <div className="flex justify-between items-start">
-              <span className="text-[#c7c5d0] font-body-sm text-sm">Monthly Income</span>
+              <span className="text-[var(--text-secondary)] font-body-sm text-sm">Monthly Income</span>
               <span className={`font-label-caps text-xs flex items-center gap-1 px-2 py-1 rounded-full ${stats.incomeChange >= 0 ? 'text-[#00cc4b] bg-[#00cc4b]/10' : 'text-[#ff4433] bg-[#ff4433]/10'}`}>
                 <span className="material-symbols-outlined text-[14px]">trending_up</span>
                 {stats.incomeChange >= 0 ? '+' : ''}{stats.incomeChange.toFixed(1)}%
               </span>
             </div>
             <div className="flex justify-between items-end">
-              <span className="font-data-display text-[28px] font-bold text-[#dae2fd] tracking-tight">{formatCurrency(stats.totalIncome)}</span>
+              <span className="font-data-display text-[28px] font-bold text-[var(--text-primary)] tracking-tight">{formatCurrency(stats.totalIncome)}</span>
               <svg className="stroke-[#00cc4b] fill-none" height="30" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 60 30" width="60">
                 <path d="M0,28 L15,15 L30,20 L45,5 L60,2" />
               </svg>
@@ -136,14 +136,14 @@ export default async function DashboardPage() {
           {/* Card 3 */}
           <div className="glass-panel rounded-xl p-6 glass-panel-hover flex flex-col justify-between h-36">
             <div className="flex justify-between items-start">
-              <span className="text-[#c7c5d0] font-body-sm text-sm">Monthly Expenses</span>
+              <span className="text-[var(--text-secondary)] font-body-sm text-sm">Monthly Expenses</span>
               <span className={`font-label-caps text-xs flex items-center gap-1 px-2 py-1 rounded-full ${stats.expenseChange <= 0 ? 'text-[#00cc4b] bg-[#00cc4b]/10' : 'text-[#ff4433] bg-[#ff4433]/10'}`}>
                 <span className="material-symbols-outlined text-[14px]">{stats.expenseChange <= 0 ? 'trending_down' : 'trending_up'}</span>
                 {stats.expenseChange >= 0 ? '+' : ''}{stats.expenseChange.toFixed(1)}%
               </span>
             </div>
             <div className="flex justify-between items-end">
-              <span className="font-data-display text-[28px] font-bold text-[#dae2fd] tracking-tight">{formatCurrency(stats.totalExpenses)}</span>
+              <span className="font-data-display text-[28px] font-bold text-[var(--text-primary)] tracking-tight">{formatCurrency(stats.totalExpenses)}</span>
               <svg className="stroke-[#ff4433] fill-none" height="30" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 60 30" width="60">
                 <path d="M0,5 L15,10 L30,25 L45,15 L60,28" />
               </svg>
@@ -153,13 +153,13 @@ export default async function DashboardPage() {
           {/* Card 4 */}
           <div className="glass-panel rounded-xl p-6 glass-panel-hover flex flex-col justify-between h-36">
             <div className="flex justify-between items-start">
-              <span className="text-[#c7c5d0] font-body-sm text-sm">Savings Rate</span>
+              <span className="text-[var(--text-secondary)] font-body-sm text-sm">Savings Rate</span>
               <span className="text-[#c0c1ff] font-label-caps text-xs flex items-center gap-1 bg-[#c0c1ff]/10 px-2 py-1 rounded-full">
                 <span className="material-symbols-outlined text-[14px]">savings</span> Safe
               </span>
             </div>
             <div className="flex justify-between items-end">
-              <span className="font-data-display text-[28px] font-bold text-[#dae2fd] tracking-tight">
+              <span className="font-data-display text-[28px] font-bold text-[var(--text-primary)] tracking-tight">
                 {stats.totalIncome > 0 ? ((stats.totalIncome - stats.totalExpenses) / stats.totalIncome * 100).toFixed(1) : '0'}%
               </span>
               <svg className="stroke-[#c0c1ff] fill-none" height="30" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 60 30" width="60">
@@ -177,15 +177,15 @@ export default async function DashboardPage() {
           {/* Left Table */}
           <div className="lg:col-span-2 glass-panel rounded-xl p-6 glass-panel-hover flex flex-col h-[400px] overflow-hidden">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-headline-md text-[20px] font-bold text-[#dae2fd]">Recent Transactions</h3>
+              <h3 className="font-headline-md text-[20px] font-bold text-[var(--text-primary)]">Recent Transactions</h3>
               <Link href="/finances" className="text-[#c0c1ff] hover:text-white font-label-caps text-xs tracking-wider transition-colors">VIEW ALL</Link>
             </div>
             <div className="flex-1 overflow-y-auto pr-2">
               <table className="w-full text-left border-collapse">
-                <tbody className="font-body-sm text-[#c7c5d0]">
+                <tbody className="font-body-sm text-[var(--text-secondary)]">
                   {!recentTx || recentTx.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="py-8 text-center text-sm text-[#c7c5d0]">No recent transactions</td>
+                      <td colSpan={4} className="py-8 text-center text-sm text-[var(--text-secondary)]">No recent transactions</td>
                     </tr>
                   ) : (
                     recentTx.map((tx) => {
@@ -194,14 +194,14 @@ export default async function DashboardPage() {
                       return (
                         <tr key={tx.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                           <td className="py-4 px-2 w-16">
-                            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-[#dae2fd]">
+                            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-[var(--text-primary)]">
                               <span className="material-symbols-outlined text-[20px]">
                                 {category?.icon || (isIncome ? 'arrow_downward' : 'shopping_cart')}
                               </span>
                             </div>
                           </td>
                           <td className="py-4 px-2">
-                            <div className="font-medium text-[#dae2fd]">{tx.title ?? tx.description}</div>
+                            <div className="font-medium text-[var(--text-primary)]">{tx.title ?? tx.description}</div>
                             <div className="text-xs mt-1">{format(new Date(tx.date), 'MMM dd, yyyy')}</div>
                           </td>
                           <td className="py-4 px-2">
@@ -223,10 +223,10 @@ export default async function DashboardPage() {
 
           {/* Right Goals */}
           <div className="lg:col-span-1 glass-panel rounded-xl p-6 glass-panel-hover flex flex-col h-[400px]">
-            <h3 className="font-headline-md text-[20px] font-bold text-[#dae2fd] mb-6">Active Goals</h3>
+            <h3 className="font-headline-md text-[20px] font-bold text-[var(--text-primary)] mb-6">Active Goals</h3>
             <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2">
               {!goals || goals.length === 0 ? (
-                <div className="text-center text-sm text-[#c7c5d0] py-12">No active goals</div>
+                <div className="text-center text-sm text-[var(--text-secondary)] py-12">No active goals</div>
               ) : (
                 goals.map((g) => {
                   const current = Number(g.current_amount || 0)
@@ -235,7 +235,7 @@ export default async function DashboardPage() {
                   return (
                     <div key={g.id}>
                       <div className="flex justify-between items-end mb-2">
-                        <span className="font-body-sm font-medium text-[#dae2fd]">{g.name}</span>
+                        <span className="font-body-sm font-medium text-[var(--text-primary)]">{g.name}</span>
                         <span className="font-data-display text-sm text-[#c0c1ff]">{pct}%</span>
                       </div>
                       <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden relative">
@@ -248,7 +248,7 @@ export default async function DashboardPage() {
                 })
               )}
             </div>
-            <Link href="/goals" className="mt-4 w-full py-2 border border-white/10 rounded-full text-center text-[#c7c5d0] font-label-caps text-xs hover:bg-white/5 hover:text-white transition-all block">
+            <Link href="/goals" className="mt-4 w-full py-2 border border-white/10 rounded-full text-center text-[var(--text-secondary)] font-label-caps text-xs hover:bg-white/5 hover:text-white transition-all block">
               ADD NEW GOAL
             </Link>
           </div>

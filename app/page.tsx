@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import DotField from '@/components/DotField'
 import Link from 'next/link'
+import { Logo } from '@/components/Logo'
 
 export default function LandingPage() {
   useEffect(() => {
@@ -25,7 +26,7 @@ export default function LandingPage() {
   return (
     <>
       <style>{`
-        body { background-color: #051424; color: #d5e4fa; overflow-x: hidden; }
+        body { background-color: var(--bg-canvas); color: var(--text-primary); overflow-x: hidden; }
         .glass-card {
           background: rgba(18, 33, 49, 0.6);
           backdrop-filter: blur(16px);
@@ -68,7 +69,7 @@ export default function LandingPage() {
         }
         .floating-tag { animation: float 6s ease-in-out infinite; }
         .nav-link {
-          color: #c7c5d0;
+          color: var(--text-secondary);
           font-family: Inter, sans-serif;
           font-size: 15px;
           font-weight: 300;
@@ -145,7 +146,7 @@ export default function LandingPage() {
         @media (max-width: 768px) {
           .nav-links-desktop { display: none !important; }
           .mobile-menu-btn { display: block !important; }
-          .mobile-menu.open { display: flex; flex-direction: column; background: #051424; padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+          .mobile-menu.open { display: flex; flex-direction: column; background: var(--bg-canvas); padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
           .tool-grid { grid-template-columns: 1fr !important; }
           .hero-headline { font-size: clamp(32px, 8vw, 64px) !important; }
           .floating-tags { display: none !important; }
@@ -157,7 +158,7 @@ export default function LandingPage() {
       <nav style={{ position: 'fixed', top: 0, width: '100%', zIndex: 50, background: 'rgba(5,20,36,0.85)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', maxWidth: '1280px', margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: "'Space Grotesk', sans-serif", fontSize: '24px', fontWeight: 700, color: '#e1dfff', letterSpacing: '-0.02em' }}>
-            <span className="material-symbols-outlined" style={{color: '#7c7fff', fontVariationSettings: "'FILL' 1", fontSize: '28px'}}>monetization_on</span> Quantivo
+            <Logo /> Quantivo
           </div>
           <div className="nav-links-desktop" style={{ display: 'flex', gap: '32px' }}>
             <a className="nav-link" href="#features">Features</a>
@@ -176,7 +177,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      <main style={{ paddingTop: '96px', paddingBottom: '80px', background: '#051424' }}>
+      <main style={{ paddingTop: '96px', paddingBottom: '80px', background: 'var(--bg-canvas)' }}>
         {/* Hero Section */}
         <section style={{ position: 'relative', paddingTop: '120px', paddingBottom: '80px', overflow: 'hidden' }}>
           {/* DotField interactive background */}
@@ -188,7 +189,7 @@ export default function LandingPage() {
               glowRadius={180}
               gradientFrom="rgba(124, 127, 255, 0.4)"
               gradientTo="rgba(124, 127, 255, 0.15)"
-              glowColor="#051424"
+              glowColor="var(--bg-canvas)"
               bulgeOnly
             />
           </div>
@@ -210,7 +211,7 @@ export default function LandingPage() {
               <h1 className="hero-headline" style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '64px', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '24px' }}>
                 <span className="animated-gradient-text">Your Money. Your Goals. Finally Under Control.</span>
               </h1>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '18px', fontWeight: 300, color: '#c7c5d0', lineHeight: 1.6, marginBottom: '40px', maxWidth: '640px', margin: '0 auto' }}>
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '18px', fontWeight: 300, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '40px', maxWidth: '640px', margin: '0 auto' }}>
                 The all-in-one finance tracker, invoice generator, and productivity suite built for freelancers and professionals.
               </p>
               
@@ -237,14 +238,14 @@ export default function LandingPage() {
                       width: '32px', height: '32px', borderRadius: '50%',
                       background: ['#ff4433', '#ffcc02', '#00acfe', '#00cc4b', '#ff64c8'][i],
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: '#051424', fontWeight: 700, fontSize: '12px',
-                      marginLeft: i > 0 ? '-8px' : '0', border: '2px solid #051424', zIndex: 10-i
+                      color: 'var(--bg-canvas)', fontWeight: 700, fontSize: '12px',
+                      marginLeft: i > 0 ? '-8px' : '0', border: '2px solid var(--bg-canvas)', zIndex: 10-i
                     }}>
                       {initial}
                     </div>
                   ))}
                 </div>
-                <div style={{ fontFamily: 'Inter', fontSize: '14px', color: '#c7c5d0' }}>Join 120,000+ professionals tracking smarter</div>
+                <div style={{ fontFamily: 'Inter', fontSize: '14px', color: 'var(--text-secondary)' }}>Join 120,000+ professionals tracking smarter</div>
               </div>
             </div>
           </div>
@@ -254,24 +255,24 @@ export default function LandingPage() {
         <section id="tools" style={{ padding: '80px 24px', maxWidth: '1280px', margin: '0 auto' }}>
           <div className="fade-up" style={{ textAlign: 'center', marginBottom: '48px' }}>
             <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '36px', fontWeight: 700, color: '#e1dfff', marginBottom: '12px' }}>Professional Tools</h2>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, color: '#c7c5d0' }}>Accelerate your workflow with precision utilities. Free to try, unlimited with Pro.</p>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, color: 'var(--text-secondary)' }}>Accelerate your workflow with precision utilities. Free to try, unlimited with Pro.</p>
           </div>
 
           <div className="tool-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
             {[
               { icon: 'receipt_long', name: 'Invoice Generator', desc: 'Create professional, compliant invoices in seconds. Export directly to PDF.', href: '/tools/invoice', badge: '2/3 free uses', active: true },
-              { icon: 'picture_as_pdf', name: 'PDF Converter', desc: 'Convert financial CSVs and raw data directly into formatted, presentation-ready PDFs.', href: '/tools/pdf', badge: '2/3 free uses', active: true },
-              { icon: 'account_balance', name: 'Bank Statement Generator', desc: 'Generate mock or normalized bank statements for testing and reconciliation.', href: '/tools/statement', badge: '2/3 free uses', active: true },
+              { icon: 'picture_as_pdf', name: 'PDF Converter', desc: 'Convert financial CSVs and raw data directly into formatted, presentation-ready PDFs.', href: '/login', badge: '2/3 free uses', active: true },
+              { icon: 'account_balance', name: 'Bank Statement Generator', desc: 'Generate mock or normalized bank statements for testing and reconciliation.', href: '/login', badge: '2/3 free uses', active: true },
               { icon: 'summarize', name: 'Expense Report', desc: 'Automate weekly expense reports.', href: '/tools/expense-report', badge: 'Coming Soon', active: false },
               { icon: 'calculate', name: 'Budget Planner', desc: 'Plan and forecast annual budgets.', href: '/tools/budget', badge: 'Coming Soon', active: false },
-              { icon: 'qr_code', name: 'QR Code Generator', desc: 'Payment QR codes on the fly.', href: '/tools/qr-code', badge: 'Coming Soon', active: false },
-              { icon: 'currency_exchange', name: 'Currency Converter', desc: 'Real-time FX rates.', href: '/tools/currency', badge: 'Coming Soon', active: false },
-              { icon: 'percent', name: 'Loan Calculator', desc: 'Amortization schedules and more.', href: '/tools/loan', badge: 'Coming Soon', active: false },
+              { icon: 'qr_code', name: 'QR Code Generator', desc: 'Payment QR codes on the fly.', href: '/login', badge: '2/3 free uses', active: true },
+              { icon: 'currency_exchange', name: 'Currency Converter', desc: 'Real-time FX rates.', href: '/login', badge: '2/3 free uses', active: true },
+              { icon: 'percent', name: 'Loan Calculator', desc: 'Amortization schedules and more.', href: '/login', badge: '2/3 free uses', active: true },
               { icon: 'table_chart', name: 'CSV to Excel', desc: 'Format conversions in browser.', href: '/tools/csv-excel', badge: 'Coming Soon', active: false },
             ].map((tool, i) => (
               <div key={tool.name} className={`tool-card fade-up ${i > 0 ? ' stagger-' + Math.min(i, 8) : ''} ${!tool.active ? 'tool-card-disabled' : ''}`} style={{ opacity: tool.active ? 1 : 0.6 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: '32px', color: tool.active ? '#fa8c00' : '#c7c5d0', fontVariationSettings: "'FILL' 0" }}>{tool.icon}</span>
+                  <span className="material-symbols-outlined" style={{ fontSize: '32px', color: tool.active ? '#fa8c00' : 'var(--text-secondary)', fontVariationSettings: "'FILL' 0" }}>{tool.icon}</span>
                   <span style={{ 
                     background: tool.active ? 'rgba(250,140,0,0.12)' : 'rgba(255,204,2,0.1)', 
                     color: tool.active ? '#fa8c00' : '#ffcc02', 
@@ -279,8 +280,8 @@ export default function LandingPage() {
                     padding: '4px 12px', borderRadius: '9999px', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px' 
                   }}>{tool.badge}</span>
                 </div>
-                <h3 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '20px', fontWeight: 600, color: '#d5e4fa', marginBottom: '8px' }}>{tool.name}</h3>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: '#c7c5d0', lineHeight: 1.6, marginBottom: '20px' }}>{tool.desc}</p>
+                <h3 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '20px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>{tool.name}</h3>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '20px' }}>{tool.desc}</p>
                 {tool.active && (
                   <div style={{ display: 'flex', gap: '10px' }}>
                     <Link href={tool.href} className="btn-amber" style={{ flex: 1, textAlign: 'center', padding: '9px 16px', fontSize: '14px' }}>Try Free →</Link>
@@ -301,7 +302,7 @@ export default function LandingPage() {
         <section id="features" style={{ padding: '80px 24px', maxWidth: '1280px', margin: '0 auto', background: 'rgba(18,33,49,0.2)' }}>
           <div className="fade-up" style={{ textAlign: 'center', marginBottom: '48px' }}>
             <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '36px', fontWeight: 700, color: '#e1dfff', marginBottom: '12px' }}>Everything You Need</h2>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, color: '#c7c5d0' }}>A complete command center for your financial life.</p>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, color: 'var(--text-secondary)' }}>A complete command center for your financial life.</p>
           </div>
           <div className="tool-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
             {[
@@ -314,8 +315,8 @@ export default function LandingPage() {
             ].map((feature, i) => (
               <div key={feature.title} className={`glass-card hover-lift fade-up ${i > 0 ? ' stagger-' + Math.min(i, 8) : ''}`} style={{ padding: '28px' }}>
                 <span className="material-symbols-outlined" style={{ fontSize: '36px', color: '#7c7fff', marginBottom: '16px', display: 'block' }}>{feature.icon}</span>
-                <h3 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '20px', fontWeight: 600, color: '#d5e4fa', marginBottom: '10px' }}>{feature.title}</h3>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: '#c7c5d0', lineHeight: 1.6 }}>{feature.desc}</p>
+                <h3 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '20px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '10px' }}>{feature.title}</h3>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{feature.desc}</p>
               </div>
             ))}
           </div>
@@ -325,16 +326,16 @@ export default function LandingPage() {
         <section id="pricing" style={{ padding: '80px 24px', maxWidth: '1280px', margin: '0 auto' }}>
           <div className="fade-up" style={{ textAlign: 'center', marginBottom: '48px' }}>
             <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '36px', fontWeight: 700, color: '#e1dfff', marginBottom: '12px' }}>Simple Pricing</h2>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, color: '#c7c5d0' }}>Start free. Scale when you need to.</p>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 300, color: 'var(--text-secondary)' }}>Start free. Scale when you need to.</p>
           </div>
           <div className="tool-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', maxWidth: '720px', margin: '0 auto' }}>
             {/* Free */}
             <div className="glass-card fade-up" style={{ padding: '36px' }}>
-              <h3 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '22px', fontWeight: 700, color: '#d5e4fa', marginBottom: '8px' }}>Free</h3>
+              <h3 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '22px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>Free</h3>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '40px', fontWeight: 400, color: '#7c7fff', marginBottom: '24px' }}>$0<span style={{ fontSize: '16px', color: '#918f9a' }}>/mo</span></div>
               <ul style={{ listStyle: 'none', padding: 0, marginBottom: '28px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {['Up to 50 transactions/mo', '3 tool uses/day', 'Basic dashboard', '1 goal'].map((f) => (
-                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: '#c7c5d0' }}>
+                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: 'var(--text-secondary)' }}>
                     <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#00cc4b' }}>check_circle</span>{f}
                   </li>
                 ))}
@@ -348,7 +349,7 @@ export default function LandingPage() {
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '40px', fontWeight: 400, color: '#7c7fff', marginBottom: '24px' }}>$12<span style={{ fontSize: '16px', color: '#918f9a' }}>/mo</span></div>
               <ul style={{ listStyle: 'none', padding: 0, marginBottom: '28px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {['Unlimited transactions', 'Unlimited tool uses', 'Advanced analytics', 'Unlimited goals', 'AI insights', 'Priority support'].map((f) => (
-                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: '#d5e4fa' }}>
+                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: 'var(--text-primary)' }}>
                     <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#7c7fff' }}>check_circle</span>{f}
                   </li>
                 ))}
@@ -378,7 +379,7 @@ export default function LandingPage() {
       <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '60px 24px 40px', background: 'rgba(1,15,31,0.6)' }}>
         <div className="tool-grid" style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '48px', marginBottom: '48px' }}>
           <div>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '24px', fontWeight: 700, color: '#e1dfff', marginBottom: '12px' }}><span style={{color: '#7c7fff'}}>Q</span> Quantivo</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: "'Space Grotesk', sans-serif", fontSize: '24px', fontWeight: 700, color: '#e1dfff', marginBottom: '12px' }}><Logo /> Quantivo</div>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: '#918f9a', lineHeight: 1.7 }}>The precision financial command center for modern professionals.</p>
           </div>
           {[
@@ -387,7 +388,7 @@ export default function LandingPage() {
             { heading: 'Legal', links: ['Privacy', 'Terms', 'Security', 'Status'] },
           ].map((col) => (
             <div key={col.heading}>
-              <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '13px', fontWeight: 600, color: '#d5e4fa', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '16px' }}>{col.heading}</div>
+              <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '16px' }}>{col.heading}</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {col.links.map((link) => (
                   <a key={link} href="#" style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: '#918f9a', textDecoration: 'none', transition: 'color 200ms ease-out' }}
@@ -400,7 +401,7 @@ export default function LandingPage() {
           ))}
         </div>
         <div style={{ maxWidth: '1280px', margin: '0 auto', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 300, color: '#918f9a' }}>© 2024 Quantivo Analytics. All rights reserved.</span>
+          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 300, color: '#918f9a' }}>© {new Date().getFullYear()} Quantivo Analytics. All rights reserved.</span>
           <Link href="/signup" className="btn-violet" style={{ fontSize: '14px', padding: '9px 24px' }}>Start Free →</Link>
         </div>
       </footer>
@@ -417,11 +418,11 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
         onClick={() => setOpen(!open)}
         style={{ width: '100%', textAlign: 'left', padding: '20px 24px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
       >
-        <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '16px', fontWeight: 600, color: '#d5e4fa' }}>{question}</span>
+        <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)' }}>{question}</span>
         <span className="material-symbols-outlined" style={{ fontSize: '20px', color: '#7c7fff', transition: 'transform 200ms ease-out', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>expand_more</span>
       </button>
       <div style={{ maxHeight: open ? '200px' : '0', overflow: 'hidden', transition: 'max-height 300ms ease-out' }}>
-        <div style={{ padding: '0 24px 20px', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: '#c7c5d0', lineHeight: 1.7 }}>{answer}</div>
+        <div style={{ padding: '0 24px 20px', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 300, color: 'var(--text-secondary)', lineHeight: 1.7 }}>{answer}</div>
       </div>
     </div>
   )

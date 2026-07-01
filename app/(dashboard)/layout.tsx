@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .single()
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0b1326', display: 'flex', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-canvas)', display: 'flex', fontFamily: 'Inter, sans-serif' }}>
       <Sidebar />
       <div style={{ marginLeft: '256px', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <TopBar user={user} profile={profile} />

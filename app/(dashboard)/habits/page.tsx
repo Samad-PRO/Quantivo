@@ -320,7 +320,7 @@ export default function HabitsPage() {
       {(showAdd || editHabit) && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '16px' }}
           onClick={() => { setShowAdd(false); setEditHabit(null) }}>
-          <div style={{ background: '#0d1c2d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '440px' }}
+          <div style={{ background: 'var(--bg-surface)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '440px' }}
             onClick={e => e.stopPropagation()}>
             <h2 style={{ color: '#e1dfff', fontSize: '20px', fontWeight: 700, marginBottom: '24px' }}>
               {editHabit ? 'Edit Habit' : 'New Habit'}
@@ -328,7 +328,7 @@ export default function HabitsPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
                 <label style={{ fontSize: '12px', color: '#918f9a', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Title</label>
-                <input style={{ width: '100%', background: '#0d1c2d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '10px 12px', color: '#d4e4fa', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
+                <input style={{ width: '100%', background: 'var(--bg-surface)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '10px 12px', color: 'var(--text-primary)', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
                   value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="e.g. Morning workout" />
               </div>
               <div>
@@ -367,7 +367,7 @@ export default function HabitsPage() {
               </div>
             </div>
             <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
-              <button onClick={() => { setShowAdd(false); setEditHabit(null) }} style={{ flex: 1, padding: '11px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#c7c5d0', cursor: 'pointer', fontSize: '14px' }}>Cancel</button>
+              <button onClick={() => { setShowAdd(false); setEditHabit(null) }} style={{ flex: 1, padding: '11px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '14px' }}>Cancel</button>
               <button onClick={editHabit ? updateHabit : addHabit} disabled={!form.title || saving}
                 style={{ flex: 2, padding: '11px', borderRadius: '8px', background: '#c0c1ff', color: '#1000a9', border: 'none', fontWeight: 700, cursor: 'pointer', fontSize: '14px', opacity: !form.title ? 0.5 : 1 }}>
                 {saving ? 'Saving...' : editHabit ? 'Save Changes' : 'Create Habit'}
@@ -381,12 +381,12 @@ export default function HabitsPage() {
       {deleteConfirm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '16px' }}
           onClick={() => setDeleteConfirm(null)}>
-          <div style={{ background: '#0d1c2d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '24px', width: '100%', maxWidth: '360px' }}
+          <div style={{ background: 'var(--bg-surface)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '24px', width: '100%', maxWidth: '360px' }}
             onClick={e => e.stopPropagation()}>
             <h3 style={{ color: '#e1dfff', fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>Delete Habit</h3>
             <p style={{ color: '#918f9a', fontSize: '14px', marginBottom: '20px' }}>Are you sure? This will deactivate the habit.</p>
             <div style={{ display: 'flex', gap: '12px' }}>
-              <button onClick={() => setDeleteConfirm(null)} style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#c7c5d0', cursor: 'pointer', fontSize: '14px' }}>Cancel</button>
+              <button onClick={() => setDeleteConfirm(null)} style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '14px' }}>Cancel</button>
               <button onClick={() => deleteHabit(deleteConfirm)} style={{ flex: 1, padding: '10px', borderRadius: '8px', background: '#ff4433', color: 'white', border: 'none', fontWeight: 700, cursor: 'pointer', fontSize: '14px' }}>Delete</button>
             </div>
           </div>
@@ -395,7 +395,7 @@ export default function HabitsPage() {
 
       {/* Toast */}
       {toastMsg && (
-        <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 200, background: '#0d1c2d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px 20px', color: '#e1dfff', fontSize: '14px' }}>
+        <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 200, background: 'var(--bg-surface)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px 20px', color: '#e1dfff', fontSize: '14px' }}>
           {toastMsg}
         </div>
       )}

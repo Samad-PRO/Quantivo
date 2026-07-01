@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { Logo } from '@/components/Logo'
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
@@ -18,12 +19,15 @@ export function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <nav className="h-screen w-64 fixed left-0 top-0 bg-[#060e20] border-r border-[#464554] z-50 flex flex-col">
+    <nav className="h-screen w-64 fixed left-0 top-0 bg-[var(--bg-canvas)] border-r border-[var(--border-color)] z-50 flex flex-col">
       <div className="flex flex-col h-full py-6">
         {/* Logo */}
-        <div className="px-6 mb-12">
-          <h1 className="text-2xl font-bold text-[#dae2fd]">Quantivo</h1>
-          <p className="text-xs text-[#c7c4d7] mt-1 tracking-wide">Premium Analytics</p>
+        <div className="px-6 mb-12 flex flex-col">
+          <div className="flex items-center gap-2">
+            <Logo />
+            <h1 className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Quantivo</h1>
+          </div>
+          <p className="text-xs text-[var(--text-secondary)] mt-1 tracking-wide">Premium Analytics</p>
         </div>
 
         {/* Nav Items */}

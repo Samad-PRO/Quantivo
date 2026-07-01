@@ -26,7 +26,7 @@ export default function PDFConverterPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#051424', color: '#d4e4fa', fontFamily: 'Inter, sans-serif', padding: '24px' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-canvas)', color: 'var(--text-primary)', fontFamily: 'Inter, sans-serif', padding: '24px' }}>
       <div style={{ maxWidth: '640px', margin: '80px auto' }}>
         <div style={{ marginBottom: '8px' }}>
           <Link href="/" style={{ color: '#918f9a', textDecoration: 'none', fontSize: '13px' }}>← Back to Quantivo</Link>
@@ -48,7 +48,7 @@ export default function PDFConverterPage() {
             style={{ border: '2px dashed rgba(192,193,255,0.2)', borderRadius: '12px', padding: '48px 24px', textAlign: 'center', cursor: 'pointer', transition: 'border-color 0.2s', marginBottom: '24px' }}
           >
             <div style={{ fontSize: '40px', marginBottom: '12px' }}>📄</div>
-            <p style={{ color: '#c7c5d0', marginBottom: '4px' }}>{file ? file.name : 'Drop your file here'}</p>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '4px' }}>{file ? file.name : 'Drop your file here'}</p>
             <p style={{ color: '#918f9a', fontSize: '13px' }}>or click to browse · TXT, HTML supported</p>
             <input id="file-upload" type="file" accept=".txt,.html" style={{ display: 'none' }} onChange={e => setFile(e.target.files?.[0] ?? null)} />
           </div>

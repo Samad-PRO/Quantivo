@@ -22,7 +22,7 @@ function Avatar({ name, avatarUrl }: { name: string; avatarUrl?: string | null }
   }
 
   return (
-    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#c0c1ff] to-[#7b7fff] text-[#051424] font-bold text-2xl">
+    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#c0c1ff] to-[#7b7fff] text-[var(--bg-canvas)] font-bold text-2xl">
       {initials}
     </div>
   )
@@ -154,8 +154,8 @@ export default function SettingsPage() {
       document.documentElement.style.background = '#f8f9fc'
       document.body.style.background = '#f8f9fc'
     } else {
-      document.documentElement.style.background = '#0b1326'
-      document.body.style.background = '#0b1326'
+      document.documentElement.style.background = 'var(--bg-canvas)'
+      document.body.style.background = 'var(--bg-canvas)'
     }
   }
 
@@ -171,7 +171,7 @@ export default function SettingsPage() {
         .ghost-input {
           background-color: rgba(1, 15, 31, 0.6);
           border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #d5e4fa;
+          color: var(--text-primary);
           transition: border-color 200ms ease-out, box-shadow 200ms ease-out;
         }
         .ghost-input:focus {
@@ -198,7 +198,7 @@ export default function SettingsPage() {
                 className={`w-full text-left block px-4 py-3 rounded-lg font-medium transition-all ${
                   isActive
                     ? 'text-[#c0c1ff] font-semibold bg-white/5 border-l-2 border-[#c0c1ff]'
-                    : 'text-[#c7c5d0] hover:bg-white/5 hover:text-white'
+                    : 'text-[var(--text-secondary)] hover:bg-white/5 hover:text-white'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -216,7 +216,7 @@ export default function SettingsPage() {
           <section id="profile" className="scroll-mt-24">
             <div className="mb-8 border-b border-white/10 pb-4">
               <h3 className="font-headline text-2xl font-bold text-white">Public Profile</h3>
-              <p className="font-body-sm text-xs text-[#c7c5d0] mt-1">This information will be displayed publicly across your workspaces.</p>
+              <p className="font-body-sm text-xs text-[var(--text-secondary)] mt-1">This information will be displayed publicly across your workspaces.</p>
             </div>
             <div className="glass-panel p-8 rounded-xl">
               {/* Avatar Upload */}
@@ -250,20 +250,20 @@ export default function SettingsPage() {
                     {avatarUrl && (
                       <button
                         onClick={handleRemoveAvatar}
-                        className="px-6 py-2 rounded-full bg-transparent text-[#c7c5d0] hover:text-white transition-colors font-body-sm text-xs"
+                        className="px-6 py-2 rounded-full bg-transparent text-[var(--text-secondary)] hover:text-white transition-colors font-body-sm text-xs"
                       >
                         Remove
                       </button>
                     )}
                   </div>
-                  <p className="font-body-sm text-[#c7c5d0] opacity-70 text-[10px]">JPG, GIF or PNG. 1MB max.</p>
+                  <p className="font-body-sm text-[var(--text-secondary)] opacity-70 text-[10px]">JPG, GIF or PNG. 1MB max.</p>
                 </div>
               </div>
 
               {/* Form Grid */}
               <div className="grid grid-cols-2 gap-8">
                 <div className="space-y-2 col-span-2 sm:col-span-1">
-                  <label className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider block">Full Name</label>
+                  <label className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider block">Full Name</label>
                   <input
                     className="ghost-input w-full px-4 py-3 rounded-full font-body-md text-sm transition-all"
                     type="text"
@@ -272,7 +272,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2 col-span-2 sm:col-span-1">
-                  <label className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider flex items-center gap-2">
+                  <label className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider flex items-center gap-2">
                     Email Address
                     <span className="material-symbols-outlined text-[#c0c1ff] text-[14px]" title="Verified">verified</span>
                   </label>
@@ -284,7 +284,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2 col-span-2 sm:col-span-1">
-                  <label className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider block">Default Currency</label>
+                  <label className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider block">Default Currency</label>
                   <div className="relative">
                     <select
                       className="ghost-input w-full px-4 py-3 rounded-full font-body-md text-sm appearance-none pr-10"
@@ -299,11 +299,11 @@ export default function SettingsPage() {
                       <option value="jpy">JPY (¥) - Japanese Yen</option>
                       <option value="chf">CHF (Fr) - Swiss Franc</option>
                     </select>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#c7c5d0]">expand_more</span>
+                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--text-secondary)]">expand_more</span>
                   </div>
                 </div>
                 <div className="space-y-2 col-span-2 sm:col-span-1">
-                  <label className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider block">Timezone</label>
+                  <label className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider block">Timezone</label>
                   <div className="relative">
                     <select
                       className="ghost-input w-full px-4 py-3 rounded-full font-body-md text-sm appearance-none pr-10"
@@ -314,7 +314,7 @@ export default function SettingsPage() {
                       <option value="pst">(GMT-08:00) Pacific Time</option>
                       <option value="utc">(UTC) Coordinated Universal Time</option>
                     </select>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#c7c5d0]">expand_more</span>
+                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--text-secondary)]">expand_more</span>
                   </div>
                 </div>
               </div>
@@ -322,7 +322,7 @@ export default function SettingsPage() {
                 <button
                   onClick={handleSaveProfile}
                   disabled={saving}
-                  className="px-8 py-3 rounded-full bg-[#c0c1ff] text-[#051424] hover:bg-white transition-colors font-semibold text-sm disabled:opacity-50"
+                  className="px-8 py-3 rounded-full bg-[#c0c1ff] text-[var(--bg-canvas)] hover:bg-white transition-colors font-semibold text-sm disabled:opacity-50"
                 >
                   {saving ? 'Saving…' : 'Save Changes'}
                 </button>
@@ -334,7 +334,7 @@ export default function SettingsPage() {
           <section id="billing" className="scroll-mt-24">
             <div className="mb-8 border-b border-white/10 pb-4">
               <h3 className="font-headline text-2xl font-bold text-white">Billing & Plan</h3>
-              <p className="font-body-sm text-xs text-[#c7c5d0] mt-1">Manage your subscription, payment methods, and billing history.</p>
+              <p className="font-body-sm text-xs text-[var(--text-secondary)] mt-1">Manage your subscription, payment methods, and billing history.</p>
             </div>
             <div className="glass-panel p-8 rounded-xl mb-8 relative overflow-hidden">
               <div className="absolute -right-20 -top-20 w-64 h-64 bg-[#c0c1ff]/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -344,16 +344,16 @@ export default function SettingsPage() {
                     <h4 className="font-headline text-lg font-bold text-white">Professional Tier</h4>
                     <span className="px-2 py-1 rounded-full bg-[#c0c1ff]/20 border border-[#c0c1ff]/30 text-[#c0c1ff] font-mono text-[10px] tracking-widest uppercase">Pro</span>
                   </div>
-                  <p className="font-body-sm text-xs text-[#c7c5d0]">Billed $12.00 monthly. Next charge on Nov 15, 2024.</p>
+                  <p className="font-body-sm text-xs text-[var(--text-secondary)]">Billed $12.00 monthly. Next charge on Nov 15, 2024.</p>
                 </div>
                 <div className="text-right">
-                  <div className="font-headline text-3xl font-bold text-white">$12<span className="font-body-sm text-sm text-[#c7c5d0]">/mo</span></div>
+                  <div className="font-headline text-3xl font-bold text-white">$12<span className="font-body-sm text-sm text-[var(--text-secondary)]">/mo</span></div>
                 </div>
               </div>
-              <div className="bg-[#051424]/50 rounded-xl p-6 border border-[#c0c1ff]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-8 relative">
+              <div className="bg-[var(--bg-canvas)]/50 rounded-xl p-6 border border-[#c0c1ff]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-8 relative">
                 <div>
                   <h5 className="font-headline font-bold text-white text-sm mb-1">Unlock Enterprise Features</h5>
-                  <ul className="flex flex-wrap gap-4 font-mono text-[11px] text-[#c7c5d0] mt-2">
+                  <ul className="flex flex-wrap gap-4 font-mono text-[11px] text-[var(--text-secondary)] mt-2">
                     <li className="flex items-center gap-1"><span className="material-symbols-outlined text-[14px] text-[#c0c1ff]">check</span> Unlimited API</li>
                     <li className="flex items-center gap-1"><span className="material-symbols-outlined text-[14px] text-[#c0c1ff]">check</span> Custom ML</li>
                     <li className="flex items-center gap-1"><span className="material-symbols-outlined text-[14px] text-[#c0c1ff]">check</span> Priority Support</li>
@@ -373,28 +373,28 @@ export default function SettingsPage() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-white/5">
-                    <th className="px-6 py-4 font-mono text-xs text-[#c7c5d0] uppercase">Date</th>
-                    <th className="px-6 py-4 font-mono text-xs text-[#c7c5d0] uppercase">Description</th>
-                    <th className="px-6 py-4 font-mono text-xs text-[#c7c5d0] uppercase text-right">Amount</th>
-                    <th className="px-6 py-4 font-mono text-xs text-[#c7c5d0] uppercase text-center">Status</th>
-                    <th className="px-6 py-4 font-mono text-xs text-[#c7c5d0] uppercase text-center">Invoice</th>
+                    <th className="px-6 py-4 font-mono text-xs text-[var(--text-secondary)] uppercase">Date</th>
+                    <th className="px-6 py-4 font-mono text-xs text-[var(--text-secondary)] uppercase">Description</th>
+                    <th className="px-6 py-4 font-mono text-xs text-[var(--text-secondary)] uppercase text-right">Amount</th>
+                    <th className="px-6 py-4 font-mono text-xs text-[var(--text-secondary)] uppercase text-center">Status</th>
+                    <th className="px-6 py-4 font-mono text-xs text-[var(--text-secondary)] uppercase text-center">Invoice</th>
                   </tr>
                 </thead>
-                <tbody className="font-body-sm text-xs text-[#c7c5d0]">
+                <tbody className="font-body-sm text-xs text-[var(--text-secondary)]">
                   {[
                     { date: '2024-10-15', desc: 'Pro Plan - Monthly Subscription', amt: '$12.00' },
                     { date: '2024-09-15', desc: 'Pro Plan - Monthly Subscription', amt: '$12.00' },
                     { date: '2024-08-15', desc: 'Pro Plan - Monthly Subscription', amt: '$12.00' }
                   ].map((row, i) => (
                     <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
-                      <td className="px-6 py-4 font-mono text-[#c7c5d0]">{row.date}</td>
+                      <td className="px-6 py-4 font-mono text-[var(--text-secondary)]">{row.date}</td>
                       <td className="px-6 py-4 text-white font-medium">{row.desc}</td>
                       <td className="px-6 py-4 font-mono text-right text-white">{row.amt}</td>
                       <td className="px-6 py-4 text-center">
                         <span className="inline-block px-3 py-1 rounded-full bg-[#10b981]/10 border border-[#10b981]/30 text-[#10b981] font-mono text-[9px] uppercase">Paid</span>
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <button onClick={() => showToast('Invoice download feature coming soon.')} className="text-[#c7c5d0] hover:text-white transition-colors">
+                        <button onClick={() => showToast('Invoice download feature coming soon.')} className="text-[var(--text-secondary)] hover:text-white transition-colors">
                           <span className="material-symbols-outlined text-[20px]">download</span>
                         </button>
                       </td>
@@ -409,19 +409,19 @@ export default function SettingsPage() {
           <section id="appearance" className="scroll-mt-24">
             <div className="mb-8 border-b border-white/10 pb-4">
               <h3 className="font-headline text-2xl font-bold text-white">Appearance</h3>
-              <p className="font-body-sm text-xs text-[#c7c5d0] mt-1">Customize the interface theme and accent colors.</p>
+              <p className="font-body-sm text-xs text-[var(--text-secondary)] mt-1">Customize the interface theme and accent colors.</p>
             </div>
             <div className="glass-panel p-8 rounded-xl space-y-8">
               {/* Theme toggler */}
               <div>
-                <label className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider block mb-4">Interface Theme</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider block mb-4">Interface Theme</label>
                 <div className="flex gap-6">
                   {/* Dark Mode */}
                   <div
                     onClick={() => handleThemeChange('dark')}
                     className={`cursor-pointer flex flex-col items-center gap-3 transition-opacity ${theme === 'dark' ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
                   >
-                    <div className={`w-40 h-28 rounded-xl border-2 bg-[#051424] p-2 relative overflow-hidden transition-all ${theme === 'dark' ? 'border-[#c0c1ff] shadow-[0_0_20px_rgba(192,193,255,0.15)]' : 'border-transparent'}`}>
+                    <div className={`w-40 h-28 rounded-xl border-2 bg-[var(--bg-canvas)] p-2 relative overflow-hidden transition-all ${theme === 'dark' ? 'border-[#c0c1ff] shadow-[0_0_20px_rgba(192,193,255,0.15)]' : 'border-transparent'}`}>
                       <div className="w-full h-full flex flex-col gap-2 opacity-80">
                         <div className="w-full h-3 bg-white/5 rounded-sm flex items-center px-1 gap-1">
                           <div className="w-1.5 h-1.5 rounded-full bg-[#c0c1ff]"></div>
@@ -433,7 +433,7 @@ export default function SettingsPage() {
                       </div>
                       {theme === 'dark' && (
                         <div className="absolute bottom-2 right-2 w-5 h-5 rounded-full bg-[#c0c1ff] flex items-center justify-center">
-                          <span className="material-symbols-outlined text-[#051424] text-[12px] font-bold">check</span>
+                          <span className="material-symbols-outlined text-[var(--bg-canvas)] text-[12px] font-bold">check</span>
                         </div>
                       )}
                     </div>
@@ -457,7 +457,7 @@ export default function SettingsPage() {
                       </div>
                       {theme === 'light' && (
                         <div className="absolute bottom-2 right-2 w-5 h-5 rounded-full bg-[#c0c1ff] flex items-center justify-center">
-                          <span className="material-symbols-outlined text-[#051424] text-[12px] font-bold">check</span>
+                          <span className="material-symbols-outlined text-[var(--bg-canvas)] text-[12px] font-bold">check</span>
                         </div>
                       )}
                     </div>
@@ -468,7 +468,7 @@ export default function SettingsPage() {
 
               {/* Accent Color picker */}
               <div>
-                <label className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider block mb-4">Accent Color</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider block mb-4">Accent Color</label>
                 <div className="flex gap-4">
                   {[
                     { id: 'violet', color: '#c0c1ff' },
@@ -499,13 +499,13 @@ export default function SettingsPage() {
           <section id="danger" className="scroll-mt-24">
             <div className="mb-8 border-b border-red-500/20 pb-4">
               <h3 className="font-headline text-2xl font-bold text-red-500">Danger Zone</h3>
-              <p className="font-body-sm text-xs text-[#c7c5d0] mt-1">Irreversible and destructive actions concerning your account data.</p>
+              <p className="font-body-sm text-xs text-[var(--text-secondary)] mt-1">Irreversible and destructive actions concerning your account data.</p>
             </div>
             <div className="glass-panel p-8 border border-red-500/20 bg-red-500/5 rounded-xl">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 pb-8 border-b border-red-500/10">
                 <div className="max-w-xl">
                   <h4 className="font-headline font-bold text-white text-sm mb-2">Export My Data</h4>
-                  <p className="font-body-sm text-xs text-[#c7c5d0] opacity-80">Download a complete copy of all your financial data, reports, and settings in CSV and JSON formats.</p>
+                  <p className="font-body-sm text-xs text-[var(--text-secondary)] opacity-80">Download a complete copy of all your financial data, reports, and settings in CSV and JSON formats.</p>
                 </div>
                 <button onClick={() => showToast('Data export requested. An email will be sent to you shortly.')} className="px-6 py-2 rounded-full border border-white/20 text-white hover:bg-white/5 transition-colors font-body-sm text-xs font-semibold shrink-0">
                   Request Export
@@ -514,7 +514,7 @@ export default function SettingsPage() {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div className="max-w-xl">
                   <h4 className="font-headline font-bold text-white text-sm mb-2">Delete Account</h4>
-                  <p className="font-body-sm text-xs text-[#c7c5d0] opacity-80">Permanently remove your account and all associated data. <strong className="text-red-500 font-medium">This action cannot be undone.</strong></p>
+                  <p className="font-body-sm text-xs text-[var(--text-secondary)] opacity-80">Permanently remove your account and all associated data. <strong className="text-red-500 font-medium">This action cannot be undone.</strong></p>
                 </div>
                 <button onClick={() => showToast('To delete your account, contact support@quantivo.app', 'error')} className="px-6 py-2 rounded-full bg-red-600 text-white hover:bg-red-500 transition-colors font-body-sm text-xs font-semibold shrink-0">
                   Delete Account
@@ -530,7 +530,7 @@ export default function SettingsPage() {
         <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-medium shadow-xl backdrop-blur-md border ${
           toast.type === 'error'
             ? 'bg-red-500/90 border-red-400/30 text-white'
-            : 'bg-[#0d1c2d]/95 border-white/10 text-[#e1dfff]'
+            : 'bg-[var(--bg-surface)]/95 border-white/10 text-[#e1dfff]'
         }`}>
           {toast.msg}
         </div>

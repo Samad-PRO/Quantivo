@@ -56,7 +56,7 @@ export default function SubscriptionsPage() {
     return sum
   }, 0)
 
-  const inp: React.CSSProperties = { width: '100%', background: '#0d1c2d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '10px 12px', color: '#d4e4fa', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }
+  const inp: React.CSSProperties = { width: '100%', background: 'var(--bg-surface)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '10px 12px', color: 'var(--text-primary)', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }
 
   const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(n)
 
@@ -99,7 +99,7 @@ export default function SubscriptionsPage() {
       {/* Add Modal */}
       {showAdd && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '16px' }}>
-          <div style={{ background: '#0d1c2d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '440px' }}>
+          <div style={{ background: 'var(--bg-surface)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '440px' }}>
             <h2 style={{ color: '#e1dfff', fontSize: '20px', fontWeight: 700, marginBottom: '24px' }}>Add Subscription</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div><label style={{ fontSize: '12px', color: '#918f9a', display: 'block', marginBottom: '6px' }}>Name</label><input style={inp} value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. Netflix" /></div>
@@ -121,7 +121,7 @@ export default function SubscriptionsPage() {
               <div><label style={{ fontSize: '12px', color: '#918f9a', display: 'block', marginBottom: '6px' }}>Next Renewal Date</label><input style={inp} type="date" value={form.next_renewal_date} onChange={e => setForm(f => ({ ...f, next_renewal_date: e.target.value }))} /></div>
             </div>
             <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
-              <button onClick={() => setShowAdd(false)} style={{ flex: 1, padding: '11px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#c7c5d0', cursor: 'pointer', fontSize: '14px' }}>Cancel</button>
+              <button onClick={() => setShowAdd(false)} style={{ flex: 1, padding: '11px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '14px' }}>Cancel</button>
               <button onClick={addSub} disabled={!form.name || !form.amount || saving} style={{ flex: 2, padding: '11px', borderRadius: '8px', background: '#c0c1ff', color: '#1000a9', border: 'none', fontWeight: 700, cursor: 'pointer', fontSize: '14px', opacity: !form.name || !form.amount ? 0.5 : 1 }}>
                 {saving ? 'Saving...' : 'Add Subscription'}
               </button>

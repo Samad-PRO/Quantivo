@@ -171,7 +171,7 @@ export default function InvoicesPage() {
         .input-glass {
           background: rgba(1, 15, 31, 0.6);
           border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #d5e4fa;
+          color: var(--text-primary);
           transition: border-color 200ms ease-out, box-shadow 200ms ease-out;
         }
         .input-glass:focus {
@@ -199,13 +199,13 @@ export default function InvoicesPage() {
           <div className="glass-panel p-6 flex flex-col gap-6">
             <div className="flex justify-between items-end border-b border-white/10 pb-4">
               <h1 className="font-headline-lg text-2xl font-bold text-white">New Invoice</h1>
-              <span className="font-mono text-xs text-[#c7c5d0]">INV-001</span>
+              <span className="font-mono text-xs text-[var(--text-secondary)]">INV-001</span>
             </div>
 
             {/* Company Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-4">
-                <label className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider">From (Your Company)</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider">From (Your Company)</label>
                 <input
                   className="input-glass rounded-lg px-4 py-2 text-sm"
                   placeholder="Your Company Name"
@@ -224,7 +224,7 @@ export default function InvoicesPage() {
 
               {/* Client Info */}
               <div className="flex flex-col gap-4">
-                <label className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider">Billed To (Client)</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider">Billed To (Client)</label>
                 <input
                   className="input-glass rounded-lg px-4 py-2 text-sm"
                   placeholder="Client Name"
@@ -252,7 +252,7 @@ export default function InvoicesPage() {
             {/* Dates & Currency */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-y border-white/10 py-6">
               <div className="flex flex-col gap-2">
-                <label className="font-mono text-xs text-[#c7c5d0]">Issue Date</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)]">Issue Date</label>
                 <input
                   className="input-glass rounded-lg px-4 py-2 text-xs font-mono"
                   type="date"
@@ -261,7 +261,7 @@ export default function InvoicesPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-mono text-xs text-[#c7c5d0]">Due Date</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)]">Due Date</label>
                 <input
                   className="input-glass rounded-lg px-4 py-2 text-xs font-mono"
                   type="date"
@@ -270,7 +270,7 @@ export default function InvoicesPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-mono text-xs text-[#c7c5d0]">Currency</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)]">Currency</label>
                 <select
                   className="input-glass rounded-lg px-4 py-2 text-xs font-mono"
                   value={currency}
@@ -285,11 +285,11 @@ export default function InvoicesPage() {
 
             {/* Line Items */}
             <div className="flex flex-col gap-4">
-              <h3 className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider">Line Items</h3>
+              <h3 className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider">Line Items</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-white/10 font-mono text-xs text-[#c7c5d0]">
+                    <tr className="border-b border-white/10 font-mono text-xs text-[var(--text-secondary)]">
                       <th className="pb-2 pl-2 w-1/2">Description</th>
                       <th className="pb-2 px-2 text-right w-1/6">Qty</th>
                       <th className="pb-2 px-2 text-right w-1/6">Rate</th>
@@ -327,13 +327,13 @@ export default function InvoicesPage() {
                             onChange={(e) => handleUpdateItem(item.id, 'rate', e.target.value)}
                           />
                         </td>
-                        <td className="py-2 pl-2 text-right font-mono text-xs text-[#dae2fd]">
+                        <td className="py-2 pl-2 text-right font-mono text-xs text-[var(--text-primary)]">
                           {symbol}{(item.qty * item.rate).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                         </td>
                         <td className="py-2 text-center">
                           <button
                             onClick={() => handleRemoveItem(item.id)}
-                            className="text-[#c7c5d0] hover:text-[#ff4433] transition-colors"
+                            className="text-[var(--text-secondary)] hover:text-[#ff4433] transition-colors"
                             disabled={lineItems.length === 1}
                           >
                             <span className="material-symbols-outlined text-[16px]">close</span>
@@ -355,7 +355,7 @@ export default function InvoicesPage() {
             {/* Totals & Notes */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-auto pt-4">
               <div className="flex flex-col gap-2">
-                <label className="font-mono text-xs text-[#c7c5d0]">Notes / Terms</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)]">Notes / Terms</label>
                 <textarea
                   className="input-glass rounded-lg px-4 py-2 text-xs resize-none"
                   placeholder="Thank you for your business."
@@ -365,11 +365,11 @@ export default function InvoicesPage() {
                 />
               </div>
               <div className="flex flex-col gap-2 bg-black/20 rounded-lg p-4">
-                <div className="flex justify-between items-center text-xs text-[#c7c5d0]">
+                <div className="flex justify-between items-center text-xs text-[var(--text-secondary)]">
                   <span>Subtotal</span>
                   <span className="font-mono">{symbol}{subtotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                 </div>
-                <div className="flex justify-between items-center text-xs text-[#c7c5d0] border-b border-white/10 pb-2">
+                <div className="flex justify-between items-center text-xs text-[var(--text-secondary)] border-b border-white/10 pb-2">
                   <div className="flex items-center gap-2">
                     <span>Tax Rate</span>
                     <input
@@ -396,8 +396,8 @@ export default function InvoicesPage() {
             <div className="watermark text-white">QUANTIVO PRO</div>
             <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-4 relative z-10">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#c7c5d0] text-sm">visibility</span>
-                <h2 className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider">Live Preview</h2>
+                <span className="material-symbols-outlined text-[var(--text-secondary)] text-sm">visibility</span>
+                <h2 className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider">Live Preview</h2>
               </div>
               <span className="bg-white/5 px-3 py-1 rounded-full font-mono text-xs text-[#c0c1ff] border border-white/10">DRAFT</span>
             </div>
@@ -410,48 +410,48 @@ export default function InvoicesPage() {
                 </div>
                 <div className="text-right">
                   <div className="font-headline text-lg font-bold text-white">INVOICE</div>
-                  <div className="font-mono text-xs text-[#c7c5d0]">INV-001</div>
+                  <div className="font-mono text-xs text-[var(--text-secondary)]">INV-001</div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-6 text-xs">
                 <div>
-                  <div className="font-mono text-[#c7c5d0] mb-2 uppercase tracking-wider">FROM</div>
+                  <div className="font-mono text-[var(--text-secondary)] mb-2 uppercase tracking-wider">FROM</div>
                   <div className="font-bold text-white mb-1">{companyName || '[Your Company]'}</div>
-                  <div className="text-[#c7c5d0] whitespace-pre-wrap">{companyAddress || '[Your Details]'}</div>
+                  <div className="text-[var(--text-secondary)] whitespace-pre-wrap">{companyAddress || '[Your Details]'}</div>
                 </div>
                 <div>
-                  <div className="font-mono text-[#c7c5d0] mb-2 uppercase tracking-wider">TO</div>
+                  <div className="font-mono text-[var(--text-secondary)] mb-2 uppercase tracking-wider">TO</div>
                   <div className="font-bold text-white mb-1">{clientName || '[Client Name]'}</div>
-                  {clientEmail && <div className="text-[#c7c5d0] mb-1">{clientEmail}</div>}
-                  <div className="text-[#c7c5d0] whitespace-pre-wrap">{clientAddress || '[Client Details]'}</div>
+                  {clientEmail && <div className="text-[var(--text-secondary)] mb-1">{clientEmail}</div>}
+                  <div className="text-[var(--text-secondary)] whitespace-pre-wrap">{clientAddress || '[Client Details]'}</div>
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-4 text-xs border-y border-white/5 py-4">
                 <div>
-                  <div className="text-[#c7c5d0] mb-1">Issue Date</div>
+                  <div className="text-[var(--text-secondary)] mb-1">Issue Date</div>
                   <div className="font-mono text-white">{issueDate || '—'}</div>
                 </div>
                 <div>
-                  <div className="text-[#c7c5d0] mb-1">Due Date</div>
+                  <div className="text-[var(--text-secondary)] mb-1">Due Date</div>
                   <div className="font-mono text-white">{dueDate || '—'}</div>
                 </div>
                 <div>
-                  <div className="text-[#c7c5d0] mb-1">Currency</div>
+                  <div className="text-[var(--text-secondary)] mb-1">Currency</div>
                   <div className="font-mono text-[#c0c1ff]">{currency}</div>
                 </div>
               </div>
 
               <div className="w-full text-xs">
-                <div className="grid grid-cols-12 gap-2 border-b border-white/10 pb-2 mb-2 font-mono text-[#c7c5d0] uppercase tracking-wider">
+                <div className="grid grid-cols-12 gap-2 border-b border-white/10 pb-2 mb-2 font-mono text-[var(--text-secondary)] uppercase tracking-wider">
                   <div className="col-span-6">Description</div>
                   <div className="col-span-2 text-right">Qty</div>
                   <div className="col-span-2 text-right">Rate</div>
                   <div className="col-span-2 text-right">Amount</div>
                 </div>
                 {lineItems.map((item) => (
-                  <div key={item.id} className="grid grid-cols-12 gap-2 pb-2 border-b border-white/5 text-[#dae2fd]">
+                  <div key={item.id} className="grid grid-cols-12 gap-2 pb-2 border-b border-white/5 text-[var(--text-primary)]">
                     <div className="col-span-6 truncate">{item.description || '[Item Description]'}</div>
                     <div className="col-span-2 text-right font-mono">{item.qty}</div>
                     <div className="col-span-2 text-right font-mono">{symbol}{item.rate.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
@@ -462,15 +462,15 @@ export default function InvoicesPage() {
 
               <div className="mt-auto flex justify-between items-end pt-6 border-t border-white/10 text-xs">
                 <div className="w-1/2">
-                  <div className="font-mono text-[#c7c5d0] mb-1 uppercase tracking-wider">NOTES</div>
-                  <div className="text-[#c7c5d0] whitespace-pre-wrap">{notes || '—'}</div>
+                  <div className="font-mono text-[var(--text-secondary)] mb-1 uppercase tracking-wider">NOTES</div>
+                  <div className="text-[var(--text-secondary)] whitespace-pre-wrap">{notes || '—'}</div>
                 </div>
                 <div className="w-1/3 space-y-2">
-                  <div className="flex justify-between text-[#c7c5d0]">
+                  <div className="flex justify-between text-[var(--text-secondary)]">
                     <span>Subtotal</span>
                     <span className="font-mono">{symbol}{subtotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                   </div>
-                  <div className="flex justify-between text-[#c7c5d0]">
+                  <div className="flex justify-between text-[var(--text-secondary)]">
                     <span>Tax ({taxRate}%)</span>
                     <span className="font-mono">{symbol}{taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                   </div>

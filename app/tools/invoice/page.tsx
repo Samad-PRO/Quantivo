@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 
 export default function PublicInvoiceToolPage() {
@@ -11,6 +11,27 @@ export default function PublicInvoiceToolPage() {
   const [clientName, setClientName] = useState('')
   const [clientEmail, setClientEmail] = useState('')
   const [clientAddress, setClientAddress] = useState('')
+  const [logoBase64, setLogoBase64] = useState<string | null>(null)
+  const logoInputRef = useRef<HTMLInputElement>(null)
+  
+  useEffect(() => {
+    const savedLogo = localStorage.getItem('invoice_logo')
+    if (savedLogo) setLogoBase64(savedLogo)
+  }, [])
+  
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const base64 = reader.result as string
+        setLogoBase64(base64)
+        localStorage.setItem('invoice_logo', base64)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   const [issueDate, setIssueDate] = useState('')
   const [dueDate, setDueDate] = useState('')
   const [currency, setCurrency] = useState('USD ($)')
@@ -19,6 +40,9 @@ export default function PublicInvoiceToolPage() {
   ])
   const [taxRate, setTaxRate] = useState(5)
   const [notes, setNotes] = useState('Thank you for your business.')
+  const [watermarkText, setWatermarkText] = useState('QUANTIVO FREE')
+  const [watermarkColor, setWatermarkColor] = useState('#ffffff')
+  const [watermarkOpacity, setWatermarkOpacity] = useState(0.02)
   const [toastMsg, setToastMsg] = useState<string | null>(null)
   const showToast = (msg: string) => { setToastMsg(msg); setTimeout(() => setToastMsg(null), 3000) }
 
@@ -74,7 +98,7 @@ export default function PublicInvoiceToolPage() {
         .input-glass {
           background: rgba(1, 15, 31, 0.6);
           border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #d5e4fa;
+          color: var(--text-primary);
           transition: border-color 200ms ease-out, box-shadow 200ms ease-out;
         }
         .input-glass:focus {
@@ -97,15 +121,15 @@ export default function PublicInvoiceToolPage() {
       `}</style>
 
       {/* Top Navbar */}
-      <nav className="w-full sticky top-0 z-50 bg-[#051424]/80 backdrop-blur-lg border-b border-white/10 flex justify-between items-center h-16 px-12">
+      <nav className="w-full sticky top-0 z-50 bg-[var(--bg-canvas)]/80 backdrop-blur-lg border-b border-white/10 flex justify-between items-center h-16 px-12">
         <Link href="/" className="font-headline-lg text-xl font-bold text-white tracking-tight">
           Quantivo
         </Link>
         <div className="flex items-center gap-6">
-          <Link href="/login" className="text-[#c7c5d0] hover:text-white font-body-sm text-sm transition-colors px-4 py-2 rounded-full">
+          <Link href="/login" className="text-[var(--text-secondary)] hover:text-white font-body-sm text-sm transition-colors px-4 py-2 rounded-full">
             Log In
           </Link>
-          <Link href="/signup" className="bg-[#c0c1ff] text-[#051424] font-body-sm text-sm font-bold px-6 py-2 rounded-full hover:brightness-110 transition-all">
+          <Link href="/signup" className="bg-[#c0c1ff] text-[var(--bg-canvas)] font-body-sm text-sm font-bold px-6 py-2 rounded-full hover:brightness-110 transition-all">
             Sign Up
           </Link>
         </div>
@@ -127,13 +151,27 @@ export default function PublicInvoiceToolPage() {
           <div className="glass-panel p-6 flex flex-col gap-6">
             <div className="flex justify-between items-end border-b border-white/10 pb-4">
               <h1 className="font-headline-lg text-2xl font-bold text-white">New Invoice</h1>
-              <span className="font-mono text-xs text-[#c7c5d0]">INV-001</span>
+              <span className="font-mono text-xs text-[var(--text-secondary)]">INV-001</span>
             </div>
 
-            {/* Company Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Company Info & Logo */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-white/10 pb-6">
               <div className="flex flex-col gap-4">
-                <label className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider">From (Your Company)</label>
+                <div className="flex items-center justify-between">
+                  <label className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider">From (Your Company)</label>
+                  <button onClick={() => logoInputRef.current?.click()} className="text-xs text-[#c0c1ff] hover:underline font-bold flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[14px]">upload</span> Upload Logo
+                  </button>
+                  <input type="file" accept="image/*" ref={logoInputRef} onChange={handleLogoUpload} className="hidden" />
+                </div>
+                {logoBase64 && (
+                  <div className="relative w-max mb-2 group">
+                    <img src={logoBase64} alt="Company Logo" className="h-12 object-contain rounded" />
+                    <button onClick={() => { setLogoBase64(null); localStorage.removeItem('invoice_logo') }} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="material-symbols-outlined text-[12px]">close</span>
+                    </button>
+                  </div>
+                )}
                 <input
                   className="input-glass rounded-lg px-4 py-2 text-sm"
                   placeholder="Your Company Name"
@@ -152,7 +190,7 @@ export default function PublicInvoiceToolPage() {
 
               {/* Client Info */}
               <div className="flex flex-col gap-4">
-                <label className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider">Billed To (Client)</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider">Billed To (Client)</label>
                 <input
                   className="input-glass rounded-lg px-4 py-2 text-sm"
                   placeholder="Client Name"
@@ -180,7 +218,7 @@ export default function PublicInvoiceToolPage() {
             {/* Dates & Currency */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-y border-white/10 py-6">
               <div className="flex flex-col gap-2">
-                <label className="font-mono text-xs text-[#c7c5d0]">Issue Date</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)]">Issue Date</label>
                 <input
                   className="input-glass rounded-lg px-4 py-2 text-xs font-mono"
                   type="date"
@@ -189,7 +227,7 @@ export default function PublicInvoiceToolPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-mono text-xs text-[#c7c5d0]">Due Date</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)]">Due Date</label>
                 <input
                   className="input-glass rounded-lg px-4 py-2 text-xs font-mono"
                   type="date"
@@ -198,7 +236,7 @@ export default function PublicInvoiceToolPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-mono text-xs text-[#c7c5d0]">Currency</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)]">Currency</label>
                 <select
                   className="input-glass rounded-lg px-4 py-2 text-xs font-mono"
                   value={currency}
@@ -213,11 +251,11 @@ export default function PublicInvoiceToolPage() {
 
             {/* Line Items */}
             <div className="flex flex-col gap-4">
-              <h3 className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider">Line Items</h3>
+              <h3 className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider">Line Items</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-white/10 font-mono text-xs text-[#c7c5d0]">
+                    <tr className="border-b border-white/10 font-mono text-xs text-[var(--text-secondary)]">
                       <th className="pb-2 pl-2 w-1/2">Description</th>
                       <th className="pb-2 px-2 text-right w-1/6">Qty</th>
                       <th className="pb-2 px-2 text-right w-1/6">Rate</th>
@@ -255,13 +293,13 @@ export default function PublicInvoiceToolPage() {
                             onChange={(e) => handleUpdateItem(item.id, 'rate', e.target.value)}
                           />
                         </td>
-                        <td className="py-2 pl-2 text-right font-mono text-xs text-[#dae2fd]">
+                        <td className="py-2 pl-2 text-right font-mono text-xs text-[var(--text-primary)]">
                           {symbol}{(item.qty * item.rate).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                         </td>
                         <td className="py-2 text-center">
                           <button
                             onClick={() => handleRemoveItem(item.id)}
-                            className="text-[#c7c5d0] hover:text-[#ff4433] transition-colors"
+                            className="text-[var(--text-secondary)] hover:text-[#ff4433] transition-colors"
                             disabled={lineItems.length === 1}
                           >
                             <span className="material-symbols-outlined text-[16px]">close</span>
@@ -283,7 +321,7 @@ export default function PublicInvoiceToolPage() {
             {/* Totals & Notes */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-auto pt-4">
               <div className="flex flex-col gap-2">
-                <label className="font-mono text-xs text-[#c7c5d0]">Notes / Terms</label>
+                <label className="font-mono text-xs text-[var(--text-secondary)]">Notes / Terms</label>
                 <textarea
                   className="input-glass rounded-lg px-4 py-2 text-xs resize-none"
                   placeholder="Thank you for your business."
@@ -293,11 +331,11 @@ export default function PublicInvoiceToolPage() {
                 />
               </div>
               <div className="flex flex-col gap-2 bg-black/20 rounded-lg p-4">
-                <div className="flex justify-between items-center text-xs text-[#c7c5d0]">
+                <div className="flex justify-between items-center text-xs text-[var(--text-secondary)]">
                   <span>Subtotal</span>
                   <span className="font-mono">{symbol}{subtotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                 </div>
-                <div className="flex justify-between items-center text-xs text-[#c7c5d0] border-b border-white/10 pb-2">
+                <div className="flex justify-between items-center text-xs text-[var(--text-secondary)] border-b border-white/10 pb-2">
                   <div className="flex items-center gap-2">
                     <span>Tax Rate</span>
                     <input
@@ -317,15 +355,56 @@ export default function PublicInvoiceToolPage() {
                 </div>
               </div>
             </div>
+
+            {/* Advanced Watermark Options */}
+            <div className="flex flex-col gap-4 border-t border-white/10 pt-6 mt-2">
+              <h3 className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider flex items-center gap-2">
+                <span className="material-symbols-outlined text-[14px]">branding_watermark</span> 
+                Watermark Options
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="flex flex-col gap-2">
+                  <label className="font-mono text-xs text-[var(--text-secondary)]">Watermark Text</label>
+                  <input
+                    className="input-glass rounded-lg px-4 py-2 text-xs"
+                    placeholder="QUANTIVO FREE"
+                    type="text"
+                    value={watermarkText}
+                    onChange={(e) => setWatermarkText(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="font-mono text-xs text-[var(--text-secondary)]">Color</label>
+                  <input
+                    type="color"
+                    value={watermarkColor}
+                    onChange={(e) => setWatermarkColor(e.target.value)}
+                    className="h-[34px] w-full bg-transparent border border-white/10 rounded cursor-pointer"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="font-mono text-xs text-[var(--text-secondary)]">Opacity: {Math.round(watermarkOpacity * 100)}%</label>
+                  <input
+                    type="range"
+                    min="0" max="1" step="0.01"
+                    value={watermarkOpacity}
+                    onChange={(e) => setWatermarkOpacity(parseFloat(e.target.value))}
+                    className="mt-2 w-full accent-[#c0c1ff]"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* RIGHT PANEL: Live Preview */}
           <div className="glass-panel p-6 flex flex-col relative overflow-hidden h-full min-h-[600px]">
-            <div className="watermark text-white">QUANTIVO FREE</div>
+            <div className="watermark" style={{ color: watermarkColor, opacity: watermarkOpacity }}>
+              {watermarkText || 'QUANTIVO FREE'}
+            </div>
             <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-4 relative z-10">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#c7c5d0] text-sm">visibility</span>
-                <h2 className="font-mono text-xs text-[#c7c5d0] uppercase tracking-wider">Live Preview</h2>
+                <span className="material-symbols-outlined text-[var(--text-secondary)] text-sm">visibility</span>
+                <h2 className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider">Live Preview</h2>
               </div>
               <span className="bg-[#fa8c00]/10 px-3 py-1 rounded-full font-mono text-xs text-[#fa8c00] border border-[#fa8c00]/20">FREE TRIAL</span>
             </div>
@@ -333,53 +412,57 @@ export default function PublicInvoiceToolPage() {
             {/* Invoice Preview Canvas */}
             <div className="flex-1 bg-white/5 rounded-lg border border-white/10 p-6 flex flex-col gap-6 relative z-10 overflow-y-auto">
               <div className="flex justify-between items-start">
-                <div className="w-12 h-12 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-white/50 text-[20px]">image</span>
-                </div>
+                {logoBase64 ? (
+                  <img src={logoBase64} alt="Company Logo" className="h-12 object-contain" />
+                ) : (
+                  <div className="w-12 h-12 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-white/50 text-[20px]">image</span>
+                  </div>
+                )}
                 <div className="text-right">
                   <div className="font-headline text-lg font-bold text-white">INVOICE</div>
-                  <div className="font-mono text-xs text-[#c7c5d0]">INV-001</div>
+                  <div className="font-mono text-xs text-[var(--text-secondary)]">INV-001</div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-6 text-xs">
                 <div>
-                  <div className="font-mono text-[#c7c5d0] mb-2 uppercase tracking-wider">FROM</div>
+                  <div className="font-mono text-[var(--text-secondary)] mb-2 uppercase tracking-wider">FROM</div>
                   <div className="font-bold text-white mb-1">{companyName || '[Your Company]'}</div>
-                  <div className="text-[#c7c5d0] whitespace-pre-wrap">{companyAddress || '[Your Details]'}</div>
+                  <div className="text-[var(--text-secondary)] whitespace-pre-wrap">{companyAddress || '[Your Details]'}</div>
                 </div>
                 <div>
-                  <div className="font-mono text-[#c7c5d0] mb-2 uppercase tracking-wider">TO</div>
+                  <div className="font-mono text-[var(--text-secondary)] mb-2 uppercase tracking-wider">TO</div>
                   <div className="font-bold text-white mb-1">{clientName || '[Client Name]'}</div>
-                  {clientEmail && <div className="text-[#c7c5d0] mb-1">{clientEmail}</div>}
-                  <div className="text-[#c7c5d0] whitespace-pre-wrap">{clientAddress || '[Client Details]'}</div>
+                  {clientEmail && <div className="text-[var(--text-secondary)] mb-1">{clientEmail}</div>}
+                  <div className="text-[var(--text-secondary)] whitespace-pre-wrap">{clientAddress || '[Client Details]'}</div>
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-4 text-xs border-y border-white/5 py-4">
                 <div>
-                  <div className="text-[#c7c5d0] mb-1">Issue Date</div>
+                  <div className="text-[var(--text-secondary)] mb-1">Issue Date</div>
                   <div className="font-mono text-white">{issueDate || '—'}</div>
                 </div>
                 <div>
-                  <div className="text-[#c7c5d0] mb-1">Due Date</div>
+                  <div className="text-[var(--text-secondary)] mb-1">Due Date</div>
                   <div className="font-mono text-white">{dueDate || '—'}</div>
                 </div>
                 <div>
-                  <div className="text-[#c7c5d0] mb-1">Currency</div>
+                  <div className="text-[var(--text-secondary)] mb-1">Currency</div>
                   <div className="font-mono text-[#fa8c00]">{currency}</div>
                 </div>
               </div>
 
               <div className="w-full text-xs">
-                <div className="grid grid-cols-12 gap-2 border-b border-white/10 pb-2 mb-2 font-mono text-[#c7c5d0] uppercase tracking-wider">
+                <div className="grid grid-cols-12 gap-2 border-b border-white/10 pb-2 mb-2 font-mono text-[var(--text-secondary)] uppercase tracking-wider">
                   <div className="col-span-6">Description</div>
                   <div className="col-span-2 text-right">Qty</div>
                   <div className="col-span-2 text-right">Rate</div>
                   <div className="col-span-2 text-right">Amount</div>
                 </div>
                 {lineItems.map((item) => (
-                  <div key={item.id} className="grid grid-cols-12 gap-2 pb-2 border-b border-white/5 text-[#dae2fd]">
+                  <div key={item.id} className="grid grid-cols-12 gap-2 pb-2 border-b border-white/5 text-[var(--text-primary)]">
                     <div className="col-span-6 truncate">{item.description || '[Item Description]'}</div>
                     <div className="col-span-2 text-right font-mono">{item.qty}</div>
                     <div className="col-span-2 text-right font-mono">{symbol}{item.rate.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
@@ -390,15 +473,15 @@ export default function PublicInvoiceToolPage() {
 
               <div className="mt-auto flex justify-between items-end pt-6 border-t border-white/10 text-xs">
                 <div className="w-1/2">
-                  <div className="font-mono text-[#c7c5d0] mb-1 uppercase tracking-wider">NOTES</div>
-                  <div className="text-[#c7c5d0] whitespace-pre-wrap">{notes || '—'}</div>
+                  <div className="font-mono text-[var(--text-secondary)] mb-1 uppercase tracking-wider">NOTES</div>
+                  <div className="text-[var(--text-secondary)] whitespace-pre-wrap">{notes || '—'}</div>
                 </div>
                 <div className="w-1/3 space-y-2">
-                  <div className="flex justify-between text-[#c7c5d0]">
+                  <div className="flex justify-between text-[var(--text-secondary)]">
                     <span>Subtotal</span>
                     <span className="font-mono">{symbol}{subtotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                   </div>
-                  <div className="flex justify-between text-[#c7c5d0]">
+                  <div className="flex justify-between text-[var(--text-secondary)]">
                     <span>Tax ({taxRate}%)</span>
                     <span className="font-mono">{symbol}{taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                   </div>
@@ -439,24 +522,24 @@ export default function PublicInvoiceToolPage() {
             </div>
             <div>
               <h3 className="font-headline text-lg font-bold text-white mb-1">Unlock Unlimited Features</h3>
-              <p className="font-body-sm text-xs text-[#c7c5d0]">Custom Branding, Auto-reminders, Multi-currency, Client Portal.</p>
+              <p className="font-body-sm text-xs text-[var(--text-secondary)]">Custom Branding, Auto-reminders, Multi-currency, Client Portal.</p>
             </div>
           </div>
-          <Link href="/signup" className="w-full sm:w-auto shrink-0 px-6 py-3 rounded-full bg-[#c0c1ff] text-[#051424] font-bold font-body-md text-sm hover:brightness-110 transition-all text-center relative z-10 block">
+          <Link href="/signup" className="w-full sm:w-auto shrink-0 px-6 py-3 rounded-full bg-[#c0c1ff] text-[var(--bg-canvas)] font-bold font-body-md text-sm hover:brightness-110 transition-all text-center relative z-10 block">
             Unlock Pro
           </Link>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="w-full mt-auto border-t border-white/5 flex flex-col md:flex-row justify-between items-center py-6 px-12 bg-[#051424]/60 backdrop-blur-md">
+      <footer className="w-full mt-auto border-t border-white/5 flex flex-col md:flex-row justify-between items-center py-6 px-12 bg-[var(--bg-canvas)]/60 backdrop-blur-md">
         <div className="font-headline text-lg text-white mb-4 md:mb-0">
           Quantivo
         </div>
-        <div className="text-[#c7c5d0] text-xs mb-4 md:mb-0">
+        <div className="text-[var(--text-secondary)] text-xs mb-4 md:mb-0">
           © 2024 Quantivo Analytics. All rights reserved.
         </div>
-        <div className="flex gap-6 text-xs text-[#c7c5d0]">
+        <div className="flex gap-6 text-xs text-[var(--text-secondary)]">
           <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
           <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
         </div>

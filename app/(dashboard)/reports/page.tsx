@@ -94,13 +94,13 @@ export default function ReportsPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
           <div>
             <h2 className="font-headline-xl text-3xl font-bold text-white tracking-tight">Reports & Analytics</h2>
-            <p className="font-body-md text-sm text-[#c7c5d0] mt-2">Comprehensive financial breakdown and predictive modeling.</p>
+            <p className="font-body-md text-sm text-[var(--text-secondary)] mt-2">Comprehensive financial breakdown and predictive modeling.</p>
           </div>
           <div className="flex items-center gap-3">
             <select
               value={range}
               onChange={(e) => setRange(e.target.value)}
-              className="glass-panel text-white border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#c0c1ff] appearance-none cursor-pointer pr-10 relative bg-[#051424]"
+              className="glass-panel text-white border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#c0c1ff] appearance-none cursor-pointer pr-10 relative bg-[var(--bg-canvas)]"
             >
               <option value="7m">Last 7 Months</option>
               <option value="1y">Last 1 Year</option>
@@ -136,13 +136,13 @@ export default function ReportsPage() {
           <div className="glass-panel rounded-xl p-6 flex flex-col justify-between h-[160px] relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#22c55e]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="flex justify-between items-start">
-              <span className="font-body-sm text-xs text-[#c7c5d0] uppercase tracking-wider">Total Income</span>
+              <span className="font-body-sm text-xs text-[var(--text-secondary)] uppercase tracking-wider">Total Income</span>
               <div className="w-8 h-8 rounded-full bg-[#22c55e]/10 flex items-center justify-center border border-[#22c55e]/20">
                 <span className="material-symbols-outlined text-[#22c55e] text-[16px]">trending_up</span>
               </div>
             </div>
             {loading ? (
-              <span className="text-sm text-[#c7c5d0]">Loading...</span>
+              <span className="text-sm text-[var(--text-secondary)]">Loading...</span>
             ) : (
               <div>
                 <div className="font-data-lg text-[32px] font-bold leading-tight text-white">{formatCurrency(totalIncome)}</div>
@@ -158,13 +158,13 @@ export default function ReportsPage() {
           <div className="glass-panel rounded-xl p-6 flex flex-col justify-between h-[160px] relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ef4444]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="flex justify-between items-start">
-              <span className="font-body-sm text-xs text-[#c7c5d0] uppercase tracking-wider">Total Expenses</span>
+              <span className="font-body-sm text-xs text-[var(--text-secondary)] uppercase tracking-wider">Total Expenses</span>
               <div className="w-8 h-8 rounded-full bg-[#ef4444]/10 flex items-center justify-center border border-[#ef4444]/20">
                 <span className="material-symbols-outlined text-[#ef4444] text-[16px]">trending_down</span>
               </div>
             </div>
             {loading ? (
-              <span className="text-sm text-[#c7c5d0]">Loading...</span>
+              <span className="text-sm text-[var(--text-secondary)]">Loading...</span>
             ) : (
               <div>
                 <div className="font-data-lg text-[32px] font-bold leading-tight text-white">{formatCurrency(totalExpenses)}</div>
@@ -180,13 +180,13 @@ export default function ReportsPage() {
           <div className="glass-panel rounded-xl p-6 flex flex-col justify-between h-[160px] relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#c0c1ff]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="flex justify-between items-start">
-              <span className="font-body-sm text-xs text-[#c7c5d0] uppercase tracking-wider">Net Savings Rate</span>
+              <span className="font-body-sm text-xs text-[var(--text-secondary)] uppercase tracking-wider">Net Savings Rate</span>
               <div className="w-8 h-8 rounded-full bg-[#c0c1ff]/10 flex items-center justify-center border border-[#c0c1ff]/20">
                 <span className="material-symbols-outlined text-[#c0c1ff] text-[16px]">account_balance_wallet</span>
               </div>
             </div>
             {loading ? (
-              <span className="text-sm text-[#c7c5d0]">Loading...</span>
+              <span className="text-sm text-[var(--text-secondary)]">Loading...</span>
             ) : (
               <div>
                 <div className="font-data-lg text-[32px] font-bold leading-tight text-white">{savingsRate.toFixed(1)}%</div>
@@ -208,11 +208,11 @@ export default function ReportsPage() {
               <div className="flex gap-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-[#c0c1ff]"></div>
-                  <span className="font-mono text-xs text-[#c7c5d0]">Income</span>
+                  <span className="font-mono text-xs text-[var(--text-secondary)]">Income</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-[#fa8c00]"></div>
-                  <span className="font-mono text-xs text-[#c7c5d0]">Savings</span>
+                  <span className="font-mono text-xs text-[var(--text-secondary)]">Savings</span>
                 </div>
               </div>
             </div>
@@ -249,8 +249,8 @@ export default function ReportsPage() {
                 {/* Savings Line (Amber) */}
                 <path d="M50,260 C100,255 120,240 171,230 C220,220 250,210 292,200 C340,190 370,170 414,150 C460,130 490,120 535,100 C580,80 610,90 657,70 C700,50 740,60 780,40" fill="none" stroke="#fa8c00" strokeDasharray="6,4" strokeWidth="2"></path>
                 {/* Data Points */}
-                <circle cx="780" cy="20" fill="#051424" r="4" stroke="#c0c1ff" strokeWidth="2"></circle>
-                <circle cx="780" cy="40" fill="#051424" r="4" stroke="#fa8c00" strokeWidth="2"></circle>
+                <circle cx="780" cy="20" fill="var(--bg-canvas)" r="4" stroke="#c0c1ff" strokeWidth="2"></circle>
+                <circle cx="780" cy="40" fill="var(--bg-canvas)" r="4" stroke="#fa8c00" strokeWidth="2"></circle>
               </svg>
             </div>
           </div>
@@ -265,12 +265,12 @@ export default function ReportsPage() {
                   <span className="material-symbols-outlined text-[#c0c1ff]">auto_awesome</span>
                   <h4 className="font-headline text-[18px] text-[#c0c1ff] font-bold">Quantos Insight</h4>
                 </div>
-                <p className="font-body-md text-xs text-[#c7c5d0] leading-relaxed">
+                <p className="font-body-md text-xs text-[var(--text-secondary)] leading-relaxed">
                   Your savings rate has improved by <strong className="text-white font-medium">12%</strong> following subscription optimization. We project an additional $4,200 in surplus capital by year end if current velocity holds.
                 </p>
               </div>
               {/* Lock Overlay */}
-              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#051424]/80 backdrop-blur-[2px]">
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[var(--bg-canvas)]/80 backdrop-blur-[2px]">
                 <span className="material-symbols-outlined text-[#c0c1ff]/50 text-[32px] mb-2">lock</span>
                 <button
                   onClick={() => showToast('Upgrade to Pro to unlock AI-powered financial insights.')}
@@ -319,7 +319,7 @@ export default function ReportsPage() {
                 <div className="bg-[#fa8c00]/70 rounded-sm"></div>
                 <div className="bg-[#fa8c00]/50 rounded-sm"></div>
               </div>
-              <div className="flex justify-between mt-2 font-mono text-[10px] text-[#c7c5d0]/50">
+              <div className="flex justify-between mt-2 font-mono text-[10px] text-[var(--text-secondary)]/50">
                 <span>Low (Mon)</span>
                 <span>High (Sun)</span>
               </div>
@@ -342,20 +342,20 @@ export default function ReportsPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="py-4 px-6 font-mono text-xs text-[#c7c5d0] font-medium tracking-wide">Category</th>
-                  <th className="py-4 px-6 font-mono text-xs text-[#c7c5d0] font-medium tracking-wide">Amount</th>
-                  <th className="py-4 px-6 font-mono text-xs text-[#c7c5d0] font-medium tracking-wide">% Share</th>
-                  <th className="py-4 px-6 font-mono text-xs text-[#c7c5d0] font-medium tracking-wide w-1/3">Allocation</th>
+                  <th className="py-4 px-6 font-mono text-xs text-[var(--text-secondary)] font-medium tracking-wide">Category</th>
+                  <th className="py-4 px-6 font-mono text-xs text-[var(--text-secondary)] font-medium tracking-wide">Amount</th>
+                  <th className="py-4 px-6 font-mono text-xs text-[var(--text-secondary)] font-medium tracking-wide">% Share</th>
+                  <th className="py-4 px-6 font-mono text-xs text-[var(--text-secondary)] font-medium tracking-wide w-1/3">Allocation</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.05]">
                 {loading ? (
                   <tr>
-                    <td colSpan={4} className="py-8 text-center text-sm text-[#c7c5d0]">Loading categories...</td>
+                    <td colSpan={4} className="py-8 text-center text-sm text-[var(--text-secondary)]">Loading categories...</td>
                   </tr>
                 ) : categories.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="py-8 text-center text-sm text-[#c7c5d0]">No categories recorded</td>
+                    <td colSpan={4} className="py-8 text-center text-sm text-[var(--text-secondary)]">No categories recorded</td>
                   </tr>
                 ) : (
                   categories.map((cat) => {
@@ -369,9 +369,9 @@ export default function ReportsPage() {
                           </div>
                         </td>
                         <td className="py-4 px-6 font-mono text-sm text-white">{formatCurrency(cat.amount)}</td>
-                        <td className="py-4 px-6 font-mono text-sm text-[#c7c5d0]">{share}%</td>
+                        <td className="py-4 px-6 font-mono text-sm text-[var(--text-secondary)]">{share}%</td>
                         <td className="py-4 px-6">
-                          <div className="w-full h-1.5 bg-[#051424] rounded-full overflow-hidden border border-white/5">
+                          <div className="w-full h-1.5 bg-[var(--bg-canvas)] rounded-full overflow-hidden border border-white/5">
                             <div className="h-full bg-gradient-to-r from-[#c0c1ff] to-[#fa8c00]" style={{ width: `${share}%` }}></div>
                           </div>
                         </td>

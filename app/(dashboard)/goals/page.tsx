@@ -155,7 +155,7 @@ export default function GoalsPage() {
         .glass-input {
           background: rgba(10, 20, 30, 0.8);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #d5e4fa;
+          color: var(--text-primary);
           border-radius: 8px;
           padding: 10px 14px;
           font-size: 14px;
@@ -180,11 +180,11 @@ export default function GoalsPage() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div>
             <h1 className="font-headline-xl text-3xl font-bold text-[#c0c1ff] mb-2">Financial Goals</h1>
-            <p className="font-body-md text-sm text-[#c7c5d0]">Track your savings milestones and strategic objectives.</p>
+            <p className="font-body-md text-sm text-[var(--text-secondary)]">Track your savings milestones and strategic objectives.</p>
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center justify-center gap-2 bg-[#c0c1ff] text-[#051424] px-6 py-3 rounded-full font-body-md text-sm font-semibold hover:opacity-90 active:scale-95 transition-all"
+            className="flex items-center justify-center gap-2 bg-[#c0c1ff] text-[var(--bg-canvas)] px-6 py-3 rounded-full font-body-md text-sm font-semibold hover:opacity-90 active:scale-95 transition-all"
           >
             <span className="material-symbols-outlined text-[20px]">add</span>
             Add New Goal
@@ -194,7 +194,7 @@ export default function GoalsPage() {
         {/* Goals Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading ? (
-            <div className="col-span-full py-12 text-center text-sm text-[#c7c5d0]">Loading goals...</div>
+            <div className="col-span-full py-12 text-center text-sm text-[var(--text-secondary)]">Loading goals...</div>
           ) : (
             <>
               {goals.map((goal) => {
@@ -213,18 +213,18 @@ export default function GoalsPage() {
                       </div>
                       <div className="flex gap-2">
                         {goal.deadline && (
-                          <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#c7c5d0] font-mono text-[10px]">
+                          <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[var(--text-secondary)] font-mono text-[10px]">
                             Due: {goal.deadline}
                           </span>
                         )}
-                        <span className={`px-3 py-1 rounded-full font-mono text-[10px] uppercase ${isCompleted ? 'bg-[#fee089]/10 border border-[#fee089]/20 text-[#fee089]' : isPaused ? 'bg-white/5 border border-white/10 text-[#c7c5d0]' : 'bg-[#c0c1ff]/10 border border-[#c0c1ff]/20 text-[#c0c1ff]'}`}>
+                        <span className={`px-3 py-1 rounded-full font-mono text-[10px] uppercase ${isCompleted ? 'bg-[#fee089]/10 border border-[#fee089]/20 text-[#fee089]' : isPaused ? 'bg-white/5 border border-white/10 text-[var(--text-secondary)]' : 'bg-[#c0c1ff]/10 border border-[#c0c1ff]/20 text-[#c0c1ff]'}`}>
                           {goal.status}
                         </span>
                       </div>
                     </div>
 
                     <h3 className="font-headline-lg text-xl font-bold text-white mb-1 z-10">{goal.title}</h3>
-                    <p className="font-body-sm text-xs text-[#c7c5d0] mb-6 z-10">
+                    <p className="font-body-sm text-xs text-[var(--text-secondary)] mb-6 z-10">
                       {isCompleted ? 'Goal fully completed!' : isPaused ? 'Goal currently paused' : 'Accumulating savings'}
                     </p>
 
@@ -251,7 +251,7 @@ export default function GoalsPage() {
                         <div className="flex justify-between items-baseline mb-1">
                           <span className="font-mono text-2xl font-bold text-white">{formatCurrency(goal.current_amount)}</span>
                         </div>
-                        <div className="font-mono text-xs text-[#c7c5d0]">
+                        <div className="font-mono text-xs text-[var(--text-secondary)]">
                           of {formatCurrency(goal.target_amount)} target
                         </div>
                       </div>
@@ -269,7 +269,7 @@ export default function GoalsPage() {
                           </button>
                           <button
                             onClick={() => handleToggleStatus(goal)}
-                            className="px-3 py-2.5 rounded-full bg-transparent border border-white/10 text-[#c7c5d0] hover:bg-white/5 transition-all font-body-sm text-sm"
+                            className="px-3 py-2.5 rounded-full bg-transparent border border-white/10 text-[var(--text-secondary)] hover:bg-white/5 transition-all font-body-sm text-sm"
                             title={isPaused ? 'Resume Goal' : 'Pause Goal'}
                           >
                             <span className="material-symbols-outlined text-[18px]">
@@ -294,10 +294,10 @@ export default function GoalsPage() {
                 className="rounded-2xl p-6 flex flex-col items-center justify-center border-2 border-dashed border-white/10 hover:border-[#c0c1ff]/30 bg-black/10 hover:bg-[#c0c1ff]/5 transition-all cursor-pointer min-h-[280px] group"
               >
                 <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <span className="material-symbols-outlined text-3xl text-[#c7c5d0] group-hover:text-[#c0c1ff] transition-colors">add</span>
+                  <span className="material-symbols-outlined text-3xl text-[var(--text-secondary)] group-hover:text-[#c0c1ff] transition-colors">add</span>
                 </div>
                 <h3 className="font-headline-lg text-lg font-bold text-white mb-2">Track New Goal</h3>
-                <p className="font-body-sm text-xs text-[#c7c5d0] text-center max-w-[200px]">Define a new financial objective and start allocating funds.</p>
+                <p className="font-body-sm text-xs text-[var(--text-secondary)] text-center max-w-[200px]">Define a new financial objective and start allocating funds.</p>
               </div>
             </>
           )}
@@ -306,15 +306,15 @@ export default function GoalsPage() {
 
       {/* Add Goal Dialog */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-[#051424]/80 z-50 flex items-center justify-center p-4" onClick={() => setShowAddModal(false)}>
+        <div className="fixed inset-0 bg-[var(--bg-canvas)]/80 z-50 flex items-center justify-center p-4" onClick={() => setShowAddModal(false)}>
           <div className="glass-modal w-full max-w-md p-6 flex flex-col gap-6 animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <div>
               <h3 className="text-xl font-bold text-white">Add New Goal</h3>
-              <p className="text-sm text-[#c7c5d0] mt-1">Define your savings target and timeline.</p>
+              <p className="text-sm text-[var(--text-secondary)] mt-1">Define your savings target and timeline.</p>
             </div>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Goal Name</label>
+                <label className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Goal Name</label>
                 <input
                   type="text"
                   placeholder="e.g. Dream House Fund"
@@ -325,7 +325,7 @@ export default function GoalsPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Target Amount ($)</label>
+                <label className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Target Amount ($)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -336,7 +336,7 @@ export default function GoalsPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Deadline (optional)</label>
+                <label className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Deadline (optional)</label>
                 <input
                   type="date"
                   className="glass-input"
@@ -348,13 +348,13 @@ export default function GoalsPage() {
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 onClick={() => setShowAddModal(false)}
-                className="px-5 py-2.5 rounded-full text-sm font-medium text-[#c7c5d0] hover:text-white hover:bg-white/5 transition-colors"
+                className="px-5 py-2.5 rounded-full text-sm font-medium text-[var(--text-secondary)] hover:text-white hover:bg-white/5 transition-colors"
                 disabled={isAdding}
               >Cancel</button>
               <button
                 onClick={handleAddGoal}
                 disabled={!addForm.title || !addForm.target || isAdding}
-                className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#c0c1ff] text-[#051424] hover:shadow-[0_0_15px_rgba(192,193,255,0.3)] disabled:opacity-50 disabled:pointer-events-none transition-all"
+                className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#c0c1ff] text-[var(--bg-canvas)] hover:shadow-[0_0_15px_rgba(192,193,255,0.3)] disabled:opacity-50 disabled:pointer-events-none transition-all"
               >
                 {isAdding ? 'Creating...' : 'Create Goal'}
               </button>
@@ -365,14 +365,14 @@ export default function GoalsPage() {
 
       {/* Add Money Dialog */}
       {addMoneyModal && (
-        <div className="fixed inset-0 bg-[#051424]/80 z-50 flex items-center justify-center p-4" onClick={() => setAddMoneyModal(null)}>
+        <div className="fixed inset-0 bg-[var(--bg-canvas)]/80 z-50 flex items-center justify-center p-4" onClick={() => setAddMoneyModal(null)}>
           <div className="glass-modal w-full max-w-sm p-6 flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <div>
               <h3 className="text-lg font-bold text-white">Add Money</h3>
-              <p className="text-sm text-[#c7c5d0] mt-1">Allocate funds to <strong className="text-[#c0c1ff]">{addMoneyModal.title}</strong></p>
+              <p className="text-sm text-[var(--text-secondary)] mt-1">Allocate funds to <strong className="text-[#c0c1ff]">{addMoneyModal.title}</strong></p>
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-medium text-[#c7c5d0] uppercase tracking-wider">Amount ($)</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Amount ($)</label>
               <input
                 type="number"
                 step="0.01"
@@ -384,8 +384,8 @@ export default function GoalsPage() {
               />
             </div>
             <div className="flex items-center justify-end gap-3">
-              <button onClick={() => setAddMoneyModal(null)} className="px-5 py-2.5 rounded-full text-sm font-medium text-[#c7c5d0] hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
-              <button onClick={handleAddMoney} disabled={!addMoneyAmount} className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#c0c1ff] text-[#051424] hover:shadow-[0_0_15px_rgba(192,193,255,0.3)] disabled:opacity-50 disabled:pointer-events-none transition-all">
+              <button onClick={() => setAddMoneyModal(null)} className="px-5 py-2.5 rounded-full text-sm font-medium text-[var(--text-secondary)] hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
+              <button onClick={handleAddMoney} disabled={!addMoneyAmount} className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#c0c1ff] text-[var(--bg-canvas)] hover:shadow-[0_0_15px_rgba(192,193,255,0.3)] disabled:opacity-50 disabled:pointer-events-none transition-all">
                 Add Funds
               </button>
             </div>
